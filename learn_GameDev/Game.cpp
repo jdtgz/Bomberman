@@ -4,6 +4,8 @@
 Game::Game()
 	: window(sf::VideoMode(600, 600), "GAME!!"), player()
 {
+	p_dir = -1; 
+
 	// load textures 
 	gameTextures.load(Textures::Enemies, "invaders.PNG"); 
 
