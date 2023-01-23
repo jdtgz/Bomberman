@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include "TextureHolder.h"
 class Game
 {
 public:
@@ -23,13 +24,14 @@ private:
 	sf::Time TimePerFrame = sf::seconds(1.f / 60.f); 
 
 	// Player variable (will be a class in the future)
-	sf::CircleShape player; 
+	TextureHolder gameTextures; 
+	sf::Sprite player; 
 	// bool to determine stillness 
 	bool p_isMoving = false; 
 	// player heading
 	int p_dir;
 	// player speed
-	int p_speed; 
+	int p_speed = 200.f; 
 	// offset to move player
 	sf::Vector2f offset;
 };

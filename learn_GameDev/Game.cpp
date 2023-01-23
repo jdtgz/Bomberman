@@ -4,18 +4,15 @@
 Game::Game()
 	: window(sf::VideoMode(600, 600), "GAME!!"), player()
 {
+	// load textures 
+	gameTextures.load(Textures::Enemies, "invaders.PNG"); 
 
 	// create the player
-	player.setRadius(40.f); 
-	player.setOrigin(player.getRadius() / 2, player.getRadius() / 2);
-	player.setPosition(100.f, 100.f); 
-	player.setFillColor(sf::Color::Cyan); 
+	player.setTexture(gameTextures.get(Textures::Enemies)); 
 }
 
 
-Game::~Game() 
-{ 
-}
+Game::~Game() { }
 
 
 void Game::run()
@@ -89,7 +86,6 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 void Game::update(sf::Time dt)
 {
-	p_speed = 200.f;
 	offset = { 0.f, 0.f }; 
 	if (p_isMoving)
 	{
