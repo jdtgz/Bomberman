@@ -1,27 +1,35 @@
 #include "Game.h"
 
 
+// constructor 
 Game::Game()
-	: window(sf::VideoMode(600, 600), "GAME!!"), player()
 {
-	p_dir = -1; 
+	window = nullptr; 
+	window = new sf::RenderWindow(sf::VideoMode(600, 600), "GAME!!");
 
-	// load textures 
-	gameTextures.load(Textures::Enemies, "invaders.PNG"); 
+	gameTextures.load(Textures::Enemies, "invaders.PNG");
+	gameTextures.load(Textures::Player, "bomberman.png"); 
 
-	// create the player
-	player.setTexture(gameTextures.get(Textures::Enemies)); 
+	player1.setSprite(gameTextures.get(Textures::Player));
 }
 
 
-Game::~Game() { }
+// destructor
+Game::~Game() 
+{ 
+	delete window; 
+}
 
 
+// runs the entirty of the game 
+// tracks time to calc movement and animations 
 void Game::run()
 {
+	// initialize closk and deltaTime
 	sf::Clock clock; 
 	sf::Time timeSinceLastUpdate = sf::Time::Zero; 
-	while (window.isOpen())
+
+	while (window->isOpen())
 	{
 		processEvents(); 
 		timeSinceLastUpdate += clock.restart(); 
@@ -36,85 +44,61 @@ void Game::run()
 }
 
 
+// Tracks all events in the game and acts accordingly 
 void Game::processEvents()
 {
-	sf::Event evnt; 
-	while (window.pollEvent(evnt))
+	sf::Event evnt;
+	while (window->pollEvent(evnt))
 	{
 		switch (evnt.type)
 		{
-		case sf::Event::KeyPressed:
-			handlePlayerInput(evnt.key.code, true); 
-			break;
-		case sf::Event::KeyReleased:
-			handlePlayerInput(evnt.key.code, false); 
-			break; 
-		case sf::Event::Closed: 
-			window.close(); 
-			break; 
+			// if a key is pressed 
+			case sf::Event::KeyPressed:
+				player1.handleInput(evnt.key.code, true); 
+				break;
+			// if a key is released 
+			case sf::Event::KeyReleased:
+				player1.handleInput(evnt.key.code, false); 
+				break;
+			// if window is closed 
+			case sf::Event::Closed: 
+				window->close(); 
+				break; 
 		}
 	}
 }
 
 
-void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
-{
-	if (isPressed)
-	{
-		p_isMoving = true;
-		switch (key)
-		{
-		case sf::Keyboard::Key::W:
-			p_dir = 0;
-			break;
-		case sf::Keyboard::Key::D:
-			p_dir = 1;
-			break;
-		case sf::Keyboard::Key::S:
-			p_dir = 2;
-			break;
-		case sf::Keyboard::Key::A:
-			p_dir = 3;
-			break;
-		}
-	}
-	else
-	{
-		p_dir = -1; 
-		p_isMoving = false; 
-	}
-}
-
-
+// updates all the events in the game 
 void Game::update(sf::Time dt)
 {
-	offset = { 0.f, 0.f }; 
-	if (p_isMoving)
-	{
-		switch (p_dir)
-		{
-			case NORTH:
-				offset.y -= p_speed;
-				break;
-			case EAST:
-				offset.x += p_speed;
-				break;
-			case SOUTH: 
-				offset.y += p_speed; 
-				break;
-			case WEST:
-				offset.x -= p_speed;
-				break;
-		}
-	
-		player.move(offset * dt.asSeconds()); 
-	}
+	// updates the position & animation of player 
+	player1.update(dt); 
 }
 
 
+// renders all objects onto sfml window 
 void Game::render()
 {
-	window.clear(); 
-	window.draw(player); 
-	window.display(); 
+	window->clear(); 
+	player1.draw(*window); 
+	window->display(); 
 }
+
+/*
+void Game::border_collision()
+{
+	// left wall
+	if (player.getPosition().x < 0.f)
+		player.setPosition(.0f, player.getPosition().y);
+	// top wall
+	if (player.getPosition().y < 0.f)
+		player.setPosition(player.getPosition().x, 0.f); 
+	// right wall 
+	if (player.getPosition().x + player.getGlobalBounds().width > window.getSize().x)
+		player.setPosition(window.getSize().x - player.getGlobalBounds().width, player.getPosition().y);
+	// bottom wal 
+	if (player.getPosition().y + player.getGlobalBounds().height > window.getSize().y)
+		player.setPosition(player.getPosition().x, window.getSize().y - player.getGlobalBounds().height); 
+}
+*/

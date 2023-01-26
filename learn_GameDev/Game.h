@@ -1,38 +1,39 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "TextureHolder.h"
+#include "Player.h"
+
 class Game
 {
 public:
+	// constructor / destructor
 	Game(); 
 	~Game(); 
+
+	// runs the whole game 
 	void run(); 
 
 private:
+
+	// helper functions for "run"
 	void processEvents();
-	void handlePlayerInput(sf::Keyboard::Key key, bool isPressed); 
 	void update(sf::Time);
 	void render();
+
+	// collision functions 
+	//void border_collision(); 
 	
 private:
 	// sfml screen
-	sf::RenderWindow window; 
+	sf::RenderWindow* window;
 
-	// indicator for headeing 
-	enum directions {NORTH = 0, EAST, SOUTH, WEST};
+	// All textures necessary for game  
+	TextureHolder gameTextures;
 
+	// FPS
 	sf::Time TimePerFrame = sf::seconds(1.f / 60.f); 
 
-	// Player variable (will be a class in the future)
-	TextureHolder gameTextures; 
-	sf::Sprite player; 
-	// bool to determine stillness 
-	bool p_isMoving = false; 
-	// player heading
-	int p_dir;
-	// player speed
-	int p_speed = 200.f; 
-	// offset to move player
-	sf::Vector2f offset;
+	// Player 
+	Player player1;
 };
 
