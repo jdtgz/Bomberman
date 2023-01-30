@@ -9,7 +9,7 @@ Game::Game()
 
 	gameTextures.load(Textures::Player, "bomberman_player.png"); 
 
-	player1.setSprite(gameTextures.get(Textures::Player));
+	player1(gameTextures.get(Textures::Player)); 
 }
 
 

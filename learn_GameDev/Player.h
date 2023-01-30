@@ -1,10 +1,17 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include "Animation.h"
+
+enum class AnimationIndex
+{
+	WalkingUp, WalkingDown, WalkingRight, WalkingLeft, Count
+};
 
 class Player
 {
 	public:
-		Player(); 
+		Player();
+		Player(sf::Texture&); 
 		~Player(); 
 
 		// accessors 
@@ -17,6 +24,7 @@ class Player
 
 	private:
 		sf::Sprite mSprite;
+		Animation animations[int(AnimationIndex::Count)]; 
 		float speed; 
 		sf::Vector2f velocity; 
 };

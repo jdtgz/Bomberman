@@ -2,9 +2,17 @@
 
 Player::Player()
 {
+}
+
+
+Player::Player(sf::Texture& txt)
+{
+	// initialize variables
 	speed = 100.f; 
 	velocity.x = 0.f;
 	velocity.y = 0.f; 
+
+	// initialize animation sprites
 }
 
 
