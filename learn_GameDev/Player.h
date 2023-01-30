@@ -8,7 +8,7 @@ class Player
 		~Player(); 
 
 		// accessors 
-		void setSprite(sf::Texture);
+		void setSprite(sf::Texture&);
 		
 		void handleInput(sf::Keyboard::Key, bool); 
 		void draw(sf::RenderWindow&) const; 

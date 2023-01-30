@@ -13,10 +13,11 @@ Player::~Player()
 }
 
 
-void Player::setSprite(sf::Texture txt)
+void Player::setSprite(sf::Texture& txt)
 {
 	mSprite.setTexture(txt); 
-	mSprite.setTextureRect({ 10,10,50,50 }); 
+	mSprite.setTextureRect({ 2,1,11,16 }); 
+	mSprite.setScale(10, 10);
 }
 
 

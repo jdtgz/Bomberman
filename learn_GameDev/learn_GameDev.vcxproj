@@ -144,6 +144,9 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="TextureHolder.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="bomberman_player.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -7,8 +7,7 @@ Game::Game()
 	window = nullptr; 
 	window = new sf::RenderWindow(sf::VideoMode(600, 600), "GAME!!");
 
-	gameTextures.load(Textures::Enemies, "invaders.PNG");
-	gameTextures.load(Textures::Player, "bomberman.png"); 
+	gameTextures.load(Textures::Player, "bomberman_player.png"); 
 
 	player1.setSprite(gameTextures.get(Textures::Player));
 }
