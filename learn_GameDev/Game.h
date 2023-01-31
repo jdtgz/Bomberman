@@ -21,7 +21,6 @@ private:
 	void render();
 
 	// collision functions 
-	//void border_collision(); 
 	
 private:
 	// sfml screen

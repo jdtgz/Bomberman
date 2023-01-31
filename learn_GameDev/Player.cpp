@@ -1,11 +1,7 @@
 #include "Player.h"
 
+
 Player::Player()
-{
-}
-
-
-Player::Player(sf::Texture& txt)
 {
 	// initialize variables
 	speed = 100.f; 
@@ -21,11 +17,12 @@ Player::~Player()
 }
 
 
-void Player::setSprite(sf::Texture& txt)
+void Player::setUpAnimations(sf::Texture& txt)
 {
-	mSprite.setTexture(txt); 
-	mSprite.setTextureRect({ 2,1,11,16 }); 
-	mSprite.setScale(10, 10);
+	//animations[int(AnimationIndex::WalkingLeft)].initializeRects({ 0,0,12,16 }, 3);
+	//animations[int(AnimationIndex::WalkingRight)].initializeRects( { 0,16,12,16 }, 3);
+	//animations[int(AnimationIndex::WalkingDown)].initializeRects({ 0,16*2,12,16 }, 3);
+	//animations[int(AnimationIndex::WalkingUp)].initializeRects({ 0,16*3,12,16 }, 3);
 }
 
 
@@ -37,15 +34,19 @@ void Player::handleInput(sf::Keyboard::Key key, bool moving)
 		{
 			case sf::Keyboard::Up:
 				velocity.y = -speed; 
+				cAnimation = AnimationIndex::WalkingUp; 
 				break;
 			case sf::Keyboard::Down:
 				velocity.y = speed; 
+				cAnimation = AnimationIndex::WalkingDown;
 				break;
 			case sf::Keyboard::Left:
 				velocity.x = -speed;
+				cAnimation = AnimationIndex::WalkingLeft;
 				break;
 			case sf::Keyboard::Right:
 				velocity.x = speed; 
+				cAnimation = AnimationIndex::WalkingRight;
 				break;
 		}
 	}
@@ -63,6 +64,7 @@ void Player::draw(sf::RenderWindow& window) const
 
 void Player::update(sf::Time dt)
 {
-	
+	animations[int(cAnimation)].update(dt.asSeconds()); 
+	animations[int(cAnimation)].applyToSprite(mSprite); 
 	mSprite.move( velocity.x * dt.asSeconds(), velocity.y * dt.asSeconds());
 }

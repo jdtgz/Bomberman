@@ -1,13 +1,15 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include <vector>
 
 class Animation
 {
 	public:
-		Animation(); 
-		Animation(sf::Texture&, sf::IntRect, int); 
+		Animation() = default;
+		Animation(sf::Texture&);
 		~Animation(); 
 
+		void initializeRects(int, int, int, int, int);
 		void applyToSprite(sf::Sprite&) const; 
 		void update(float); 
 
@@ -15,9 +17,9 @@ class Animation
 		void advance(); 
 
 		int nFrames; 
-		const int HOLDTIME = 0.1f; 
+		static constexpr float HOLDTIME = 0.1f; 
 		sf::Texture texture; 
-		sf::IntRect* frames; 
+		std::vector<sf::IntRect> frames;
 		int iFrame;
 		float time; 
 };

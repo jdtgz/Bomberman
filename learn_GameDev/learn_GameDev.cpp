@@ -4,7 +4,7 @@
 // put this in linker-->system: Windows (/SUBSYSTEM:WINDOWS)
 //#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 #include "Game.h"
-#include "iostream"
+#include <iostream>
 
 
 int main()

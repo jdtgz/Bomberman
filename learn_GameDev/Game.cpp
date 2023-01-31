@@ -8,8 +8,6 @@ Game::Game()
 	window = new sf::RenderWindow(sf::VideoMode(600, 600), "GAME!!");
 
 	gameTextures.load(Textures::Player, "bomberman_player.png"); 
-
-	player1(gameTextures.get(Textures::Player)); 
 }
 
 
@@ -80,24 +78,6 @@ void Game::update(sf::Time dt)
 void Game::render()
 {
 	window->clear(); 
-	player1.draw(*window); 
+	player1.draw(*window);  
 	window->display(); 
 }
-
-/*
-void Game::border_collision()
-{
-	// left wall
-	if (player.getPosition().x < 0.f)
-		player.setPosition(.0f, player.getPosition().y);
-	// top wall
-	if (player.getPosition().y < 0.f)
-		player.setPosition(player.getPosition().x, 0.f); 
-	// right wall 
-	if (player.getPosition().x + player.getGlobalBounds().width > window.getSize().x)
-		player.setPosition(window.getSize().x - player.getGlobalBounds().width, player.getPosition().y);
-	// bottom wal 
-	if (player.getPosition().y + player.getGlobalBounds().height > window.getSize().y)
-		player.setPosition(player.getPosition().x, window.getSize().y - player.getGlobalBounds().height); 
-}
-*/

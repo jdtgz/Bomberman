@@ -2,30 +2,33 @@
 #include "SFML/Graphics.hpp"
 #include "Animation.h"
 
-enum class AnimationIndex
-{
-	WalkingUp, WalkingDown, WalkingRight, WalkingLeft, Count
-};
 
 class Player
 {
+	private:
+		enum class AnimationIndex
+		{
+			WalkingLeft, WalkingRight, WalkingDown, WalkingUp, Count
+		};
+
 	public:
 		Player();
-		Player(sf::Texture&); 
 		~Player(); 
 
-		// accessors 
-		void setSprite(sf::Texture&);
-		
+		void setUpAnimations(sf::Texture&);
 		void handleInput(sf::Keyboard::Key, bool); 
 		void draw(sf::RenderWindow&) const; 
 		void update(sf::Time);
 
 
 	private:
+		// visual attributes
 		sf::Sprite mSprite;
-		Animation animations[int(AnimationIndex::Count)]; 
-		float speed; 
+		Animation animations[int(AnimationIndex::Count)];
+		AnimationIndex cAnimation = AnimationIndex::WalkingRight; 
+		
+		// movements attributes 
+		float speed;
 		sf::Vector2f velocity; 
 };
 

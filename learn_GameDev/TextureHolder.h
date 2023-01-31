@@ -5,7 +5,7 @@
 
 namespace Textures
 {
-	enum ID { Enemies, Player };
+	enum ID { Player };
 }
 
 class TextureHolder

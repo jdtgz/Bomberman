@@ -1,29 +1,35 @@
 #include "Animation.h"
 
-Animation::Animation()
-{
-}
 
-Animation::Animation(sf::Texture& txt, sf::IntRect rect, int total)
+Animation::Animation(sf::Texture& t)
 {
-	nFrames = total; 
-	iFrame = 0; 
+	texture = t;
+	nFrames = 0;
+	iFrame = 0;
 	time = 0.0f;
-	texture = txt;
-	frames = new sf::IntRect[nFrames]; 
 }
 
 
 Animation::~Animation()
 {
-	delete[] frames;
+}
+
+
+void Animation::initializeRects(int x, int y, int width, int height, int total)
+{
+	nFrames = total; 
+	
+	for (int i = 0; i < nFrames; i++)
+	{
+		frames.push_back(sf::IntRect(x, y + i * width, width, height));
+	}
 }
 
 
 void Animation::applyToSprite(sf::Sprite& s) const
 {
-	s.setTexture(texture); 
-	s.setTextureRect(frames[iFrame]); 
+	s.setTexture(texture);
+	s.setTextureRect(frames[iFrame]);
 }
 
 
