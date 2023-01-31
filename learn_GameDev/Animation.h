@@ -16,7 +16,7 @@ class Animation
 		void advance(); 
 
 		static constexpr int nFrames = 3; 
-		static constexpr float HOLDTIME = 0.5f; 
+		static constexpr float HOLDTIME = 0.1f; 
 		sf::Texture texture; 
 		sf::IntRect frames[nFrames];
 		int iFrame;

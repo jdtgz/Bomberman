@@ -2,7 +2,7 @@
 
 
 Player::Player(sf::Texture& t)
-	: rightWalk(t, 1, 16, 12, 16)
+	: rightWalk(t, 0, 0, 12, 16)
 {
 	// initialize variables
 	speed = 100.f; 
