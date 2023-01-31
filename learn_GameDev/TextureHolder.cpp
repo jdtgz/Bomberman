@@ -3,6 +3,7 @@
 
 TextureHolder::TextureHolder()
 {
+	load(Textures::Player, "bomberman_player.png"); 
 }
 
 

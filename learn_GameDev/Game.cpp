@@ -3,11 +3,10 @@
 
 // constructor 
 Game::Game()
+	: player1(gameTextures.get(Textures::Player))
 {
 	window = nullptr; 
 	window = new sf::RenderWindow(sf::VideoMode(600, 600), "GAME!!");
-
-	gameTextures.load(Textures::Player, "bomberman_player.png"); 
 }
 
 
@@ -68,8 +67,7 @@ void Game::processEvents()
 
 // updates all the events in the game 
 void Game::update(sf::Time dt)
-{
-	// updates the position & animation of player 
+{ 
 	player1.update(dt); 
 }
 

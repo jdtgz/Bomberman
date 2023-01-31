@@ -5,17 +5,10 @@
 
 class Player
 {
-	private:
-		enum class AnimationIndex
-		{
-			WalkingLeft, WalkingRight, WalkingDown, WalkingUp, Count
-		};
-
 	public:
-		Player();
+		Player(sf::Texture&);
 		~Player(); 
 
-		void setUpAnimations(sf::Texture&);
 		void handleInput(sf::Keyboard::Key, bool); 
 		void draw(sf::RenderWindow&) const; 
 		void update(sf::Time);
@@ -24,8 +17,7 @@ class Player
 	private:
 		// visual attributes
 		sf::Sprite mSprite;
-		Animation animations[int(AnimationIndex::Count)];
-		AnimationIndex cAnimation = AnimationIndex::WalkingRight; 
+		Animation rightWalk; 
 		
 		// movements attributes 
 		float speed;
