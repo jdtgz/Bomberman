@@ -5,6 +5,15 @@
 
 class Player
 {
+private:
+	enum class AnimationIndex
+	{
+		WalkingLeft = 0, 
+		WalkingRight,
+		WalkingDown,
+		WalkingUp,
+		Count
+	};
 	public:
 		Player(sf::Texture&);
 		~Player(); 
@@ -17,12 +26,8 @@ class Player
 	private:
 		// visual attributes
 		sf::Sprite mSprite;
-		Animation animations[4]; 
-		enum AnimationIndex
-		{
-			WalkingLeft, WalkingRight, WalkingDown, WalkingUp
-		};
-		int curAnimation;
+		Animation animations[int(AnimationIndex::Count)];
+		AnimationIndex curAnimation;
 
 		// movements attributes 
 		float speed;

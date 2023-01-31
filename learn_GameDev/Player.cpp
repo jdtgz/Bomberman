@@ -8,12 +8,12 @@ Player::Player(sf::Texture& t)
 	velocity.x = 0.f;
 	velocity.y = 0.f;
 
-	animations[WalkingLeft] = Animation(t, 0, 0, 12, 16, 3);
-	animations[WalkingRight] = Animation(t, 0, 16, 12, 16, 3);
-	animations[WalkingDown] = Animation(t, 0, 32, 12, 16, 3);
-	animations[WalkingUp] = Animation(t, 0, 48, 12, 16, 3);
+	animations[int(AnimationIndex::WalkingLeft)] = Animation(t, 0, 0, 12, 16, 3);
+	animations[int(AnimationIndex::WalkingRight)] = Animation(t, 0, 16, 12, 16, 3);
+	animations[int(AnimationIndex::WalkingDown)] = Animation(t, 0, 32, 12, 16, 3);
+	animations[int(AnimationIndex::WalkingUp)] = Animation(t, 0, 48, 12, 16, 3);
 
-	curAnimation = WalkingRight;
+	curAnimation = AnimationIndex::WalkingRight;
 }
 
 
@@ -30,19 +30,19 @@ void Player::handleInput(sf::Keyboard::Key key, bool moving)
 		{
 			case sf::Keyboard::Up:
 				velocity.y = -speed; 
-				curAnimation = WalkingUp;
+				curAnimation = AnimationIndex::WalkingUp;
 				break;
 			case sf::Keyboard::Down:
 				velocity.y = speed; 
-				curAnimation = WalkingDown;
+				curAnimation = AnimationIndex::WalkingDown;
 				break;
 			case sf::Keyboard::Left:
 				velocity.x = -speed;
-				curAnimation = WalkingLeft;
+				curAnimation = AnimationIndex::WalkingLeft;
 				break;
 			case sf::Keyboard::Right:
 				velocity.x = speed; 
-				curAnimation = WalkingRight;
+				curAnimation = AnimationIndex::WalkingRight;
 				break;
 		}
 	}
@@ -60,7 +60,7 @@ void Player::draw(sf::RenderWindow& window) const
 
 void Player::update(sf::Time dt)
 {
-	animations[curAnimation].update(dt.asSeconds());
-	animations[curAnimation].applyToSprite(mSprite);
+	animations[int(curAnimation)].update(dt.asSeconds());
+	animations[int(curAnimation)].applyToSprite(mSprite);
 	mSprite.move( velocity.x * dt.asSeconds(), velocity.y * dt.asSeconds());
 }
