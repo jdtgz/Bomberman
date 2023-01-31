@@ -8,10 +8,11 @@ Player::Player(sf::Texture& t)
 	velocity.x = 0.f;
 	velocity.y = 0.f;
 
-	animations[int(AnimationIndex::WalkingLeft)] = Animation(t, 0, 0, 12, 16, 3);
-	animations[int(AnimationIndex::WalkingRight)] = Animation(t, 0, 16, 12, 16, 3);
-	animations[int(AnimationIndex::WalkingDown)] = Animation(t, 0, 32, 12, 16, 3);
-	animations[int(AnimationIndex::WalkingUp)] = Animation(t, 0, 48, 12, 16, 3);
+	// setup animations 
+	animations[int(AnimationIndex::WalkingLeft)].setUp(t, 0, 0, 12, 16, 3);
+	animations[int(AnimationIndex::WalkingRight)].setUp(t, 0, 16, 12, 16, 3);
+	animations[int(AnimationIndex::WalkingDown)].setUp(t, 0, 32, 12, 16, 3);
+	animations[int(AnimationIndex::WalkingUp)].setUp(t, 0, 48, 12, 16, 3);
 
 	curAnimation = AnimationIndex::WalkingRight;
 }
@@ -46,7 +47,7 @@ void Player::handleInput(sf::Keyboard::Key key, bool moving)
 				break;
 		}
 	}
-	else 
+	else
 		velocity = { 0.0f, 0.0f };
 
 }

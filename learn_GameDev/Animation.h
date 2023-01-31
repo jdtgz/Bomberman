@@ -9,13 +9,14 @@ class Animation
 		Animation(sf::Texture&, int, int, int, int, int); 
 		~Animation(); 
 
+		void setUp(sf::Texture&, int, int, int, int, int);
 		void applyToSprite(sf::Sprite&) const; 
 		void update(float); 
 
 	private:
 		void advance(); 
 
-		int nFrames = 3; 
+		int nFrames; 
 		static constexpr float HOLDTIME = 0.1f; 
 		sf::Texture texture; 
 		sf::IntRect* frames;

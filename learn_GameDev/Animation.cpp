@@ -15,10 +15,23 @@ Animation::Animation(sf::Texture& t, int x, int y, int width, int height, int tF
 
 	for (int i = 0; i < nFrames; i++)
 	{
+		frames[i] = sf::IntRect(x + i * width, y, width, height); 
+	}
+}
+
+
+void Animation::setUp(sf::Texture& t, int x, int y, int width, int height, int tFrames)
+{
+	texture = t;
+	nFrames = tFrames;
+	frames = new sf::IntRect[nFrames];
+
+	for (int i = 0; i < nFrames; i++)
+	{
 		frames[i] = sf::IntRect(x + i * width, y, width, height);
 
 		std::cout << frames[i].top << " " << frames[i].left << " "
-			<< frames[i].height << " " << frames[i].width << " \n"; 
+			<< frames[i].height << " " << frames[i].width << " \n";
 	}
 }
 
