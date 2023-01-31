@@ -5,20 +5,20 @@
 class Animation
 {
 	public:
-		Animation(sf::Texture&, int, int, int, int); 
+		Animation() = default; 
+		Animation(sf::Texture&, int, int, int, int, int); 
 		~Animation(); 
 
-		void initializeRects(int, int, int, int, int);
 		void applyToSprite(sf::Sprite&) const; 
 		void update(float); 
 
 	private:
 		void advance(); 
 
-		static constexpr int nFrames = 3; 
+		int nFrames = 3; 
 		static constexpr float HOLDTIME = 0.1f; 
 		sf::Texture texture; 
-		sf::IntRect frames[nFrames];
+		sf::IntRect* frames;
 		int iFrame;
 		float time; 
 };

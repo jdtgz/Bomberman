@@ -17,8 +17,13 @@ class Player
 	private:
 		// visual attributes
 		sf::Sprite mSprite;
-		Animation rightWalk; 
-		
+		Animation animations[4]; 
+		enum AnimationIndex
+		{
+			WalkingLeft, WalkingRight, WalkingDown, WalkingUp
+		};
+		int curAnimation;
+
 		// movements attributes 
 		float speed;
 		sf::Vector2f velocity; 
