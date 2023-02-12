@@ -18,7 +18,7 @@ class Animation
 
 		int nFrames; 
 		static constexpr float HOLDTIME = 0.1f; 
-		sf::Texture texture; 
+		sf::Texture* texture; 
 		sf::IntRect* frames;
 		int iFrame;
 		float time; 
