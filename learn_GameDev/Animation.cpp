@@ -1,22 +1,22 @@
 #include "Animation.h"
 
 
+// destructor
 Animation::~Animation()
 {
 	delete[] frames; 
+	delete texture;
 }
 
 
-Animation::Animation(sf::Texture& t, int x, int y, int width, int height, int tFrames)
-{ 
-	texture = &t; 
-	nFrames = tFrames; 
-	frames = new sf::IntRect[nFrames]; 
-
-	for (int i = 0; i < nFrames; i++)
-	{
-		frames[i] = sf::IntRect(x + i * width, y, width, height); 
-	}
+// default constructor
+Animation::Animation()
+{  
+	texture = 0; 
+	frames = nullptr; 
+	nFrames = 0; 
+	iFrame = 0;
+	time = 0.0f; 
 }
 
 
@@ -26,6 +26,8 @@ void Animation::setUp(sf::Texture& t, int x, int y, int width, int height, int t
 	nFrames = tFrames;
 	frames = new sf::IntRect[nFrames];
 
+	// cycle through and initialize all the frames 
+	// *No spacing between sprite boxes 
 	for (int i = 0; i < nFrames; i++)
 	{
 		frames[i] = sf::IntRect(x + i * width, y, width, height);

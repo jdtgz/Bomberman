@@ -3,7 +3,7 @@
 
 Player::Player(sf::Texture& t)
 {
-	// initialize variables
+	// initialize movement attributes 
 	speed = 100.f; 
 	velocity.x = 0.f;
 	velocity.y = 0.f;
@@ -14,10 +14,12 @@ Player::Player(sf::Texture& t)
 	animations[int(AnimationIndex::WalkingDown)].setUp(t, 0, 32, 12, 16, 3);
 	animations[int(AnimationIndex::WalkingUp)].setUp(t, 0, 48, 12, 16, 3);
 
+	// set the starting animation
 	curAnimation = AnimationIndex::WalkingRight;
 }
 
 
+// destructor
 Player::~Player()
 {
 }
@@ -25,6 +27,7 @@ Player::~Player()
 
 void Player::handleInput(sf::Keyboard::Key key, bool moving)
 {
+	// change the direction of the player based on input
 	if (moving)
 	{
 		switch (key)
@@ -59,9 +62,12 @@ void Player::draw(sf::RenderWindow& window) const
 }
 
 
-void Player::update(sf::Time dt)
+void Player::update(float dt)
 {
-	animations[int(curAnimation)].update(dt.asSeconds());
+	// update animations 
+	animations[int(curAnimation)].update(dt);
 	animations[int(curAnimation)].applyToSprite(mSprite);
-	mSprite.move( velocity.x * dt.asSeconds(), velocity.y * dt.asSeconds());
+
+	// update location
+	mSprite.move( velocity.x * dt, velocity.y * dt);
 }

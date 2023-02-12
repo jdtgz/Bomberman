@@ -5,6 +5,7 @@
 Game::Game()
 	: player1(gameTextures.get(Textures::Player))
 {
+	// initialize window
 	window = nullptr; 
 	window = new sf::RenderWindow(sf::VideoMode(600, 600), "GAME!!");
 }
@@ -68,7 +69,7 @@ void Game::processEvents()
 // updates all the events in the game 
 void Game::update(sf::Time dt)
 { 
-	player1.update(dt); 
+	player1.update(dt.asSeconds()); 
 }
 
 
