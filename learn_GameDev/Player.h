@@ -6,6 +6,7 @@
 class Player
 {
 private:
+	// total animations of the player
 	enum class AnimationIndex
 	{
 		WalkingLeft = 0, 
@@ -15,12 +16,18 @@ private:
 		Count
 	};
 	public:
+		// constructor/destructor
 		Player(sf::Texture&);
 		~Player(); 
 
+		// Given a key, do something
 		void handleInput(sf::Keyboard::Key, bool); 
+
+		// Draws player onto the screen
 		void draw(sf::RenderWindow&) const; 
-		void update(sf::Time);
+
+		// updates attributes of player while in main
+		void update(float);
 
 
 	private:

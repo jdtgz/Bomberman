@@ -5,22 +5,35 @@
 class Animation
 {
 	public:
-		Animation() = default; 
-		Animation(sf::Texture&, int, int, int, int, int); 
+		// constructor/destructor
+		Animation(); 
 		~Animation(); 
 
+		// Given a texture, initial cords, box size, & number of frames,
+		// set all the frames in the animaiton
 		void setUp(sf::Texture&, int, int, int, int, int);
+
+		// apply the current frame to a sprite
 		void applyToSprite(sf::Sprite&) const; 
+
+		// cycle animation based on time in-game
 		void update(float); 
 
 	private:
+		// cycles to the next frame in frames
 		void advance(); 
 
+		// total number of frames in animation
 		int nFrames; 
+		// amount of time a single frame will be on screen
 		static constexpr float HOLDTIME = 0.1f; 
-		sf::Texture texture; 
+		// image to pull sprite rects from 
+		sf::Texture* texture; 
+		// array of IntRects that contain boxes of each frame 
 		sf::IntRect* frames;
+		// current frames in cycle
 		int iFrame;
+		// counter to track how long a single frame has been on screen
 		float time; 
 };
 

@@ -49,5 +49,14 @@
     <Image Include="bomberman_player.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="bomberman_enemies.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="bomberman_explosion.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="bomberman_items.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
