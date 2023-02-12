@@ -5,7 +5,6 @@
 Animation::~Animation()
 {
 	delete[] frames; 
-	delete texture;
 }
 
 
