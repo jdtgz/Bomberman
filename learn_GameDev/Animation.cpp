@@ -9,7 +9,7 @@ Animation::~Animation()
 
 Animation::Animation(sf::Texture& t, int x, int y, int width, int height, int tFrames)
 { 
-	texture = t; 
+	texture = &t; 
 	nFrames = tFrames; 
 	frames = new sf::IntRect[nFrames]; 
 
@@ -22,7 +22,7 @@ Animation::Animation(sf::Texture& t, int x, int y, int width, int height, int tF
 
 void Animation::setUp(sf::Texture& t, int x, int y, int width, int height, int tFrames)
 {
-	texture = t;
+	texture = &t;
 	nFrames = tFrames;
 	frames = new sf::IntRect[nFrames];
 
@@ -38,7 +38,7 @@ void Animation::setUp(sf::Texture& t, int x, int y, int width, int height, int t
 
 void Animation::applyToSprite(sf::Sprite& s) const
 {
-	s.setTexture(texture);
+	s.setTexture(*texture);
 	s.setTextureRect(frames[iFrame]);
 	s.setScale(5, 5); 
 }
