@@ -3,7 +3,7 @@
 
 // constructor 
 Game::Game()
-	: player1(gameTextures.get(Textures::Player))
+	: player1(TextureHolder::get(Textures::Player))
 {
 	// initialize window
 	window = nullptr; 
@@ -77,6 +77,15 @@ void Game::update(sf::Time dt)
 void Game::render()
 {
 	window->clear(); 
+
+
+	Animation animation;
+	animation.setUp(TextureHolder::get(Textures::Items), 0, 16, 16, 16, 3);
+	sf::Sprite sprite;
+	sprite.setPosition(100, 100);
+	animation.applyToSprite(sprite);
+	window->draw(sprite);
+
 	player1.draw(*window);  
 	window->display(); 
 }

@@ -5,7 +5,7 @@
 // testing notifications on webhook // testing again
 Animation::~Animation()
 {
-	delete[] frames; 
+	delete[] frames;
 }
 
 
