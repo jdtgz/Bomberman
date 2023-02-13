@@ -14,6 +14,6 @@ public:
 
 	void print(sf::RenderWindow&);
 private:
-	std::vector<std::vector<Tile*>> map;
+	Tile* tilemap[32][12];
 };
 

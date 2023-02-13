@@ -2,17 +2,17 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-class Tile
+class myTile
 {
 public:
-	Tile(int, int, int);
-	~Tile();
+	myTile(int, int, int);
+	~myTile();
 
 	int getTileType();
 	void setTileType(int);
 
 	void move(int); //Tiles only move side to side
-	
+
 	void print(sf::RenderWindow&) const;
 	sf::RectangleShape tile;
 private:

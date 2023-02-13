@@ -1,13 +1,17 @@
 #include "Tile.h"
+#include <SFML/Graphics.hpp>
+
 
 Tile::Tile(int xCord, int yCord, int size)
 {
 	initalizeTile(xCord, yCord, size);
 }
 
+
 Tile::~Tile()
 {
 }
+
 
 void Tile::initalizeTile(int xCord, int yCord, int size)
 {
@@ -20,22 +24,26 @@ void Tile::initalizeTile(int xCord, int yCord, int size)
 	std::cout << "Tile Created at " << xCord << "," << yCord << '\n';
 }
 
+
 int Tile::getTileType()
 {
 	return tileType;
 }
+
 
 void Tile::setTileType(int newType)
 {
 	tileType = newType;
 }
 
+
 void Tile::move(int distance)
 {
 	tile.move(distance, 0);
 }
 
+
 void Tile::print(sf::RenderWindow& window) const
 {
-	//window.draw(tile);
+	window.draw(tile);
 }
