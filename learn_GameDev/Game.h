@@ -2,6 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include "TextureHolder.h"
 #include "Player.h"
+#include "Level.h"
 
 class Game
 {
@@ -30,9 +31,14 @@ private:
 	TextureHolder gameTextures;
 
 	// FPS
-	sf::Time TimePerFrame = sf::seconds(1.f / 60.f); 
+	sf::Time timePerFrame = sf::seconds(1.f / 60.f); 
 
 	// Player 
 	Player player1;
-};
 
+	// Level
+	Level level;
+
+	// Level Number
+	int levelNumber = 0;
+};

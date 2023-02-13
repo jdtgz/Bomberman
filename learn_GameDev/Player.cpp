@@ -4,18 +4,16 @@
 Player::Player(sf::Texture& t)
 {
 	// initialize movement attributes 
-	speed = 100.f; 
-	velocity.x = 0.f;
-	velocity.y = 0.f;
+	speed = 100.f;
 
 	// setup animations 
-	animations[int(AnimationIndex::WalkingLeft)].setUp(t, 0, 0, 12, 16, 3);
-	animations[int(AnimationIndex::WalkingRight)].setUp(t, 0, 16, 12, 16, 3);
-	animations[int(AnimationIndex::WalkingDown)].setUp(t, 0, 32, 12, 16, 3);
-	animations[int(AnimationIndex::WalkingUp)].setUp(t, 0, 48, 12, 16, 3);
+	animations[int(AnimationIndex::WALKING_LEFT)].setUp(t, 0, 0, 12, 16, 3);
+	animations[int(AnimationIndex::WALKING_RIGHT)].setUp(t, 0, 16, 12, 16, 3);
+	animations[int(AnimationIndex::WALKING_DOWN)].setUp(t, 0, 32, 12, 16, 3);
+	animations[int(AnimationIndex::WALKING_UP)].setUp(t, 0, 48, 12, 16, 3);
 
 	// set the starting animation
-	curAnimation = AnimationIndex::WalkingRight;
+	curAnimation = AnimationIndex::WALKING_RIGHT;
 }
 
 
@@ -25,34 +23,48 @@ Player::~Player()
 }
 
 
-void Player::handleInput(sf::Keyboard::Key key, bool moving)
+void Player::keyPressed(sf::Keyboard::Key key)
 {
 	// change the direction of the player based on input
-	if (moving)
+	switch (key)
 	{
-		switch (key)
-		{
-			case sf::Keyboard::Up:
-				velocity.y = -speed; 
-				curAnimation = AnimationIndex::WalkingUp;
-				break;
-			case sf::Keyboard::Down:
-				velocity.y = speed; 
-				curAnimation = AnimationIndex::WalkingDown;
-				break;
-			case sf::Keyboard::Left:
-				velocity.x = -speed;
-				curAnimation = AnimationIndex::WalkingLeft;
-				break;
-			case sf::Keyboard::Right:
-				velocity.x = speed; 
-				curAnimation = AnimationIndex::WalkingRight;
-				break;
-		}
+		case sf::Keyboard::Up:
+			up = true; 
+			curAnimation = AnimationIndex::WALKING_UP;
+			break;
+		case sf::Keyboard::Down:
+			down = true; 
+			curAnimation = AnimationIndex::WALKING_DOWN;
+			break;
+		case sf::Keyboard::Left:
+			left = true;
+			curAnimation = AnimationIndex::WALKING_LEFT;
+			break;
+		case sf::Keyboard::Right:
+			right = true; 
+			curAnimation = AnimationIndex::WALKING_RIGHT;
+			break;
 	}
-	else
-		velocity = { 0.0f, 0.0f };
+}
 
+void Player::keyReleased(sf::Keyboard::Key key)
+{
+	// change the direction of the player based on input
+	switch (key)
+	{
+	case sf::Keyboard::Up:
+		up = false;
+		break;
+	case sf::Keyboard::Down:
+		down = false;
+		break;
+	case sf::Keyboard::Left:
+		left = false;
+		break;
+	case sf::Keyboard::Right:
+		right = false;
+		break;
+	}
 }
 
 
@@ -69,5 +81,5 @@ void Player::update(float dt)
 	animations[int(curAnimation)].applyToSprite(mSprite);
 
 	// update location
-	mSprite.move( velocity.x * dt, velocity.y * dt);
+	mSprite.move(((left * -3) + (right * 3)), ((up * -3) + (down * 3)));
 }
