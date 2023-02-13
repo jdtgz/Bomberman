@@ -4,7 +4,7 @@
 Level::Level()
 {
 	//Set positions and sizes of the tiles
-	int xPos = 0, yPos = 0;
+	int xPos = 0, yPos = 100;
 	for (int x = 0; x < mapLength; x++)
 	{
 		for (int y = 0; y < mapHeight; y++)
@@ -13,7 +13,7 @@ Level::Level()
 			yPos += 50;
 		}
 		xPos += 50;
-		yPos = 0;
+		yPos = 100;
 	}
 }
 
