@@ -31,7 +31,7 @@ private:
 	TextureHolder gameTextures;
 
 	// FPS
-	sf::Time TimePerFrame = sf::seconds(1.f / 60.f); 
+	sf::Time timePerFrame = sf::seconds(1.f / 60.f); 
 
 	// Player 
 	Player player1;
@@ -42,4 +42,3 @@ private:
 	// Level Number
 	int levelNumber = 0;
 };
-

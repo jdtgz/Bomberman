@@ -7,13 +7,13 @@ Player::Player(sf::Texture& t)
 	speed = 100.f;
 
 	// setup animations 
-	animations[int(AnimationIndex::WalkingLeft)].setUp(t, 0, 0, 12, 16, 3);
-	animations[int(AnimationIndex::WalkingRight)].setUp(t, 0, 16, 12, 16, 3);
-	animations[int(AnimationIndex::WalkingDown)].setUp(t, 0, 32, 12, 16, 3);
-	animations[int(AnimationIndex::WalkingUp)].setUp(t, 0, 48, 12, 16, 3);
+	animations[int(AnimationIndex::WALKING_LEFT)].setUp(t, 0, 0, 12, 16, 3);
+	animations[int(AnimationIndex::WALKING_RIGHT)].setUp(t, 0, 16, 12, 16, 3);
+	animations[int(AnimationIndex::WALKING_DOWN)].setUp(t, 0, 32, 12, 16, 3);
+	animations[int(AnimationIndex::WALKING_UP)].setUp(t, 0, 48, 12, 16, 3);
 
 	// set the starting animation
-	curAnimation = AnimationIndex::WalkingRight;
+	curAnimation = AnimationIndex::WALKING_RIGHT;
 }
 
 
@@ -30,19 +30,19 @@ void Player::keyPressed(sf::Keyboard::Key key)
 	{
 		case sf::Keyboard::Up:
 			up = true; 
-			curAnimation = AnimationIndex::WalkingUp;
+			curAnimation = AnimationIndex::WALKING_UP;
 			break;
 		case sf::Keyboard::Down:
 			down = true; 
-			curAnimation = AnimationIndex::WalkingDown;
+			curAnimation = AnimationIndex::WALKING_DOWN;
 			break;
 		case sf::Keyboard::Left:
 			left = true;
-			curAnimation = AnimationIndex::WalkingLeft;
+			curAnimation = AnimationIndex::WALKING_LEFT;
 			break;
 		case sf::Keyboard::Right:
 			right = true; 
-			curAnimation = AnimationIndex::WalkingRight;
+			curAnimation = AnimationIndex::WALKING_RIGHT;
 			break;
 	}
 }

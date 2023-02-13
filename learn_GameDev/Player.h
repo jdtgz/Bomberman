@@ -9,11 +9,11 @@ private:
 	// total animations of the player
 	enum class AnimationIndex
 	{
-		WalkingLeft = 0, 
-		WalkingRight,
-		WalkingDown,
-		WalkingUp,
-		Count
+		WALKING_LEFT = 0, 
+		WALKING_RIGHT,
+		WALKING_DOWN,
+		WALKING_UP,
+		COUNT
 	};
 	public:
 		// constructor/destructor
@@ -34,11 +34,10 @@ private:
 	private:
 		// visual attributes
 		sf::Sprite mSprite;
-		Animation animations[int(AnimationIndex::Count)];
+		Animation animations[int(AnimationIndex::COUNT)];
 		AnimationIndex curAnimation;
 
 		// movements attributes 
 		float speed;
 		bool left = false, right = false, up = false, down = false;
 };
-

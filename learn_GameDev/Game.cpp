@@ -1,51 +1,61 @@
 #include "Game.h"
 
 
-// constructor 
 Game::Game()
 	: player1(gameTextures.get(Textures::Player))
 {
-	// initialize window
-	window = nullptr; 
+	//Create a new window
 	window = new sf::RenderWindow(sf::VideoMode(600, 600), "GAME!!");
 	window->setFramerateLimit(144);
 
-	// create level
+	//Generate the level
 	level.generate(levelNumber);
 }
 
 
-// destructor
 Game::~Game() 
-{ 
+{
+	//Unallocate window
 	delete window; 
 }
 
 
-// runs the entirty of the game 
-// tracks time to calc movement and animations 
+//Runs the game
+//Keeps track of time for movement and animations
 void Game::run()
 {
-	// initialize closk and deltaTime
+	//Initialize clock & delta time
 	sf::Clock clock; 
-	sf::Time timeSinceLastUpdate = sf::Time::Zero;
+	sf::Time timeSinceLastTick = sf::Time::Zero;
 
 	while (window->isOpen())
 	{
-		processEvents(); 
-		timeSinceLastUpdate += clock.restart(); 
-		while (timeSinceLastUpdate > TimePerFrame)
+		//Poll events
+		processEvents();
+
+		//Calculate dt
+		timeSinceLastTick += clock.restart();
+
+		//While there is time in the current tick
+		while (timeSinceLastTick > timePerFrame)
 		{
-			timeSinceLastUpdate -= TimePerFrame;
-			processEvents(); 
-			update(TimePerFrame); 
+			//Decrement dt
+			timeSinceLastTick -= timePerFrame;
+
+			//Poll events again
+			processEvents();
+
+			//Tick
+			update(timePerFrame); 
 		}
+
+		//Display updated gamestate
 		render(); 
 	}
 }
 
 
-// Tracks all events in the game and acts accordingly 
+//Event manager
 void Game::processEvents()
 {
 	sf::Event evnt;
@@ -53,31 +63,30 @@ void Game::processEvents()
 	{
 		switch (evnt.type)
 		{
-			// if a key is pressed 
+			//Tell the player when a key is down
 			case sf::Event::KeyPressed:
 				player1.keyPressed(evnt.key.code); 
 				break;
-			// if a key is released 
+			//Tell the player when a key is released
 			case sf::Event::KeyReleased:
 				player1.keyReleased(evnt.key.code); 
 				break;
-			// if window is closed 
+			//Close the window
 			case sf::Event::Closed: 
-				window->close(); 
-				break; 
+				window->close();
 		}
 	}
 }
 
 
-// updates all the events in the game 
+//Tick
 void Game::update(sf::Time dt)
 { 
 	player1.update(dt.asSeconds()); 
 }
 
 
-// renders all objects onto sfml window 
+//Draw all objects to the window
 void Game::render()
 {
 	window->clear(); 

@@ -36,4 +36,3 @@ class Animation
 		// counter to track how long a single frame has been on screen
 		float time; 
 };
-

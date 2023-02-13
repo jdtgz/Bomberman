@@ -16,4 +16,3 @@ public:
 private:
 	Tile* tilemap[32][12];
 };
-
