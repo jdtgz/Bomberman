@@ -43,7 +43,3 @@ sf::Texture& TextureHolder::get(Textures::ID id)
 		return emptyTex;
 	}
 }
-=======
-	auto found = textureMap.find(id); 
-	return *found->second; 
-}
