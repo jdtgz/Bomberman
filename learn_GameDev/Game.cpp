@@ -2,7 +2,7 @@
 
 
 Game::Game()
-	: player1(gameTextures.get(Textures::Player))
+	: player1(TextureHolder::get(Textures::Player))
 {
 	//Create a new window
 	window = new sf::RenderWindow(sf::VideoMode(600, 600), "GAME!!");
