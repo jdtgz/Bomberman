@@ -19,9 +19,9 @@ void Tile::initalizeTile(int xCord, int yCord, int size)
 	tile.setPosition(xCord, yCord);
 
 	//For testing purposes
-	tile.setFillColor(sf::Color::Red);
-	tile.setOutlineThickness(5);
-	tile.setOutlineColor(sf::Color::Green);
+	//tile.setFillColor(sf::Color::Red);
+	//tile.setOutlineThickness(5);
+	//tile.setOutlineColor(sf::Color::Green);
 
 	//Debug
 	std::cout << "Tile Created at " << xCord << "," << yCord << '\n';
@@ -43,6 +43,23 @@ void Tile::setTileType(const int type)
 	switch (tileType)
 	{
 		//put anything related to tile type changes here
+	case TILE_TYPES::AIR:
+		break;
+	case TILE_TYPES::BOMB:
+		break;
+	case TILE_TYPES::BRICK:
+		break;
+	case TILE_TYPES::EXIT:
+		break;
+	case TILE_TYPES::EXPLOTION:
+		break;
+	case TILE_TYPES::POWERUP:
+		break;
+	case TILE_TYPES::TILE:
+		sf::Texture* tileTex = &TextureHolder::get(Textures::Items);
+		tile.setTexture(tileTex);
+		tile.setTextureRect(sf::IntRect(0,16,16,16));
+		break;
 	}
 }
 

@@ -1,6 +1,18 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "TextureHolder.h"
+
+enum TILE_TYPES
+{
+	AIR = 0,
+	BRICK, // breakable
+	TILE, // invincible
+	BOMB,
+	EXPLOTION,
+	POWERUP,
+	EXIT
+};
 
 class Tile
 {
@@ -16,17 +28,6 @@ public:
 	void print(sf::RenderWindow&) const;
 	sf::RectangleShape tile;
 private:
-	enum types
-	{
-		AIR = 0,
-		BRICK, // breakable
-		TILE, // invincible
-		BOMB,
-		EXPLOTION,
-		POWERUP,
-		EXIT
-	};
-
 	void initalizeTile(int, int, int);
 
 	int tileType = 0;
