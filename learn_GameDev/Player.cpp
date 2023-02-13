@@ -1,16 +1,18 @@
 #include "Player.h"
 
 
-Player::Player(sf::Texture& t)
+Player::Player()
 {
 	// initialize movement attributes 
 	speed = 100.f;
+	
+	sf::Texture* t = &TextureHolder::get(Textures::Player);
 
 	// setup animations 
-	animations[int(AnimationIndex::WALKING_LEFT)].setUp(t, 0, 0, 12, 16, 3);
-	animations[int(AnimationIndex::WALKING_RIGHT)].setUp(t, 0, 16, 12, 16, 3);
-	animations[int(AnimationIndex::WALKING_DOWN)].setUp(t, 0, 32, 12, 16, 3);
-	animations[int(AnimationIndex::WALKING_UP)].setUp(t, 0, 48, 12, 16, 3);
+	animations[int(AnimationIndex::WALKING_LEFT)].setUp(*t, 0, 0, 12, 16, 3);
+	animations[int(AnimationIndex::WALKING_RIGHT)].setUp(*t, 0, 16, 12, 16, 3);
+	animations[int(AnimationIndex::WALKING_DOWN)].setUp(*t, 0, 32, 12, 16, 3);
+	animations[int(AnimationIndex::WALKING_UP)].setUp(*t, 0, 48, 12, 16, 3);
 
 	// set the starting animation
 	curAnimation = AnimationIndex::WALKING_RIGHT;
