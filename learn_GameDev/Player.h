@@ -21,7 +21,8 @@ private:
 		~Player(); 
 
 		// Given a key, do something
-		void handleInput(sf::Keyboard::Key, bool); 
+		void keyPressed(sf::Keyboard::Key); 
+		void keyReleased(sf::Keyboard::Key);
 
 		// Draws player onto the screen
 		void draw(sf::RenderWindow&) const; 
@@ -38,6 +39,6 @@ private:
 
 		// movements attributes 
 		float speed;
-		sf::Vector2f velocity; 
+		bool left = false, right = false, up = false, down = false;
 };
 

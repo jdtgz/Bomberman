@@ -2,6 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include "TextureHolder.h"
 #include "Player.h"
+#include "Level.h"
 
 class Game
 {
@@ -34,5 +35,11 @@ private:
 
 	// Player 
 	Player player1;
+
+	// Level
+	Level level;
+
+	// Level Number
+	int levelNumber = 0;
 };
 

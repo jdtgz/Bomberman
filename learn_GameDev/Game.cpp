@@ -8,6 +8,10 @@ Game::Game()
 	// initialize window
 	window = nullptr; 
 	window = new sf::RenderWindow(sf::VideoMode(600, 600), "GAME!!");
+	window->setFramerateLimit(144);
+
+	// create level
+	level.generate(levelNumber);
 }
 
 
@@ -24,7 +28,7 @@ void Game::run()
 {
 	// initialize closk and deltaTime
 	sf::Clock clock; 
-	sf::Time timeSinceLastUpdate = sf::Time::Zero; 
+	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
 	while (window->isOpen())
 	{
@@ -51,11 +55,11 @@ void Game::processEvents()
 		{
 			// if a key is pressed 
 			case sf::Event::KeyPressed:
-				player1.handleInput(evnt.key.code, true); 
+				player1.keyPressed(evnt.key.code); 
 				break;
 			// if a key is released 
 			case sf::Event::KeyReleased:
-				player1.handleInput(evnt.key.code, false); 
+				player1.keyReleased(evnt.key.code); 
 				break;
 			// if window is closed 
 			case sf::Event::Closed: 
@@ -77,6 +81,7 @@ void Game::update(sf::Time dt)
 void Game::render()
 {
 	window->clear(); 
+	level.print(*window);
 	player1.draw(*window);  
 	window->display(); 
 }
