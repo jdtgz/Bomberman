@@ -5,14 +5,13 @@
 Animation::~Animation()
 {
 	delete[] frames; 
-	delete texture;
 }
 
 
 // default constructor
 Animation::Animation()
 {  
-	texture = 0; 
+	texture = nullptr; 
 	frames = nullptr; 
 	nFrames = 0; 
 	iFrame = 0;
