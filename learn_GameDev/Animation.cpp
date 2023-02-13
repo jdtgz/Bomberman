@@ -2,6 +2,7 @@
 
 
 // destructor
+// testing notifications on webhook
 Animation::~Animation()
 {
 	delete[] frames; 
