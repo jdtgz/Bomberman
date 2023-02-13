@@ -11,7 +11,7 @@ Animation::~Animation()
 // default constructor
 Animation::Animation()
 {  
-	texture = 0; 
+	texture = nullptr; 
 	frames = nullptr; 
 	nFrames = 0; 
 	iFrame = 0;
