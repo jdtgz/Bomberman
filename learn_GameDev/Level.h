@@ -14,5 +14,8 @@ public:
 
 	void print(sf::RenderWindow&);
 private:
-	Tile* tilemap[32][12];
+	const int mapLength = 31;
+	const int mapHeight = 13;
+
+	Tile* tilemap[31][13];
 };

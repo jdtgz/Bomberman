@@ -39,6 +39,11 @@ int Tile::getTileType()
 void Tile::setTileType(const int type)
 {
 	tileType = type;
+
+	switch (tileType)
+	{
+		//put anything related to tile type changes here
+	}
 }
 
 

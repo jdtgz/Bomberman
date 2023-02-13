@@ -16,6 +16,17 @@ public:
 	void print(sf::RenderWindow&) const;
 	sf::RectangleShape tile;
 private:
+	enum types
+	{
+		AIR = 0,
+		BRICK, // breakable
+		TILE, // invincible
+		BOMB,
+		EXPLOTION,
+		POWERUP,
+		EXIT
+	};
+
 	void initalizeTile(int, int, int);
 
 	int tileType = 0;
