@@ -9,7 +9,13 @@ Level::Level()
 	{
 		for (int y = 0; y < mapHeight; y++)
 		{
-			tilemap[x][y] = new Tile(xPos, yPos, 50);
+			if (y == 0 || x == 0 || y == mapHeight - 1 || x == mapLength - 1)
+				tilemap[x][y] = new Tile(xPos, yPos, TileType::Air);
+			else if (x % 2 != 0 && y % 2 != 0)
+				tilemap[x][y] = new Tile(xPos, yPos, TileType::Tile);
+			else
+				tilemap[x][y] = new Tile(xPos, yPos, TileType::Air);
+
 			yPos += 50;
 		}
 		xPos += 50;
@@ -32,9 +38,6 @@ void Level::generate(int levelNum)
 	//will set all the tile IDs on level start
 
 	//This is to test tile textures
-	for (int x = 0; x < mapLength; x++)
-		for (int y = 0; y < mapHeight; y++)
-			tilemap[x][y]->setTileType(TILE_TYPES::TILE);
 }
 
 
@@ -44,10 +47,10 @@ void Level::end()
 }
 
 
-void Level::print(sf::RenderWindow& window)
+void Level::draw(sf::RenderWindow& window) const
 {
 	//Print the tiles to the window
 	for (int x = 0; x < mapLength; x++)
 		for (int y = 0; y < mapHeight; y++)
-			tilemap[x][y]->print(window);
+			tilemap[x][y]->draw(window);
 }

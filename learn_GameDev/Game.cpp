@@ -2,7 +2,6 @@
 
 
 Game::Game()
-	: player1(TextureHolder::get(Textures::Player))
 {
 	//Create a new window
 	window = new sf::RenderWindow(sf::VideoMode(750, 750), "GAME!!");
@@ -90,7 +89,7 @@ void Game::update(sf::Time dt)
 void Game::render()
 {
 	window->clear(); 
-	level.print(*window);
+	level.draw(*window);
 	player1.draw(*window);  
 	window->display(); 
 }
