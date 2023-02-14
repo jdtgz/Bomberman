@@ -45,3 +45,4 @@ sf::Texture& TextureHolder::get(Textures::ID id)
 		return emptyTex;
 	}
 }
+

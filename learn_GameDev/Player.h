@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "Animation.h"
+#include "TextureHolder.h"
 
 
 class Player
@@ -17,7 +18,7 @@ private:
 	};
 	public:
 		// constructor/destructor
-		Player(sf::Texture&);
+		Player();
 		~Player(); 
 
 		// Given a key, do something
