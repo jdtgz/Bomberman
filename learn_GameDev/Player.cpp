@@ -16,6 +16,8 @@ Player::Player()
 
 	// set the starting animation
 	curAnimation = AnimationIndex::WALKING_RIGHT;
+	
+	animations[int(curAnimation)].applyToSprite(mSprite);
 }
 
 
@@ -79,8 +81,11 @@ void Player::draw(sf::RenderWindow& window) const
 void Player::update(float dt)
 {
 	// update animations 
-	animations[int(curAnimation)].update(dt);
-	animations[int(curAnimation)].applyToSprite(mSprite);
+	if (right || left || down || up)
+	{
+		animations[int(curAnimation)].update(dt);
+		animations[int(curAnimation)].applyToSprite(mSprite);
+	}
 
 	// update location
 	mSprite.move(((left * -3) + (right * 3)), ((up * -3) + (down * 3)));

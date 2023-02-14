@@ -7,6 +7,8 @@ TextureHolder::TextureHolder()
 {
 	load(Textures::Player, "bomberman_player.png");
 	load(Textures::Items, "bomberman_items.png");
+	load(Textures::Items, "bomberman_enemies.png");
+	load(Textures::Items, "bomberman_explosion.png");
 }
 
 
@@ -43,7 +45,4 @@ sf::Texture& TextureHolder::get(Textures::ID id)
 		return emptyTex;
 	}
 }
-=======
-	auto found = textureMap.find(id); 
-	return *found->second; 
-}
+

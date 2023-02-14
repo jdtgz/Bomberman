@@ -2,9 +2,10 @@
 
 
 Game::Game()
+	: player1(TextureHolder::get(Textures::Player))
 {
 	//Create a new window
-	window = new sf::RenderWindow(sf::VideoMode(600, 600), "GAME!!");
+	window = new sf::RenderWindow(sf::VideoMode(750, 750), "GAME!!");
 	window->setFramerateLimit(144);
 
 	//Generate the level
