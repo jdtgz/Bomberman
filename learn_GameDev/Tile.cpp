@@ -47,6 +47,7 @@ void Tile::setTileRect()
 			break;
 	}
 	tile.setScale(3, 3); 
+
 }
 
 

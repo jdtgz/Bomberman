@@ -3,10 +3,12 @@
 #include <iostream>
 #include "TextureHolder.h"
 
+
 namespace TileType 
 {
 	enum Tile_ID { Air = 0, Brick, Tile, Door };
 }
+
 
 class Tile
 {
