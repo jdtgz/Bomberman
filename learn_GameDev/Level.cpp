@@ -35,7 +35,65 @@ Level::~Level()
 
 void Level::generate(int levelNum)
 {
-	//will set all the tile IDs on level start
+	int random = 0, randX = 0, randY = 0, totalSoftBlock = 0, i = 0;
+	//int ememies = 0;
+
+	for (int x = 0; x < mapLength; x++)
+	{
+		for (int y = 0; y < mapHeight; y++)
+		{
+			if (!(x % 2 != 0 && y % 2 != 0) && x + y > 1) // keep top left corner open
+			{
+				random = rand() % 4;
+				if (random == 1)
+				{
+					totalSoftBlock++;
+					tilemap[x][y]->setTileRect(1);
+				}
+			}
+		}
+	}
+
+	/*
+	while(enemies < 6)
+	{
+	randX = (rand() % (mapLength - 2)) + 1
+	randY = (rand() % (mapHeight - 2)) + 1
+
+	if(tilemap[x][y]->getType() == 0 && x + y > 1)
+		//Create enemy at x,y
+	}
+
+	//PowerUp Set
+	random = rand % totalSoftBlock; //pick random soft block
+
+	for (int x = 0; x < mapLength; x++)
+	{
+		for (int y = 0; y < mapHeight; y++)
+		{
+			if(tilemap[x][y]->getType() == 1)
+				i++;
+			if(random == i)
+				// set x,y to a powerup
+		}
+	}
+
+	//Exit Set
+	random = rand % totalSoftBlock; //pick random soft block
+	i = 0;
+
+	for (int x = 0; x < mapLength; x++)
+	{
+		for (int y = 0; y < mapHeight; y++)
+		{
+			if(tilemap[x][y]->getType() == 1)
+				i++;
+			if(random == i)
+				// set x,y to a exit
+		}
+	}
+	*/
+
 }
 
 

@@ -4,7 +4,7 @@
 Tile::Tile(int xCord, int yCord, int t)
 {
 	type = t; 
-	initalizeTile(xCord, yCord);
+	initalizeTile(xCord, yCord, t);
 }
 
 
@@ -28,8 +28,9 @@ int Tile::getType()
 
 
 //Sets the tile type to the given type
-void Tile::setTileRect()
+void Tile::setTileRect(int newType)
 {
+	type = newType;
 	switch (type)
 	{
 		//put anything related to tile type changes here
@@ -54,10 +55,10 @@ void Tile::setTileRect()
 
 
 //Set the tile to be a square of the given size at position x, y
-void Tile::initalizeTile(int xCord, int yCord)
+void Tile::initalizeTile(int xCord, int yCord, int t)
 {
 	tile.setTexture(TextureHolder::get(Textures::Items)); 
-	setTileRect(); 
+	setTileRect(t); 
 	tile.setPosition(xCord, yCord);
 
 	// debug
