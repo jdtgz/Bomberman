@@ -88,5 +88,14 @@ void Player::update(float dt)
 	}
 
 	// update location
-	mSprite.move(((left * -3) + (right * 3)), ((up * -3) + (down * 3)));
+	xVel = ((left * -3) + (right * 3));
+	yVel = ((up * -3) + (down * 3));
+
+	mSprite.move(xVel, yVel);
+}
+
+void Player::setVelocity(int newX, int newY)
+{
+	xVel = newX;
+	yVel = newY;
 }

@@ -31,6 +31,8 @@ private:
 		// updates attributes of player while in main
 		void update(float);
 
+		void setVelocity(int, int);
+
 
 	private:
 		// visual attributes
@@ -41,4 +43,5 @@ private:
 		// movements attributes 
 		float speed;
 		bool left = false, right = false, up = false, down = false;
+		int xVel = 0, yVel = 0;
 };
