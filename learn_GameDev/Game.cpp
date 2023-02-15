@@ -90,7 +90,7 @@ void Game::update(sf::Time dt)
 void Game::render()
 {
 	window->clear(); 
-	level.print(*window);
+	level.draw(*window);
 	player1.draw(*window);  
 	window->display(); 
 }

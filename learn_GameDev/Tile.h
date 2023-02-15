@@ -3,16 +3,12 @@
 #include <iostream>
 #include "TextureHolder.h"
 
-enum TILE_TYPES
+
+namespace TileType 
 {
-	AIR = 0,
-	BRICK, // breakable
-	TILE, // invincible
-	BOMB,
-	EXPLOTION,
-	POWERUP,
-	EXIT
-};
+	enum Tile_ID { Air = 0, Brick, Tile, Door };
+}
+
 
 class Tile
 {
@@ -20,15 +16,14 @@ public:
 	Tile(int, int, int);
 	~Tile();
 
-	int getTileType();
-	void setTileType(int);
-
-	void move(int); //Tiles only move side to side
+	int getType();
+	void setTileRect();
 	
-	void print(sf::RenderWindow&) const;
-	sf::RectangleShape tile;
-private:
-	void initalizeTile(int, int, int);
+	void draw(sf::RenderWindow&) const;
 
-	int tileType = 0;
+private:
+	sf::Sprite tile; 
+	void initalizeTile(int, int);
+
+	int type;
 };

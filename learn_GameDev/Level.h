@@ -12,7 +12,7 @@ public:
 	void generate(int);
 	void end();
 
-	void print(sf::RenderWindow&);
+	void draw(sf::RenderWindow&) const;
 private:
 	const int mapLength = 31;
 	const int mapHeight = 13;
