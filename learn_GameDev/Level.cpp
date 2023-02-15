@@ -46,6 +46,11 @@ void Level::end()
 	//will check for level end
 }
 
+int Level::getLength() const
+{
+	return mapLength;
+}
+
 
 void Level::draw(sf::RenderWindow& window) const
 {

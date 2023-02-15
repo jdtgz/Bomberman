@@ -9,6 +9,10 @@ Game::Game()
 
 	//Generate the level
 	level.generate(levelNumber);
+
+	view.setSize(sf::Vector2f(window->getSize()));
+
+	player1.getSprite().setPosition(48 * 31 / 2, 48 * 13 / 2);
 }
 
 
@@ -82,6 +86,24 @@ void Game::processEvents()
 void Game::update(sf::Time dt)
 { 
 	player1.update(dt.asSeconds()); 
+
+	//Prevent viewport from going off of the map
+	if (player1.getSprite().getPosition().x > (view.getSize().x / 2) - 48 &&
+		player1.getSprite().getPosition().x < (31 * 48) - (view.getSize().x / 3))
+	{
+		view.setCenter(sf::Vector2f(player1.getSprite().getPosition().x,
+			window->getSize().y / 2 + 48));
+	}
+	else if (player1.getSprite().getPosition().x < (view.getSize().x / 2) - 48)
+	{
+		view.setCenter(sf::Vector2f((view.getSize().x / 2) - 48, 
+						window->getSize().y / 2 + 48));
+	}
+	else if (player1.getSprite().getPosition().x > (31 * 48) - (view.getSize().x / 3))
+	{
+		view.setCenter(sf::Vector2f((31 * 48) - (view.getSize().x / 3), 
+						window->getSize().y / 2 + 48));
+	}
 }
 
 
@@ -89,7 +111,12 @@ void Game::update(sf::Time dt)
 void Game::render()
 {
 	window->clear(); 
+	//Center viewport on player
+	window->setView(view);
+
+
 	level.draw(*window);
-	player1.draw(*window);  
+	player1.draw(*window); 
+
 	window->display(); 
 }

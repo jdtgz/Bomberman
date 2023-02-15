@@ -16,7 +16,8 @@ public:
 
 	int getType();
 	void setTileRect();
-	
+	void destroy();
+
 	void draw(sf::RenderWindow&) const;
 
 private:

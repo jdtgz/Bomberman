@@ -12,6 +12,8 @@ public:
 	void generate(int);
 	void end();
 
+	int getLength() const;
+
 	void draw(sf::RenderWindow&) const;
 private:
 	const int mapLength = 31;

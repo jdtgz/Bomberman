@@ -49,6 +49,14 @@ void Tile::setTileRect()
 	tile.setScale(3, 3); 
 }
 
+void Tile::destroy()
+{
+	if (type == TileType::Brick)
+	{
+
+	}
+}
+
 
 
 

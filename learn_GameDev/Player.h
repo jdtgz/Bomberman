@@ -24,6 +24,7 @@ private:
 		// Given a key, do something
 		void keyPressed(sf::Keyboard::Key); 
 		void keyReleased(sf::Keyboard::Key);
+		sf::Sprite& getSprite() { return mSprite; }
 
 		// Draws player onto the screen
 		void draw(sf::RenderWindow&) const; 
