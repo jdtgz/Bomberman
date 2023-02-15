@@ -36,8 +36,6 @@ Level::~Level()
 void Level::generate(int levelNum)
 {
 	//will set all the tile IDs on level start
-
-	//This is to test tile textures
 }
 
 
