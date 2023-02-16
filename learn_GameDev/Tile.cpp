@@ -33,16 +33,16 @@ void Tile::setTileRect()
 	switch (type)
 	{
 		//put anything related to tile type changes here
-		case TileType::Air:
+		case tileType::AIR:
 			tile.setTextureRect({ 96,32,16,16 });
 			break;
-		case TileType::Brick:
+		case tileType::BRICK:
 			tile.setTextureRect({ 16,16,16,16 });
 			break;
-		case TileType::Tile:
+		case tileType::TILE:
 			tile.setTextureRect({ 0,16,16,16 });
 			break;
-		case TileType::Door:
+		case tileType::DOOR:
 			tile.setTextureRect({ 32,16,16,16 });
 			break;
 	}
@@ -51,13 +51,11 @@ void Tile::setTileRect()
 }
 
 
-
-
 //Set the tile to be a square of the given size at position x, y
 void Tile::initalizeTile(int xCord, int yCord)
 {
-	tile.setTexture(TextureHolder::get(Textures::Items)); 
-	setTileRect(); 
+	tile.setTexture(TextureHolder::get(textures::ITEMS));
+	setTileRect();
 	tile.setPosition(xCord, yCord);
 
 	// debug
@@ -65,6 +63,44 @@ void Tile::initalizeTile(int xCord, int yCord)
 }
 
 
+void Tile::detectCollision(Player& plr)
+{
+	sf::FloatRect pB = plr.getBoundingBox();
+	sf::FloatRect tB = tile.getGlobalBounds();
 
-
-
+	if (pB.intersects(tB) && type != tileType::AIR)
+	{
+		//Moving Horizontally
+		if (plr.getVelocity().x != 0)
+		{
+			//Moving Right
+			if (plr.getVelocity().x > 0)
+			{
+				plr.setCanMoveRight(false);
+				plr.move(-plr.getSpeed(), 0);
+			}
+			//Moving Left
+			else
+			{
+				plr.setCanMoveLeft(false);
+				plr.move(plr.getSpeed(), 0);
+			}
+		}
+		//Moving Vertically
+		else if (plr.getVelocity().y != 0)
+		{
+			//Moving Down
+			if (plr.getVelocity().y > 0)
+			{
+				plr.setCanMoveDown(false);
+				plr.move(0, -plr.getSpeed());
+			}
+			//Moving Up
+			else
+			{
+				plr.setCanMoveUp(false);
+				plr.move(0, plr.getSpeed());
+			}
+		}
+	}
+}

@@ -5,16 +5,16 @@ Level::Level()
 {
 	//Set positions and sizes of the tiles
 	int xPos = 0, yPos = 100;
-	for (int x = 0; x < mapLength; x++)
+	for (int x = 0; x < MAP_LENGTH; x++)
 	{
-		for (int y = 0; y < mapHeight; y++)
+		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			if (y == 0 || x == 0 || y == mapHeight - 1 || x == mapLength - 1)
-				tilemap[x][y] = new Tile(xPos, yPos, TileType::Air);
+			if (y == 0 || x == 0 || y == MAP_HEIGHT - 1 || x == MAP_LENGTH - 1)
+				tilemap[x][y] = new Tile(xPos, yPos, tileType::AIR);
 			else if (x % 2 != 0 && y % 2 != 0)
-				tilemap[x][y] = new Tile(xPos, yPos, TileType::Tile);
+				tilemap[x][y] = new Tile(xPos, yPos, tileType::TILE);
 			else
-				tilemap[x][y] = new Tile(xPos, yPos, TileType::Air);
+				tilemap[x][y] = new Tile(xPos, yPos, tileType::AIR);
 
 			yPos += 50;
 		}
@@ -27,8 +27,8 @@ Level::Level()
 Level::~Level()
 {
 	//Unallocate tilemap memory
-	for (int x = 0; x < mapLength; x++)
-		for (int y = 0; y < mapHeight; y++)
+	for (int x = 0; x < MAP_LENGTH; x++)
+		for (int y = 0; y < MAP_HEIGHT; y++)
 			delete tilemap[x][y];
 }
 
@@ -48,7 +48,19 @@ void Level::end()
 void Level::draw(sf::RenderWindow& window) const
 {
 	//Print the tiles to the window
-	for (int x = 0; x < mapLength; x++)
-		for (int y = 0; y < mapHeight; y++)
+	for (int x = 0; x < MAP_LENGTH; x++)
+		for (int y = 0; y < MAP_HEIGHT; y++)
 			tilemap[x][y]->draw(window);
+}
+
+
+void Level::collisions(Player& plr)
+{
+	for (int x = 0; x < MAP_LENGTH; x++)
+	{
+		for (int y = 0; y < MAP_HEIGHT; y++)
+		{
+			tilemap[x][y]->detectCollision(plr);
+		}
+	}
 }
