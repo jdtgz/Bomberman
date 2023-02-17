@@ -59,7 +59,7 @@ void Tile::initalizeTile(int xCord, int yCord)
 	tile.setPosition(xCord, yCord);
 
 	// debug
-	std::cout << "Tile Created at " << xCord << "," << yCord << '\n';
+	//std::cout << "Tile Created at " << xCord << "," << yCord << '\n';
 }
 
 
@@ -68,38 +68,49 @@ void Tile::detectCollision(Player& plr)
 	sf::FloatRect pB = plr.getBoundingBox();
 	sf::FloatRect tB = tile.getGlobalBounds();
 
+	const float NEAR = 0.3f; //x% from the top
+	const float FAR = 1.f - NEAR; //x% from the bottom
+
 	if (pB.intersects(tB) && type != tileType::AIR)
 	{
-		//Moving Horizontally
+		//Moving horizontally
 		if (plr.getVelocity().x != 0)
 		{
-			//Moving Right
-			if (plr.getVelocity().x > 0)
-			{
-				plr.setCanMoveRight(false);
-				plr.move(-plr.getSpeed(), 0);
-			}
-			//Moving Left
+			//Above
+			if (pB.top + pB.height > tB.top &&
+				pB.top + pB.height < tB.top + (tB.height * NEAR))
+				plr.move(0, -plr.getSpeed());
+			//Below
+			else if (pB.top < tB.top + tB.height &&
+				pB.top > tB.top + (tB.height * FAR))
+				plr.move(0, plr.getSpeed());
+			//Facing
 			else
 			{
-				plr.setCanMoveLeft(false);
-				plr.move(plr.getSpeed(), 0);
+				if (plr.getVelocity().x > 0)
+					plr.setCanMoveRight(false);
+				else
+					plr.setCanMoveLeft(false);
 			}
 		}
-		//Moving Vertically
+		//Moving vertically
 		else if (plr.getVelocity().y != 0)
 		{
-			//Moving Down
-			if (plr.getVelocity().y > 0)
-			{
-				plr.setCanMoveDown(false);
-				plr.move(0, -plr.getSpeed());
-			}
-			//Moving Up
+			//Left
+			if (pB.left + pB.width > tB.left &&
+				pB.left + pB.width < tB.left + (tB.width * NEAR))
+				plr.move(-plr.getSpeed(), 0);
+			//Right
+			else if (pB.left < tB.left + tB.width &&
+				pB.left > tB.left + (tB.width * FAR))
+				plr.move(plr.getSpeed(), 0);
+			//Facing
 			else
 			{
-				plr.setCanMoveUp(false);
-				plr.move(0, plr.getSpeed());
+				if (plr.getVelocity().y > 0)
+					plr.setCanMoveDown(false);
+				else
+					plr.setCanMoveUp(false);
 			}
 		}
 	}
