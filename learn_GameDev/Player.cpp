@@ -35,6 +35,7 @@ void Player::keyPressed(const sf::Keyboard::Key &key)
 		case sf::Keyboard::Up:
 			up = true; 
 			curAnimation = animIndex::WALKING_UP;
+			//Reset 'can moves' for all other directions
 			canMoveDown = true;
 			canMoveLeft = true;
 			canMoveRight = true;
@@ -42,6 +43,7 @@ void Player::keyPressed(const sf::Keyboard::Key &key)
 		case sf::Keyboard::Down:
 			down = true; 
 			curAnimation = animIndex::WALKING_DOWN;
+			//Reset 'can moves' for all other directions
 			canMoveUp = true;
 			canMoveLeft = true;
 			canMoveRight = true;
@@ -49,6 +51,7 @@ void Player::keyPressed(const sf::Keyboard::Key &key)
 		case sf::Keyboard::Left:
 			left = true;
 			curAnimation = animIndex::WALKING_LEFT;
+			//Reset 'can moves' for all other directions
 			canMoveUp = true;
 			canMoveDown = true;
 			canMoveRight = true;
@@ -56,6 +59,7 @@ void Player::keyPressed(const sf::Keyboard::Key &key)
 		case sf::Keyboard::Right:
 			right = true; 
 			curAnimation = animIndex::WALKING_RIGHT;
+			//Reset 'can moves' for all other directions
 			canMoveUp = true;
 			canMoveDown = true;
 			canMoveLeft = true;
@@ -100,10 +104,12 @@ void Player::update(const float& dt)
 		animations[int(curAnimation)].applyToSprite(mSprite);
 	}
 
-	// update location
-	xVel = ((canMoveLeft * left * -speed) + (canMoveRight * right * speed));
-	yVel = ((canMoveUp * up * -speed) + (canMoveDown * down * speed));
+	//Update velocity based on user input, move speed, and
+	//the directions the player can currently move in
+	setVelocity((canMoveLeft * left * -speed) + (canMoveRight * right * speed),
+		(canMoveUp * up * -speed) + (canMoveDown * down * speed));
 
+	//Move sprite by velocity
 	move(xVel, yVel);
 }
 
@@ -115,18 +121,21 @@ void Player::setVelocity(const int& newX, const int& newY)
 }
 
 
+//Get the movement velocity of the player
 sf::Vector2f Player::getVelocity() const
 {
 	return sf::Vector2f(xVel, yVel);
 }
 
 
+//Get the hitbox for the player sprite
 sf::FloatRect Player::getBoundingBox() const
 {
 	return mSprite.getGlobalBounds();
 }
 
 
+//Move player sprite by x, y
 void Player::move(const float& x, const float& y)
 {
 	mSprite.move(x, y);
@@ -134,6 +143,7 @@ void Player::move(const float& x, const float& y)
 }
 
 
+//Set if the player can move left or not
 void Player::setCanMoveLeft(const bool& v)
 {
 	canMoveLeft = v;
@@ -141,6 +151,7 @@ void Player::setCanMoveLeft(const bool& v)
 }
 
 
+//Set if the player can move right or not
 void Player::setCanMoveRight(const bool& v)
 {
 	canMoveRight = v;
@@ -148,6 +159,7 @@ void Player::setCanMoveRight(const bool& v)
 }
 
 
+//Set if the player can move up or not
 void Player::setCanMoveUp(const bool& v)
 {
 	canMoveUp = v;
@@ -155,6 +167,7 @@ void Player::setCanMoveUp(const bool& v)
 }
 
 
+//Set if the player can move down or not
 void Player::setCanMoveDown(const bool& v)
 {
 	canMoveDown = v;
@@ -162,6 +175,7 @@ void Player::setCanMoveDown(const bool& v)
 }
 
 
+//Get player move speed
 float Player::getSpeed() const
 {
 	return speed;

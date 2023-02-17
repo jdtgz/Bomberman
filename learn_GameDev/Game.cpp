@@ -29,6 +29,7 @@ void Game::run()
 
 	while (window->isOpen())
 	{
+		//Detect all collisions and adjust player accordingly
 		level.collisions(player1);
 
 		//Poll events

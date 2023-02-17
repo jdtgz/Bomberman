@@ -54,13 +54,10 @@ void Level::draw(sf::RenderWindow& window) const
 }
 
 
+//Detect collisions between player and tile
 void Level::collisions(Player& plr)
 {
 	for (int x = 0; x < MAP_LENGTH; x++)
-	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
-		{
 			tilemap[x][y]->detectCollision(plr);
-		}
-	}
 }
