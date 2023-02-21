@@ -4,18 +4,18 @@
 Player::Player()
 {
 	// initialize movement attributes 
-	speed = 100.f;
+	speed = 3.f;
 	
-	sf::Texture* t = &TextureHolder::get(Textures::Player);
+	sf::Texture* t = &TextureHolder::get(textures::PLAYER);
 
 	// setup animations 
-	animations[int(AnimationIndex::WALKING_LEFT)].setUp(*t, 0, 0, 12, 16, 3);
-	animations[int(AnimationIndex::WALKING_RIGHT)].setUp(*t, 0, 16, 12, 16, 3);
-	animations[int(AnimationIndex::WALKING_DOWN)].setUp(*t, 0, 32, 12, 16, 3);
-	animations[int(AnimationIndex::WALKING_UP)].setUp(*t, 0, 48, 12, 16, 3);
+	animations[int(animIndex::WALKING_LEFT)].setUp(*t, 0, 0, 12, 16, 3);
+	animations[int(animIndex::WALKING_RIGHT)].setUp(*t, 0, 16, 12, 16, 3);
+	animations[int(animIndex::WALKING_DOWN)].setUp(*t, 0, 32, 12, 16, 3);
+	animations[int(animIndex::WALKING_UP)].setUp(*t, 0, 48, 12, 16, 3);
 
 	// set the starting animation
-	curAnimation = AnimationIndex::WALKING_RIGHT;
+	curAnimation = animIndex::WALKING_RIGHT;
 	
 	animations[int(curAnimation)].applyToSprite(mSprite);
 }
@@ -27,31 +27,48 @@ Player::~Player()
 }
 
 
-void Player::keyPressed(sf::Keyboard::Key key)
+void Player::keyPressed(const sf::Keyboard::Key &key)
 {
 	// change the direction of the player based on input
 	switch (key)
 	{
 		case sf::Keyboard::Up:
 			up = true; 
-			curAnimation = AnimationIndex::WALKING_UP;
+			curAnimation = animIndex::WALKING_UP;
+			//Reset 'can moves' for all other directions
+			canMoveDown = true;
+			canMoveLeft = true;
+			canMoveRight = true;
 			break;
 		case sf::Keyboard::Down:
 			down = true; 
-			curAnimation = AnimationIndex::WALKING_DOWN;
+			curAnimation = animIndex::WALKING_DOWN;
+			//Reset 'can moves' for all other directions
+			canMoveUp = true;
+			canMoveLeft = true;
+			canMoveRight = true;
 			break;
 		case sf::Keyboard::Left:
 			left = true;
-			curAnimation = AnimationIndex::WALKING_LEFT;
+			curAnimation = animIndex::WALKING_LEFT;
+			//Reset 'can moves' for all other directions
+			canMoveUp = true;
+			canMoveDown = true;
+			canMoveRight = true;
 			break;
 		case sf::Keyboard::Right:
 			right = true; 
-			curAnimation = AnimationIndex::WALKING_RIGHT;
+			curAnimation = animIndex::WALKING_RIGHT;
+			//Reset 'can moves' for all other directions
+			canMoveUp = true;
+			canMoveDown = true;
+			canMoveLeft = true;
 			break;
 	}
 }
 
-void Player::keyReleased(sf::Keyboard::Key key)
+
+void Player::keyReleased(const sf::Keyboard::Key &key)
 {
 	// change the direction of the player based on input
 	switch (key)
@@ -78,7 +95,7 @@ void Player::draw(sf::RenderWindow& window) const
 }
 
 
-void Player::update(float dt)
+void Player::update(const float& dt)
 {
 	// update animations 
 	if (right || left || down || up)
@@ -87,15 +104,79 @@ void Player::update(float dt)
 		animations[int(curAnimation)].applyToSprite(mSprite);
 	}
 
-	// update location
-	xVel = ((left * -3) + (right * 3));
-	yVel = ((up * -3) + (down * 3));
+	//Update velocity based on user input, move speed, and
+	//the directions the player can currently move in
+	setVelocity((canMoveLeft * left * -speed) + (canMoveRight * right * speed),
+		(canMoveUp * up * -speed) + (canMoveDown * down * speed));
 
-	mSprite.move(xVel, yVel);
+	//Move sprite by velocity
+	move(xVel, yVel);
 }
 
-void Player::setVelocity(int newX, int newY)
+
+void Player::setVelocity(const int& newX, const int& newY)
 {
 	xVel = newX;
 	yVel = newY;
+}
+
+
+//Get the movement velocity of the player
+sf::Vector2f Player::getVelocity() const
+{
+	return sf::Vector2f(xVel, yVel);
+}
+
+
+//Get the hitbox for the player sprite
+sf::FloatRect Player::getBoundingBox() const
+{
+	return mSprite.getGlobalBounds();
+}
+
+
+//Move player sprite by x, y
+void Player::move(const float& x, const float& y)
+{
+	mSprite.move(x, y);
+	return;
+}
+
+
+//Set if the player can move left or not
+void Player::setCanMoveLeft(const bool& v)
+{
+	canMoveLeft = v;
+	return;
+}
+
+
+//Set if the player can move right or not
+void Player::setCanMoveRight(const bool& v)
+{
+	canMoveRight = v;
+	return;
+}
+
+
+//Set if the player can move up or not
+void Player::setCanMoveUp(const bool& v)
+{
+	canMoveUp = v;
+	return;
+}
+
+
+//Set if the player can move down or not
+void Player::setCanMoveDown(const bool& v)
+{
+	canMoveDown = v;
+	return;
+}
+
+
+//Get player move speed
+float Player::getSpeed() const
+{
+	return speed;
 }

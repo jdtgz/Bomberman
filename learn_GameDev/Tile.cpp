@@ -33,16 +33,16 @@ void Tile::setTileRect()
 	switch (type)
 	{
 		//put anything related to tile type changes here
-		case TileType::Air:
+		case tileType::AIR:
 			tile.setTextureRect({ 96,32,16,16 });
 			break;
-		case TileType::Brick:
+		case tileType::BRICK:
 			tile.setTextureRect({ 16,16,16,16 });
 			break;
-		case TileType::Tile:
+		case tileType::TILE:
 			tile.setTextureRect({ 0,16,16,16 });
 			break;
-		case TileType::Door:
+		case tileType::DOOR:
 			tile.setTextureRect({ 32,16,16,16 });
 			break;
 	}
@@ -51,20 +51,78 @@ void Tile::setTileRect()
 }
 
 
-
-
 //Set the tile to be a square of the given size at position x, y
 void Tile::initalizeTile(int xCord, int yCord)
 {
-	tile.setTexture(TextureHolder::get(Textures::Items)); 
-	setTileRect(); 
+	tile.setTexture(TextureHolder::get(textures::ITEMS));
+	setTileRect();
 	tile.setPosition(xCord, yCord);
 
 	// debug
-	std::cout << "Tile Created at " << xCord << "," << yCord << '\n';
+	//std::cout << "Tile Created at " << xCord << "," << yCord << '\n';
 }
 
 
+void Tile::detectCollision(Player& plr)
+{
+	//Get hitboxes
+	sf::FloatRect pB = plr.getBoundingBox();
+	sf::FloatRect tB = tile.getGlobalBounds();
 
+	//For "auto correct" feature
+	const float NEAR = 0.3f; //x% from the top
+	const float FAR = 1.f - NEAR; //x% from the bottom
 
+	//Adjust player box by player move speed
+	pB.top -= plr.getSpeed();
+	pB.height += 2 * plr.getSpeed();
+	pB.left -= plr.getSpeed();
+	pB.width += 2 * plr.getSpeed();
 
+	//The player box is intersecting a tile and the tile is non-passable
+	if (pB.intersects(tB) && type != tileType::AIR)
+	{
+		//Moving horizontally
+		if (plr.getVelocity().x != 0)
+		{
+			//Up Correction
+			if (pB.top + pB.height > tB.top &&
+				pB.top + pB.height < tB.top + (tB.height * NEAR))
+				plr.move(0, -plr.getSpeed());
+			//Down Correction
+			else if (pB.top < tB.top + tB.height &&
+				pB.top > tB.top + (tB.height * FAR))
+				plr.move(0, plr.getSpeed());
+			//Running into tile
+			else
+			{
+				//Prevent player from moving into tile
+				if (plr.getVelocity().x > 0)
+					plr.setCanMoveRight(false);
+				else
+					plr.setCanMoveLeft(false);
+			}
+		}
+		//Moving vertically
+		else if (plr.getVelocity().y != 0)
+		{
+			//Left Correction
+			if (pB.left + pB.width > tB.left &&
+				pB.left + pB.width < tB.left + (tB.width * NEAR))
+				plr.move(-plr.getSpeed(), 0);
+			//Right Correction
+			else if (pB.left < tB.left + tB.width &&
+				pB.left > tB.left + (tB.width * FAR))
+				plr.move(plr.getSpeed(), 0);
+			//Running into tile
+			else
+			{
+				//Prevent player from moving into tile
+				if (plr.getVelocity().y > 0)
+					plr.setCanMoveDown(false);
+				else
+					plr.setCanMoveUp(false);
+			}
+		}
+	}
+}
