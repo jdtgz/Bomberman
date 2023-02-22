@@ -4,6 +4,7 @@
 #include "TextureHolder.h"
 #include "Player.h"
 
+
 namespace tileType 
 {
 	enum tileId { AIR = 0, BRICK, TILE, DOOR };
@@ -17,9 +18,11 @@ public:
 	~Tile();
 
 	int getType();
-	void setTileRect(int);
-	
+	void setTileRect();
+	void destroy();
+
 	void draw(sf::RenderWindow&) const;
+
 	void detectCollision(Player&);
 private:
 	sf::Sprite tile; 

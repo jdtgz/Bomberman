@@ -18,5 +18,5 @@ private:
 	const int MAP_LENGTH = 31;
 	const int MAP_HEIGHT = 13;
 
-	Tile* tilemap[31][13];
+	Tile* tilemap[MAP_LENGTH][MAP_HEIGHT];
 };

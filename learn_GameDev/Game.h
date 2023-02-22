@@ -35,6 +35,8 @@ private:
 	// Level
 	Level level;
 
+	sf::View view;
+
 	// Level Number
 	int levelNumber = 0;
 };

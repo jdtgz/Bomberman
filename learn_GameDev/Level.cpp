@@ -15,7 +15,6 @@ Level::Level()
 				tilemap[x][y] = new Tile(xPos, yPos, tileType::TILE);
 			else
 				tilemap[x][y] = new Tile(xPos, yPos, tileType::AIR);
-
 			yPos += 50;
 		}
 		xPos += 50;
@@ -92,14 +91,18 @@ void Level::generate(int levelNum)
 				// set x,y to a exit
 		}
 	}
-	*/
-
+  */
 }
 
 
 void Level::end()
 {
 	//will check for level end
+}
+
+int Level::getLength() const
+{
+	return mapLength;
 }
 
 
