@@ -4,7 +4,7 @@
 Tile::Tile(int xCord, int yCord, int t)
 {
 	type = t; 
-	tile.setTexture(TextureHolder::get(Textures::Items)); 
+	tile.setTexture(TextureHolder::get(textures::ITEMS)); 
 	setTileRect(t); 
 	tile.setPosition(xCord, yCord);
 }
@@ -32,7 +32,7 @@ int Tile::getType()
 //Sets the tile type to the given type
 void Tile::setTileRect(int newType)
 {
-	switch (type)
+	switch (newType)
 	{
 		//put anything related to tile type changes here
 		case tileType::AIR:
@@ -51,7 +51,7 @@ void Tile::setTileRect(int newType)
 	tile.setScale(3, 3);
 }
 
-
+/*
 void Tile::destroy()
 {
 	if (type == TileType::Brick)
@@ -59,6 +59,8 @@ void Tile::destroy()
 
 	}
 }
+*/
+
 
 
 

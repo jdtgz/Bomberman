@@ -37,9 +37,9 @@ void Level::generate(int levelNum)
 	int random = 0, randX = 0, randY = 0, totalSoftBlock = 0, i = 0;
 	//int ememies = 0;
 
-	for (int x = 0; x < mapLength; x++)
+	for (int x = 0; x < MAP_LENGTH; x++)
 	{
-		for (int y = 0; y < mapHeight; y++)
+		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
 			if (!(x % 2 != 0 && y % 2 != 0) && x + y > 1) // keep top left corner open
 			{
@@ -102,7 +102,7 @@ void Level::end()
 
 int Level::getLength() const
 {
-	return mapLength;
+	return MAP_LENGTH;
 }
 
 

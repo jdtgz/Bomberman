@@ -134,6 +134,10 @@ sf::FloatRect Player::getBoundingBox() const
 	return mSprite.getGlobalBounds();
 }
 
+sf::Sprite Player::getSprite() const
+{
+	return mSprite;
+}
 
 //Move player sprite by x, y
 void Player::move(const float& x, const float& y)

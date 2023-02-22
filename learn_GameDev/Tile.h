@@ -18,8 +18,8 @@ public:
 	~Tile();
 
 	int getType();
-	void setTileRect();
-	void destroy();
+	void setTileRect(int);
+	//void destroy();
 
 	void draw(sf::RenderWindow&) const;
 

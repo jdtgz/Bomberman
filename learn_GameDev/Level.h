@@ -12,11 +12,12 @@ public:
 	void generate(int);
 	void end();
 
+	int getLength() const;
 	void draw(sf::RenderWindow&) const;
 	void collisions(Player&);
 private:
 	const int MAP_LENGTH = 31;
 	const int MAP_HEIGHT = 13;
 
-	Tile* tilemap[MAP_LENGTH][MAP_HEIGHT];
+	Tile* tilemap[31][13];
 };

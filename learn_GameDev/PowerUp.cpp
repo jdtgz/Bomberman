@@ -10,9 +10,12 @@ PowerUp::PowerUp(int typ)
 void PowerUp::applyPowerUp(Player& player)
 {
 	// determine what type of power up it is & update player
+	/*
 	switch (powerType)
 	{
 		case BombUp:
+			std::cout << "BOMB UP\n";
+	}	
+	*/
 
-	}
 }

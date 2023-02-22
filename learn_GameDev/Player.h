@@ -32,6 +32,7 @@ public:
 	void setCanMoveDown(const bool&);
 	sf::FloatRect getBoundingBox() const;
 	sf::Vector2f getVelocity() const;
+	sf::Sprite getSprite() const;
 private:
 	// total animations of the player
 	enum class animIndex
