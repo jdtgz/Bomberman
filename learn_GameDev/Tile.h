@@ -2,11 +2,12 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "TextureHolder.h"
+#include "Player.h"
 
 
-namespace TileType 
+namespace tileType 
 {
-	enum Tile_ID { Air = 0, Brick, Tile, Door };
+	enum tileId { AIR = 0, BRICK, TILE, DOOR };
 }
 
 
@@ -22,9 +23,9 @@ public:
 
 	void draw(sf::RenderWindow&) const;
 
+	void detectCollision(Player&);
 private:
 	sf::Sprite tile; 
-	void initalizeTile(int, int);
 
 	int type;
 };

@@ -3,23 +3,20 @@
 #include "SFML/Graphics.hpp"
 #include <string>
 
-namespace Textures
+namespace textures
 {
-	enum ID { Player, Items, Enemies, Explosion };
+	enum id { PLAYER, ITEMS, ENEMIES, EXPLOSION };
 }
 
 class TextureHolder
 {
-	public:
-		TextureHolder(); 
-		~TextureHolder(); 
+public:
+	TextureHolder(); 
+	~TextureHolder(); 
 
-
-		static void load(Textures::ID id, const std::string& filename); 
-		static sf::Texture& get(Textures::ID id); 
-
-	private:
-		static std::map<Textures::ID,
-			sf::Texture*> textureMap; 
+	static void load(textures::id id, const std::string& filename); 
+	static sf::Texture& get(textures::id id); 
+private:
+	static std::map<textures::id,
+		sf::Texture*> textureMap; 
 };
-

@@ -13,7 +13,6 @@ public:
 
 	// runs the whole game 
 	void run(); 
-
 private:
 
 	// helper functions for "run"
@@ -21,9 +20,6 @@ private:
 	void update(sf::Time);
 	void render();
 
-	// collision functions 
-	
-private:
 	// sfml screen
 	sf::RenderWindow* window;
 
