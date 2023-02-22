@@ -23,7 +23,6 @@ public:
 	void detectCollision(Player&);
 private:
 	sf::Sprite tile; 
-	void initalizeTile(int, int, int);
 
 	int type;
 };
