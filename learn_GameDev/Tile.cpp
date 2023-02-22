@@ -4,7 +4,9 @@
 Tile::Tile(int xCord, int yCord, int t)
 {
 	type = t; 
-	initalizeTile(xCord, yCord, t);
+	tile.setTexture(TextureHolder::get(Textures::Items)); 
+	setTileRect(t); 
+	tile.setPosition(xCord, yCord);
 }
 
 
@@ -49,18 +51,6 @@ void Tile::setTileRect(int newType)
 	}
 	tile.setScale(3, 3); 
 
-}
-
-
-//Set the tile to be a square of the given size at position x, y
-void Tile::initalizeTile(int xCord, int yCord, int t)
-{
-	tile.setTexture(TextureHolder::get(Textures::Items)); 
-	setTileRect(t); 
-	tile.setPosition(xCord, yCord);
-
-	// debug
-	//std::cout << "Tile Created at " << xCord << "," << yCord << '\n';
 }
 
 
