@@ -6,37 +6,36 @@
 
 class Game
 {
-public:
-	// constructor / destructor
-	Game(); 
-	~Game(); 
+	public:
+		// constructor / destructor
+		Game(); 
+		~Game(); 
 
-	// runs the whole game 
-	void run(); 
-private:
+		// runs the whole game 
+		void run(); 
 
-	// helper functions for "run"
-	void processEvents();
-	void update(sf::Time);
-	void render();
+	private:
+		// helper functions for "run"
+		void processEvents();
+		void update(sf::Time);
+		void render();
 
-	// sfml screen
-	sf::RenderWindow* window;
+		// sfml screen attributes 
+		sf::RenderWindow* window;
+		sf::View view;
 
-	// All textures necessary for game  
-	TextureHolder gameTextures;
+		// All textures necessary for game  
+		TextureHolder gameTextures;
 
-	// FPS
-	sf::Time timePerFrame = sf::seconds(1.f / 60.f); 
+		// FPS
+		sf::Time timePerFrame = sf::seconds(1.f / 60.f); 
 
-	// Player 
-	Player player1;
+		// Player 
+		Player player1;
 
-	// Level
-	Level level;
+		// Level
+		Level level;
 
-	sf::View view;
-
-	// Level Number
-	int levelNumber = 0;
+		// Level Number
+		int levelNumber = 0;
 };

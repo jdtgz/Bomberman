@@ -5,7 +5,7 @@
 class Bomb
 {
 public:
-	Bomb(int x, int y, int range, bool timer);
+	Bomb(int, int, int, bool);
 	~Bomb();
 
 	//Can accept sf::RenderWindow and sf::RenderTexture

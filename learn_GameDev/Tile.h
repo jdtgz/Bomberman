@@ -7,25 +7,28 @@
 
 namespace tileType 
 {
-	enum tileId { AIR = 0, BRICK, TILE, DOOR };
+	enum tileID { AIR = 0, BRICK, TILE, DOOR, BOMB, POWERUP };
 }
 
 
 class Tile
 {
-public:
-	Tile(int, int, int);
-	~Tile();
+	public:
+		Tile(int, int, int);
+		~Tile();
 
-	int getType();
-	void setTileRect(int);
-	//void destroy();
+		int getType();
+		void setTileRect(int);
+		//void destroy();
 
-	void draw(sf::RenderWindow&) const;
+		void draw(sf::RenderWindow&) const;
 
-	void detectCollision(Player&);
-private:
-	sf::Sprite tile; 
+		// collision detection
+		void detectCollision(Player&);
+		//void detectCollision(Enemy&); 
+	private:
+		sf::Sprite tile; 
+		//Animaiton blowUp
 
-	int type;
+		int type;
 };

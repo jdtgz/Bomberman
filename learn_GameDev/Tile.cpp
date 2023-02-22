@@ -1,15 +1,23 @@
 #include "Tile.h"
 
 
+// place a tile of type t at (xCoord, yCoord)
 Tile::Tile(int xCord, int yCord, int t)
 {
-	type = t; 
+	// set the tileID, if it is a block and not a Bomb/PowerUp
+	if(t != tileType::BOMB && t != tileType::POWERUP)
+		type = t; 
+
+	// load the texture and set the sprite for tile
 	tile.setTexture(TextureHolder::get(textures::ITEMS)); 
 	setTileRect(t); 
+
+	// place the tile 
 	tile.setPosition(xCord, yCord);
 }
 
 
+// destructor
 Tile::~Tile()
 {
 }
@@ -22,14 +30,14 @@ void Tile::draw(sf::RenderWindow& window) const
 }
 
 
-//Returns the tile type as an integer
+//Returns the tileID of tile
 int Tile::getType()
 {
 	return type;
 }
 
 
-//Sets the tile type to the given type
+//Given an tileID, set the proper textureRect & scale it 
 void Tile::setTileRect(int newType)
 {
 	switch (newType)
@@ -40,6 +48,7 @@ void Tile::setTileRect(int newType)
 			break;
 		case tileType::BRICK:
 			tile.setTextureRect({ 16,16,16,16 });
+			//set the frames for Brick's blowup animaiton
 			break;
 		case tileType::TILE:
 			tile.setTextureRect({ 0,16,16,16 });
@@ -51,7 +60,10 @@ void Tile::setTileRect(int newType)
 	tile.setScale(3, 3);
 }
 
+
 /*
+//destroys the tile if its tileID is Brick
+//should be called AFTER a confirmed collision with a bomb object
 void Tile::destroy()
 {
 	if (type == TileType::Brick)
@@ -62,8 +74,8 @@ void Tile::destroy()
 */
 
 
-
-
+//tracks collisions between the player and the tile, 
+// pushes them away from the 
 void Tile::detectCollision(Player& plr)
 {
 	//Get hitboxes

@@ -31,12 +31,6 @@ void Animation::setUp(sf::Texture& t, int x, int y, int width, int height, int t
 	for (int i = 0; i < nFrames; i++)
 	{
 		frames[i] = sf::IntRect(x + i * width, y, width, height);
-
-		/* 
-		debug 
-		std::cout << frames[i].top << " " << frames[i].left << " "
-			<< frames[i].height << " " << frames[i].width << " \n";
-		*/
 	}
 }
 

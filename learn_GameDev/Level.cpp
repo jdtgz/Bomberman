@@ -100,18 +100,23 @@ void Level::end()
 	//will check for level end
 }
 
+
 int Level::getLength() const
 {
 	return MAP_LENGTH;
 }
 
 
+// draw all the objects and emeies onto the screen 
 void Level::draw(sf::RenderWindow& window) const
 {
 	//Print the tiles to the window
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 			tilemap[x][y]->draw(window);
+	
+	// for(int i = 0; i < enemies.length; i++)
+	//		enemies[i]->draw(window); 
 }
 
 
