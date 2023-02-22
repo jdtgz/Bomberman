@@ -17,13 +17,13 @@ public:
 	~Tile();
 
 	int getType();
-	void setTileRect();
+	void setTileRect(int);
 	
 	void draw(sf::RenderWindow&) const;
 	void detectCollision(Player&);
 private:
-	sf::Sprite tile;
-	void initalizeTile(int, int);
+	sf::Sprite tile; 
+	void initalizeTile(int, int, int);
 
 	int type;
 };
