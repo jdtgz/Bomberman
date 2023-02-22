@@ -6,10 +6,10 @@ Tile::Tile(int xCord, int yCord, int t)
 {
 	// set the tileID, if it is a block and not a Bomb/PowerUp
 	if(t != tileType::BOMB && t != tileType::POWERUP)
-		type = t; 
+		type = t;
 
 	// load the texture and set the sprite for tile
-	tile.setTexture(TextureHolder::get(textures::ITEMS)); 
+	tile.setTexture(TextureHolder::get(textures::ITEMS));
 	setTileRect(t); 
 
 	// place the tile 
@@ -40,6 +40,7 @@ int Tile::getType()
 //Given an tileID, set the proper textureRect & scale it 
 void Tile::setTileRect(int newType)
 {
+	type = newType;
 	switch (newType)
 	{
 		//put anything related to tile type changes here

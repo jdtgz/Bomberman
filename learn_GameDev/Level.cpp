@@ -35,7 +35,7 @@ Level::~Level()
 void Level::generate(int levelNum)
 {
 	int random = 0, randX = 0, randY = 0, totalSoftBlock = 0, i = 0;
-	//int ememies = 0;
+	//int enemies = 0;
 
 	for (int x = 0; x < MAP_LENGTH; x++)
 	{
@@ -47,7 +47,7 @@ void Level::generate(int levelNum)
 				if (random == 1)
 				{
 					totalSoftBlock++;
-					tilemap[x][y]->setTileRect(1);
+					tilemap[x][y]->setTileRect(tileType::BRICK);
 				}
 			}
 		}
