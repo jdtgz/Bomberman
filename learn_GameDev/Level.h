@@ -13,9 +13,10 @@ public:
 	void end();
 
 	void draw(sf::RenderWindow&) const;
+	void collisions(Player&);
 private:
-	const int mapLength = 31;
-	const int mapHeight = 13;
+	const int MAP_LENGTH = 31;
+	const int MAP_HEIGHT = 13;
 
 	Tile* tilemap[31][13];
 };

@@ -18,7 +18,6 @@ class Animation
 
 		// cycle animation based on time in-game
 		void update(float); 
-
 	private:
 		// cycles to the next frame in frames
 		void advance(); 

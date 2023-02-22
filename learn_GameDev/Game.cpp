@@ -2,7 +2,6 @@
 
 
 Game::Game()
-	: player1()
 {
 	//Create a new window
 	window = new sf::RenderWindow(sf::VideoMode(750, 750), "GAME!!");
@@ -30,6 +29,9 @@ void Game::run()
 
 	while (window->isOpen())
 	{
+		//Detect all collisions and adjust player accordingly
+		level.collisions(player1);
+
 		//Poll events
 		processEvents();
 
@@ -50,7 +52,7 @@ void Game::run()
 		}
 
 		//Display updated gamestate
-		render(); 
+		render();
 	}
 }
 
