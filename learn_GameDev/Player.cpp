@@ -120,7 +120,6 @@ void Player::update(const float& dt)
 	// if plr collides with fire (witout flameUp powerUp)
 	// or enemy -> death animation...
 
-
 	//Update velocity based on user input, move speed, and
 	//the directions the player can currently move in
 	setVelocity((canMoveLeft * left * -speed) + (canMoveRight * right * speed),

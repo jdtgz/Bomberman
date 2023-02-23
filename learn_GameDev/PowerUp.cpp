@@ -2,11 +2,9 @@
 
 
 PowerUp::PowerUp(const int& type)
-{
-	sf::Texture* t = &TextureHolder::get(textures::ITEMS); 
-	
+{	
 	// initialize the "fake" sprite for the powerup
-	sprite.setTexture(*t);
+	sprite.setTexture(TextureHolder::get(textures::ITEMS));
 	sprite.setTextureRect({ 16, 16, 16, 16 });
 
 	revealed = false; 
