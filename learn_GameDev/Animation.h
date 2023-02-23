@@ -9,6 +9,8 @@ class Animation
 		Animation(); 
 		~Animation(); 
 
+		int getCurrentFrame() const { return iFrame; }
+
 		// Given a texture, initial cords, box size, & number of frames,
 		// set all the frames in the animaiton
 		void setUp(sf::Texture&, const int&, const int&,

@@ -36,19 +36,29 @@ void Bomb::draw(sf::RenderTarget& target)
 	//Bomb
 	if (!m_exploded)
 	{
-		m_sprite.setTexture(*m_bomb_sheet);
-		m_sprite.setTextureRect(sf::IntRect(0,0,16,16));
+		m_animations[(int)animationIndex::BOMB].applyToSprite(m_sprite);
 		target.draw(m_sprite);
 	}
 
 	else
 	{
 		//Center explosion
+		m_animations[(int)animationIndex::CENTER].applyToSprite(m_sprite);
+		target.draw(m_sprite);
+
+		for (int i = 0; i < m_range; i++)
+		{
+
+			for (int i = 0; i < 4; i++)
+			{
+
+			}
+		}
 		//Left explosion
 		//Right explosion
 		//Down explosion
 		//Up explosion
-		
+
 	}
 }
 
@@ -66,65 +76,50 @@ void Bomb::update(float dt)
 		explode();
 		m_explode_clock.restart();
 	}
-	else if (m_explode_clock.getElapsedTime() > m_frame_time)
+	else if (m_explode_clock.getElapsedTime() > m_frame_time && m_exploded)
 	{
 		m_current_frame = (m_current_frame + 1) % 4;
 
+
+
 		m_explode_clock.restart();
 	}
+
+	if (m_exploded)
+	{
+
+		if (m_animations[(int)animationIndex::CENTER].getCurrentFrame() < 4)
+		{
+			m_animations[(int)animationIndex::CENTER].update(dt);
+			m_animations[(int)animationIndex::LEFT].update(dt);
+			m_animations[(int)animationIndex::RIGHT].update(dt);
+			m_animations[(int)animationIndex::UP].update(dt);
+			m_animations[(int)animationIndex::DOWN].update(dt);
+			m_animations[(int)animationIndex::HORIZONTAL].update(dt);
+			m_animations[(int)animationIndex::VERTICAL].update(dt);
+		}
+		else
+		{
+
+		}
+	}
+
+	m_animations[0].update(dt);
 }
 
 
 void Bomb::initAnimation()
 {
 	//Loading frames from small explosion to large explosion
+	sf::Texture* bomb = &TextureHolder::get(textures::ITEMS);
+	sf::Texture* explosion = &TextureHolder::get(textures::ITEMS);
 
-	//Center Animation
-	m_frames.push_back(new sf::IntRect(16 * 0, 16 * 0, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 1, 16 * 0, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 2, 16 * 0, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 3, 16 * 0, 16, 16));
-
-	//Vertical Animation
-	//Up
-
-	m_frames.push_back(new sf::IntRect(16 * 0, 16 * 1, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 1, 16 * 1, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 2, 16 * 1, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 3, 16 * 1, 16, 16));
-
-	//Down
-
-	m_frames.push_back(new sf::IntRect(16 * 0, 16 * 3, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 1, 16 * 3, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 2, 16 * 3, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 3, 16 * 3, 16, 16));
-
-	//Horizontal Animation
-	//Up
-
-	m_frames.push_back(new sf::IntRect(16 * 0, 16 * 2, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 1, 16 * 2, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 2, 16 * 2, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 3, 16 * 2, 16, 16));
-
-	//Down
-
-	m_frames.push_back(new sf::IntRect(16 * 0, 16 * 4, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 1, 16 * 4, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 2, 16 * 4, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 3, 16 * 4, 16, 16));
-
-
-	//Continuous Vertical
-	m_frames.push_back(new sf::IntRect(16 * 0, 16 * 5, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 1, 16 * 5, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 2, 16 * 5, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 3, 16 * 5, 16, 16));
-	
-	//Continuous Horizontal
-	m_frames.push_back(new sf::IntRect(16 * 0, 16 * 6, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 1, 16 * 6, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 2, 16 * 6, 16, 16));
-	m_frames.push_back(new sf::IntRect(16 * 3, 16 * 6, 16, 16));
+	m_animations[(int)animationIndex::BOMB].setUp(*bomb, 0, 16 * 0, 16, 16, 3);
+	m_animations[(int)animationIndex::CENTER].setUp(*explosion, 0, 16 * 0, 16, 16, 4);
+	m_animations[(int)animationIndex::RIGHT].setUp(*explosion, 0, 16 * 1, 16, 16, 4);
+	m_animations[(int)animationIndex::LEFT].setUp(*explosion, 0, 16 * 2, 16, 16, 4);
+	m_animations[(int)animationIndex::UP].setUp(*explosion, 0, 16 * 3, 16, 16, 4);
+	m_animations[(int)animationIndex::DOWN].setUp(*explosion, 0, 16 * 4, 16, 16, 4);
+	m_animations[(int)animationIndex::HORIZONTAL].setUp(*explosion, 0, 16 * 5, 16, 16, 4);
+	m_animations[(int)animationIndex::VERTICAL].setUp(*explosion, 0, 16 * 5, 6, 16, 4);
 }
