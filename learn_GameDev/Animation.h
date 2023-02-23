@@ -11,13 +11,14 @@ class Animation
 
 		// Given a texture, initial cords, box size, & number of frames,
 		// set all the frames in the animaiton
-		void setUp(sf::Texture&, int, int, int, int, int);
+		void setUp(sf::Texture&, const int&, const int&,
+			const int&, const int&, const int&);
 
 		// apply the current frame to a sprite
 		void applyToSprite(sf::Sprite&) const; 
 
 		// cycle animation based on time in-game
-		void update(float); 
+		void update(const float&); 
 
 	private:
 		// cycles to the next frame in frames

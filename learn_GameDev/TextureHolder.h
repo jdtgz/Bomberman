@@ -5,7 +5,7 @@
 
 namespace textures
 {
-	enum id { PLAYER, ITEMS, ENEMIES, EXPLOSION };
+	enum id { PLAYER = 0, ITEMS, ENEMIES, EXPLOSION };
 }
 
 class TextureHolder
@@ -14,8 +14,8 @@ public:
 	TextureHolder(); 
 	~TextureHolder(); 
 
-	static void load(textures::id id, const std::string& filename); 
-	static sf::Texture& get(textures::id id); 
+	static void load(const textures::id&, const std::string&); 
+	static sf::Texture& get(const textures::id&); 
 private:
 	static std::map<textures::id,
 		sf::Texture*> textureMap; 

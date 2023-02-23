@@ -23,7 +23,7 @@ TextureHolder::~TextureHolder()
 }
 
 
-void TextureHolder::load(textures::id id, const std::string& filename)
+void TextureHolder::load(const textures::id& id, const std::string& filename)
 {
 	//std::unique_ptr<sf::Texture> txture(new sf::Texture()); 
 	sf::Texture* txture = new sf::Texture();
@@ -33,7 +33,7 @@ void TextureHolder::load(textures::id id, const std::string& filename)
 }
 
 
-sf::Texture& TextureHolder::get(textures::id id)
+sf::Texture& TextureHolder::get(const textures::id& id)
 {
 	std::map<textures::id, sf::Texture*>::iterator 
 	found = textureMap.find(id);

@@ -21,8 +21,9 @@ Level::Level()
 		yPos = 100;
 	}
 
+	//Create tile border
 	xPos = -50;
-	yPos = 50;
+	yPos = 100;
 	for (int i = 0; i < BORDER_COUNT; i++)
 	{
 		if (i < MAP_LENGTH + 2)
@@ -37,7 +38,7 @@ Level::Level()
 		}
 		else
 		{
-			if (i % 2 == MAP_LENGTH % 2)
+			if (i % 2 != MAP_LENGTH % 2)
 				border[i] = new Tile(-50, yPos, tileType::TILE);
 			else
 			{
@@ -61,7 +62,7 @@ Level::~Level()
 }
 
 
-void Level::generate(int levelNum)
+void Level::generate(const int& levelNum)
 {
 	int random = 0, randX = 0, randY = 0, totalSoftBlock = 0, i = 0;
 	//int enemies = 0;
@@ -174,8 +175,8 @@ void Level::collisions(Player& plr)
 			i < MAP_LENGTH + MAP_LENGTH + 4 && i >= MAP_LENGTH + 2 ?
 			tileType::AIR : tileType::TILE,
 			i < MAP_LENGTH + 2 ? tileType::AIR : tileType::TILE,
-			i % 2 != MAP_LENGTH % 2 && i >= MAP_LENGTH + MAP_LENGTH + 4 ?
-			tileType::AIR : tileType::TILE,
 			i % 2 == MAP_LENGTH % 2 && i >= MAP_LENGTH + MAP_LENGTH + 4 ?
+			tileType::AIR : tileType::TILE,
+			i % 2 != MAP_LENGTH % 2 && i >= MAP_LENGTH + MAP_LENGTH + 4 ?
 			tileType::AIR : tileType::TILE);
 }

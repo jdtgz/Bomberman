@@ -1,16 +1,16 @@
 #include "PowerUp.h"
 
 
-PowerUp::PowerUp(int typ)
+PowerUp::PowerUp(const int& type)
 {
 	sf::Texture* t = &TextureHolder::get(textures::ITEMS); 
 	
 	// initialize the "fake" sprite for the powerup
-	mSprite.setTexture(*t); 
-	mSprite.setTextureRect({ 16, 16, 16, 16 });
+	sprite.setTexture(*t);
+	sprite.setTextureRect({ 16, 16, 16, 16 });
 
 	revealed = false; 
-	powerType = typ;  
+	powerType = type;
 }
 
 
@@ -23,39 +23,40 @@ PowerUp::~PowerUp()
 // then destroy old sprite & reveal actual sprite
 void PowerUp::revealPowerUp()
 {
-	revealed = true; 
+	revealed = true;
+	std::cout << "Revealed: ";
 	switch (powerType)
 	{
-		case powerups::BombUp:
-			mSprite.setTextureRect({ 0, 48, 16, 16 });
+		case powerups::BOMB_UP:
+			sprite.setTextureRect({ 0, 48, 16, 16 });
 			std::cout << "BOMB UP\n";
 			break;
-		case powerups::FlameUp:
-			mSprite.setTextureRect({ 16, 48, 16, 16 });
+		case powerups::FLAME_UP:
+			sprite.setTextureRect({ 16, 48, 16, 16 });
 			std::cout << "FLAME UP\n";
 			break;
-		case powerups::SpeedUp:
-			mSprite.setTextureRect({ 32, 48, 16, 16 });
+		case powerups::SPEED_UP:
+			sprite.setTextureRect({ 32, 48, 16, 16 });
 			std::cout << "SPEED UP\n";
 			break;
-		case powerups::WallPass:
-			mSprite.setTextureRect({ 48, 48, 16, 16 });
+		case powerups::WALL_PASS:
+			sprite.setTextureRect({ 48, 48, 16, 16 });
 			std::cout << "WALL PASS\n";
 			break;
-		case powerups::Detonator:
-			mSprite.setTextureRect({ 64, 48, 16, 16 });
+		case powerups::DETONATOR:
+			sprite.setTextureRect({ 64, 48, 16, 16 });
 			std::cout << "DETONATOR\n";
 			break;
-		case powerups::BombPass:
-			mSprite.setTextureRect({ 80, 48, 16, 16 });
+		case powerups::BOMB_PASS:
+			sprite.setTextureRect({ 80, 48, 16, 16 });
 			std::cout << "BOMB PASS\n";
 			break;
-		case powerups::FlamePass:
-			mSprite.setTextureRect({ 96, 48, 16, 16 });
+		case powerups::FLAME_PASS:
+			sprite.setTextureRect({ 96, 48, 16, 16 });
 			std::cout << "FLAME PASS\n";
 			break;
-		case powerups::Invincibility:
-			mSprite.setTextureRect({ 112, 48, 16, 16 });
+		case powerups::INVINCIBILITY:
+			sprite.setTextureRect({ 112, 48, 16, 16 });
 			std::cout << "INVINCIBLE\n";
 			break;
 	}
@@ -66,31 +67,32 @@ void PowerUp::revealPowerUp()
 // aceess the player once & adjust its powerUp attirbutes
 void PowerUp::applyPowerUp(Player& player)
 {
-	// determine what type of power up it is & update player
+	//determine what type of power up it is & update player
+	std::cout << "Obtained: ";
 	switch (powerType)
 	{
-		case powerups::BombUp:
+		case powerups::BOMB_UP:
 			std::cout << "BOMB UP\n";
 			break;
-		case powerups::FlameUp: 
+		case powerups::FLAME_UP: 
 			std::cout << "FLAME UP\n";
 			break;
-		case powerups::SpeedUp: 
+		case powerups::SPEED_UP: 
 			std::cout << "SPEED UP\n";
 			break; 
-		case powerups::WallPass:
+		case powerups::WALL_PASS:
 			std::cout << "WALL PASS\n";
 			break;
-		case powerups::Detonator:
+		case powerups::DETONATOR:
 			std::cout << "DETONATOR\n";
 			break;
-		case powerups::BombPass:
+		case powerups::BOMB_PASS:
 			std::cout << "BOMB PASS\n";
 			break;
-		case powerups::FlamePass:
+		case powerups::FLAME_PASS:
 			std::cout << "FLAME PASS\n";
 			break;
-		case powerups::Invincibility:
+		case powerups::INVINCIBILITY:
 			std::cout << "INVINCIBLE\n";
 			break;
 	}	

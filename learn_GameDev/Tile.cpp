@@ -2,7 +2,7 @@
 
 
 // place a tile of type t at (xCoord, yCoord)
-Tile::Tile(const int& x, const int& y, const int& t)
+Tile::Tile(const int& x, const int& y, const tileType::tileID& t)
 {
 	// set the tileID, if it is a block and not a Bomb/PowerUp
 	if(t != tileType::BOMB && t != tileType::POWERUP)
@@ -23,6 +23,12 @@ Tile::~Tile()
 }
 
 
+//Tile interactions
+void Tile::interact()
+{
+}
+
+
 //Draws the tile to the screen
 void Tile::draw(sf::RenderWindow& window) const
 {
@@ -31,20 +37,21 @@ void Tile::draw(sf::RenderWindow& window) const
 
 
 //Returns the tileID of tile
-int Tile::getType()
+tileType::tileID Tile::getType()
 {
 	return type;
 }
 
 
 //Given an tileID, set the proper textureRect & scale it 
-void Tile::setTile(const int& t)
+void Tile::setTile(const tileType::tileID& t)
 {
 	type = t;
 	switch (t)
 	{
 		//put anything related to tile type changes here
 		case tileType::AIR:
+		case tileType::BOMB:
 			tile.setTextureRect({ 96,32,16,16 });
 			break;
 		case tileType::BRICK:
@@ -77,7 +84,8 @@ void Tile::destroy()
 //tracks collisions between the player and the tile, 
 //pushes them away from the tile
 void Tile::detectCollision(Player& plr,
-	const int& u, const int& d, const int& l, const int& r)
+	const tileType::tileID& u, const tileType::tileID& d,
+	const tileType::tileID& l, const tileType::tileID& r)
 {
 	//Get hitboxes
 	sf::FloatRect pB = plr.getBoundingBox();

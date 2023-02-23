@@ -17,7 +17,7 @@ class Game
 	private:
 		// helper functions for "run"
 		void processEvents();
-		void update(sf::Time);
+		void update(const sf::Time&);
 		void render();
 
 		// sfml screen attributes 
@@ -31,7 +31,7 @@ class Game
 		sf::Time timePerFrame = sf::seconds(1.f / 60.f); 
 
 		// Player 
-		Player player1;
+		Player player;
 
 		// Level
 		Level level;

@@ -20,7 +20,8 @@ Animation::Animation()
 }
 
 
-void Animation::setUp(sf::Texture& t, int x, int y, int width, int height, int tFrames)
+void Animation::setUp(sf::Texture& t, const int& x, const int& y,
+	const int& width, const int& height, const int& tFrames)
 {
 	texture = &t;
 	nFrames = tFrames;
@@ -43,7 +44,7 @@ void Animation::applyToSprite(sf::Sprite& s) const
 }
 
 
-void Animation::update(float dt)
+void Animation::update(const float& dt)
 {
 	time += dt; 
 	while (time >= HOLDTIME)

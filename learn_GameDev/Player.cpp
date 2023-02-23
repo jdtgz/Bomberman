@@ -18,9 +18,10 @@ Player::Player()
 
 	// set the starting animation
 	curAnimation = animIndex::WALKING_RIGHT;
-	animations[int(curAnimation)].applyToSprite(mSprite);
+	animations[int(curAnimation)].applyToSprite(sprite);
 
-	mSprite.setPosition(0, 100);
+	//Default position in the top left corner
+	sprite.setPosition(0, 100);
 }
 
 
@@ -103,7 +104,7 @@ void Player::keyReleased(const sf::Keyboard::Key &key)
 // draws player onto the screen 
 void Player::draw(sf::RenderWindow& window) const
 {
-	window.draw(mSprite); 
+	window.draw(sprite);
 }
 
 
@@ -114,7 +115,7 @@ void Player::update(const float& dt)
 	if (right || left || down || up)
 	{
 		animations[int(curAnimation)].update(dt);
-		animations[int(curAnimation)].applyToSprite(mSprite);
+		animations[int(curAnimation)].applyToSprite(sprite);
 	}
 	// if plr collides with fire (witout flameUp powerUp)
 	// or enemy -> death animation...
@@ -148,21 +149,21 @@ sf::Vector2f Player::getVelocity() const
 //Get the hitbox for the player sprite
 sf::FloatRect Player::getBoundingBox() const
 {
-	return mSprite.getGlobalBounds();
+	return sprite.getGlobalBounds();
 }
 
 
 // return sprite of player 
 sf::Sprite Player::getSprite() const 
 {
-	return mSprite;
+	return sprite;
 }
 
 
 //Move player sprite by x, y
 void Player::move(const float& x, const float& y)
 {
-	mSprite.move(x, y);
+	sprite.move(x, y);
 	return;
 }
 

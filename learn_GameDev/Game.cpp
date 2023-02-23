@@ -3,8 +3,11 @@
 
 Game::Game()
 {
+	//Randomize generator
+	//srand(time(NULL));
+
 	//Create a new window
-	window = new sf::RenderWindow(sf::VideoMode(750, 750), "GAME!!");
+	window = new sf::RenderWindow(sf::VideoMode(750, 750), "Bomberman");
 	window->setFramerateLimit(144);
 
 	//Generate the level
@@ -12,7 +15,7 @@ Game::Game()
 
 	view.setSize(sf::Vector2f(window->getSize()));
 
-	player1.getSprite().setPosition(48 * 31 / 2, 48 * 13 / 2);
+	player.getSprite().setPosition(48 * 31 / 2, 48 * 13 / 2);
 }
 
 
@@ -34,7 +37,7 @@ void Game::run()
 	while (window->isOpen())
 	{
 		//Detect all collisions and adjust player accordingly
-		level.collisions(player1);
+		level.collisions(player);
 
 		//Poll events
 		processEvents();
@@ -71,11 +74,11 @@ void Game::processEvents()
 		{
 			//Tell the player when a key is down
 			case sf::Event::KeyPressed:
-				player1.keyPressed(evnt.key.code); 
+				player.keyPressed(evnt.key.code); 
 				break;
 			//Tell the player when a key is released
 			case sf::Event::KeyReleased:
-				player1.keyReleased(evnt.key.code); 
+				player.keyReleased(evnt.key.code); 
 				break;
 			//Close the window
 			case sf::Event::Closed: 
@@ -86,23 +89,23 @@ void Game::processEvents()
 
 
 //Tick
-void Game::update(sf::Time dt)
+void Game::update(const sf::Time& dt)
 {
-	player1.update(dt.asSeconds());
+	player.update(dt.asSeconds());
 
 	//Prevent viewport from going off of the map
-	if (player1.getSprite().getPosition().x > (view.getSize().x / 2) - 48 &&
-		player1.getSprite().getPosition().x < (31 * 48) - (view.getSize().x / 3))
+	if (player.getSprite().getPosition().x > (view.getSize().x / 2) - 48 &&
+		player.getSprite().getPosition().x < (31 * 48) - (view.getSize().x / 3))
 	{
-		view.setCenter(sf::Vector2f(player1.getSprite().getPosition().x,
+		view.setCenter(sf::Vector2f(player.getSprite().getPosition().x,
 			window->getSize().y / 2 + 48));
 	}
-	else if (player1.getSprite().getPosition().x < (view.getSize().x / 2) - 48)
+	else if (player.getSprite().getPosition().x < (view.getSize().x / 2) - 48)
 	{
 		view.setCenter(sf::Vector2f((view.getSize().x / 2) - 48,
 			window->getSize().y / 2 + 48));
 	}
-	else if (player1.getSprite().getPosition().x > (31 * 48) - (view.getSize().x / 3))
+	else if (player.getSprite().getPosition().x > (31 * 48) - (view.getSize().x / 3))
 	{
 		view.setCenter(sf::Vector2f((31 * 48) - (view.getSize().x / 3),
 			window->getSize().y / 2 + 48));
@@ -120,7 +123,7 @@ void Game::render()
   
 	// draw the level and player 
 	level.draw(*window);
-	player1.draw(*window); 
+	player.draw(*window); 
   
 	window->display(); 
 }

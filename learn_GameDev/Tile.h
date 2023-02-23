@@ -14,22 +14,22 @@ namespace tileType
 class Tile
 {
 	public:
-		Tile(const int&, const int&, const int&);
+		Tile(const int&, const int&, const tileType::tileID&);
 		~Tile();
 
-		int getType();
-		void setTile(const int&);
-		//void destroy();
+		tileType::tileID getType();
+		void setTile(const tileType::tileID&);
+		void interact();
 
 		void draw(sf::RenderWindow&) const;
 
 		// collision detection
 		void detectCollision(Player&,
-			const int&, const int&, const int&, const int&);
-		//void detectCollision(Enemy&); 
+			const tileType::tileID&, const tileType::tileID&,
+			const tileType::tileID&, const tileType::tileID&);
 	private:
 		sf::Sprite tile; 
 		//Animaiton blowUp
 
-		int type;
+		tileType::tileID type;
 };
