@@ -14,17 +14,18 @@ namespace tileType
 class Tile
 {
 	public:
-		Tile(int, int, int);
+		Tile(const int&, const int&, const int&);
 		~Tile();
 
 		int getType();
-		void setTileRect(int);
+		void setTile(const int&);
 		//void destroy();
 
 		void draw(sf::RenderWindow&) const;
 
 		// collision detection
-		void detectCollision(Player&);
+		void detectCollision(Player&,
+			const int&, const int&, const int&, const int&);
 		//void detectCollision(Enemy&); 
 	private:
 		sf::Sprite tile; 

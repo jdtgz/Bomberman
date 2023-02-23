@@ -19,6 +19,8 @@ Player::Player()
 	// set the starting animation
 	curAnimation = animIndex::WALKING_RIGHT;
 	animations[int(curAnimation)].applyToSprite(mSprite);
+
+	mSprite.setPosition(0, 100);
 }
 
 

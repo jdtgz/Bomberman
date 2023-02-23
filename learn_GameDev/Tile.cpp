@@ -2,7 +2,7 @@
 
 
 // place a tile of type t at (xCoord, yCoord)
-Tile::Tile(int xCord, int yCord, int t)
+Tile::Tile(const int& x, const int& y, const int& t)
 {
 	// set the tileID, if it is a block and not a Bomb/PowerUp
 	if(t != tileType::BOMB && t != tileType::POWERUP)
@@ -10,10 +10,10 @@ Tile::Tile(int xCord, int yCord, int t)
 
 	// load the texture and set the sprite for tile
 	tile.setTexture(TextureHolder::get(textures::ITEMS));
-	setTileRect(t); 
+	setTile(t);
 
 	// place the tile 
-	tile.setPosition(xCord, yCord);
+	tile.setPosition(x, y);
 }
 
 
@@ -38,10 +38,10 @@ int Tile::getType()
 
 
 //Given an tileID, set the proper textureRect & scale it 
-void Tile::setTileRect(int newType)
+void Tile::setTile(const int& t)
 {
-	type = newType;
-	switch (newType)
+	type = t;
+	switch (t)
 	{
 		//put anything related to tile type changes here
 		case tileType::AIR:
@@ -56,7 +56,6 @@ void Tile::setTileRect(int newType)
 			break;
 		case tileType::DOOR:
 			tile.setTextureRect({ 32,16,16,16 });
-			break;
 	}
 	tile.setScale(3, 3);
 }
@@ -76,8 +75,9 @@ void Tile::destroy()
 
 
 //tracks collisions between the player and the tile, 
-// pushes them away from the 
-void Tile::detectCollision(Player& plr)
+//pushes them away from the tile
+void Tile::detectCollision(Player& plr,
+	const int& u, const int& d, const int& l, const int& r)
 {
 	//Get hitboxes
 	sf::FloatRect pB = plr.getBoundingBox();
@@ -101,11 +101,13 @@ void Tile::detectCollision(Player& plr)
 		{
 			//Up Correction
 			if (pB.top + pB.height > tB.top &&
-				pB.top + pB.height < tB.top + (tB.height * NEAR))
+				pB.top + pB.height < tB.top + (tB.height * NEAR) &&
+				u == tileType::AIR)
 				plr.move(0, -plr.getSpeed());
 			//Down Correction
 			else if (pB.top < tB.top + tB.height &&
-				pB.top > tB.top + (tB.height * FAR))
+				pB.top > tB.top + (tB.height * FAR) &&
+				d == tileType::AIR)
 				plr.move(0, plr.getSpeed());
 			//Running into tile
 			else
@@ -122,11 +124,13 @@ void Tile::detectCollision(Player& plr)
 		{
 			//Left Correction
 			if (pB.left + pB.width > tB.left &&
-				pB.left + pB.width < tB.left + (tB.width * NEAR))
+				pB.left + pB.width < tB.left + (tB.width * NEAR) &&
+				l == tileType::AIR)
 				plr.move(-plr.getSpeed(), 0);
 			//Right Correction
 			else if (pB.left < tB.left + tB.width &&
-				pB.left > tB.left + (tB.width * FAR))
+				pB.left > tB.left + (tB.width * FAR) &&
+				r == tileType::AIR)
 				plr.move(plr.getSpeed(), 0);
 			//Running into tile
 			else
