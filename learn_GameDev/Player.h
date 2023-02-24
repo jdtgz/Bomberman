@@ -3,16 +3,17 @@
 #include "Animation.h"
 #include "TextureHolder.h"
 
+
 namespace directions
 {
 	// directions 
 	enum ID { RIGHT = 0, LEFT, UP, DOWN, COUNT };
 }
 
+
 class Player
 {
 	public:
-
 		// constructor/destructor
 		Player();
 		~Player();
@@ -26,10 +27,10 @@ class Player
 
 		// updates attributes of player while in main
 		void update(const float&);
-
 		void setVelocity(const int&, const int&);
-
 		float getSpeed() const;
+		// detonate oldest bomb  
+		void detonate(); 
 
 		//Collision
 		void move(const float&, const float&);
@@ -38,7 +39,13 @@ class Player
 		sf::Vector2f getVelocity() const;
 		sf::Sprite getSprite() const;
 
+		// powerup/player attributes 
+		bool getDetonatorStatus();
+		void activateDetonator(); 
+
+
 	private:
+		// Visual attributes
 		// total animations of the player
 		enum class animIndex
 		{
@@ -49,17 +56,21 @@ class Player
 			DEATH,
 			COUNT
 		};
-		// visual attributes
 		sf::Sprite sprite;
 		Animation animations[int(animIndex::COUNT)];
 		animIndex curAnimation;
 
-		// movements attributes 
+
+		// Movement attributes 
 		float speed;
 		int xVel = 0, yVel = 0;
 		// Direction that the player is moving 
 		bool movement[directions::COUNT];
-
 		// Directions where player 'can possibly' move
-		bool canMove[directions::COUNT]; 
+		bool canMove[directions::COUNT];
+
+
+		// player attirbutes 
+		bool detonator; 
+
 };
