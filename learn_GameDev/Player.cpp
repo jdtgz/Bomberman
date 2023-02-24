@@ -5,16 +5,21 @@ Player::Player()
 {
 	// initialize movement attributes 
 	speed = 3.f;
+	for (int i = 0; i < directions::COUNT; i++)
+	{
+		movement[i] = false; 
+		canMove[i] = true; 
+	}
 	
 	// get the texture
 	sf::Texture* t = &TextureHolder::get(textures::PLAYER);
 
 	// setup animations 
-	animations[int(animIndex::WALKING_LEFT)].setUp(*t, 0, 0, 12, 16, 3);
-	animations[int(animIndex::WALKING_RIGHT)].setUp(*t, 0, 16, 12, 16, 3);
-	animations[int(animIndex::WALKING_DOWN)].setUp(*t, 0, 32, 12, 16, 3);
-	animations[int(animIndex::WALKING_UP)].setUp(*t, 0, 48, 12, 16, 3);
-	animations[int(animIndex::DEATH)].setUp(*t, 0, 64, 16, 16, 7);
+	animations[int(animIndex::WALKING_LEFT)].setUp(*t, 0, 16 * 0, 12, 16, 3);
+	animations[int(animIndex::WALKING_RIGHT)].setUp(*t, 0, 16 * 1, 12, 16, 3);
+	animations[int(animIndex::WALKING_DOWN)].setUp(*t, 0, 16 * 2, 12, 16, 3);
+	animations[int(animIndex::WALKING_UP)].setUp(*t, 0, 16 * 3, 12, 16, 3);
+	animations[int(animIndex::DEATH)].setUp(*t, 0, 16 * 4, 16, 16, 7);
 
 	// set the starting animation
 	curAnimation = animIndex::WALKING_RIGHT;
@@ -38,36 +43,36 @@ void Player::keyPressed(const sf::Keyboard::Key &key)
 	switch (key)
 	{
 		case sf::Keyboard::Up:
-			up = true; 
+			movement[directions::UP] = true;
 			curAnimation = animIndex::WALKING_UP;
 			//Reset 'can moves' for all other directions
-			canMoveDown = true;
-			canMoveLeft = true;
-			canMoveRight = true;
+			canMove[directions::RIGHT] = true; 
+			canMove[directions::LEFT] = true;
+			canMove[directions::DOWN] = true;
 			break;
 		case sf::Keyboard::Down:
-			down = true; 
+			movement[directions::DOWN] = true;
 			curAnimation = animIndex::WALKING_DOWN;
 			//Reset 'can moves' for all other directions
-			canMoveUp = true;
-			canMoveLeft = true;
-			canMoveRight = true;
+			canMove[directions::RIGHT] = true;
+			canMove[directions::LEFT] = true;
+			canMove[directions::UP] = true;
 			break;
 		case sf::Keyboard::Left:
-			left = true;
+			movement[directions::LEFT] = true;
 			curAnimation = animIndex::WALKING_LEFT;
 			//Reset 'can moves' for all other directions
-			canMoveUp = true;
-			canMoveDown = true;
-			canMoveRight = true;
+			canMove[directions::UP] = true;
+			canMove[directions::DOWN] = true;
+			canMove[directions::RIGHT] = true;
 			break;
 		case sf::Keyboard::Right:
-			right = true; 
+			movement[directions::RIGHT] = true;
 			curAnimation = animIndex::WALKING_RIGHT;
 			//Reset 'can moves' for all other directions
-			canMoveUp = true;
-			canMoveDown = true;
-			canMoveLeft = true;
+			canMove[directions::UP] = true;
+			canMove[directions::DOWN] = true;
+			canMove[directions::LEFT] = true;
 			break;
 		case sf::Keyboard::A:
 			// place a bomb
@@ -86,16 +91,16 @@ void Player::keyReleased(const sf::Keyboard::Key &key)
 	switch (key)
 	{
 	case sf::Keyboard::Up:
-		up = false;
+		movement[directions::UP] = false;
 		break;
 	case sf::Keyboard::Down:
-		down = false;
+		movement[directions::DOWN] = false;
 		break;
 	case sf::Keyboard::Left:
-		left = false;
+		movement[directions::LEFT] = false;
 		break;
 	case sf::Keyboard::Right:
-		right = false;
+		movement[directions::RIGHT] = false;
 		break;
 	}
 }
@@ -112,18 +117,22 @@ void Player::draw(sf::RenderWindow& window) const
 void Player::update(const float& dt)
 {
 	// update animations 
-	if (right || left || down || up)
+	if (movement[directions::UP] || movement[directions::DOWN] 
+		|| movement[directions::LEFT] || movement[directions::RIGHT])
 	{
 		animations[int(curAnimation)].update(dt);
 		animations[int(curAnimation)].applyToSprite(sprite);
 	}
-	// if plr collides with fire (witout flameUp powerUp)
-	// or enemy -> death animation...
 
 	//Update velocity based on user input, move speed, and
 	//the directions the player can currently move in
-	setVelocity((canMoveLeft * left * -speed) + (canMoveRight * right * speed),
-		(canMoveUp * up * -speed) + (canMoveDown * down * speed));
+	int x = canMove[directions::LEFT] * movement[directions::LEFT] * -speed; 
+	x += canMove[directions::RIGHT] * movement[directions::RIGHT] * speed; 
+
+	int y = canMove[directions::UP] * movement[directions::UP] * -speed;
+	y += canMove[directions::DOWN] * movement[directions::DOWN] * speed;
+
+	setVelocity(x, y);
 
 	//Move sprite by velocity
 	move(xVel, yVel);
@@ -168,33 +177,9 @@ void Player::move(const float& x, const float& y)
 
 
 //Set if the player can move left or not
-void Player::setCanMoveLeft(const bool& v)
+void Player::setCanMove(const int& dir, const bool& v)
 {
-	canMoveLeft = v;
-	return;
-}
-
-
-//Set if the player can move right or not
-void Player::setCanMoveRight(const bool& v)
-{
-	canMoveRight = v;
-	return;
-}
-
-
-//Set if the player can move up or not
-void Player::setCanMoveUp(const bool& v)
-{
-	canMoveUp = v;
-	return;
-}
-
-
-//Set if the player can move down or not
-void Player::setCanMoveDown(const bool& v)
-{
-	canMoveDown = v;
+	canMove[dir] = v;
 	return;
 }
 

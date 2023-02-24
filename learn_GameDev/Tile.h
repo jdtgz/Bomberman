@@ -3,33 +3,34 @@
 #include <iostream>
 #include "TextureHolder.h"
 #include "Player.h"
+#include "Animation.h"
 
 
 namespace tileType 
 {
-	enum tileID { AIR = 0, BRICK, TILE, DOOR, BOMB, POWERUP };
+	enum ID { AIR = 0, BRICK, TILE, DOOR, BOMB, POWERUP };
 }
 
 
 class Tile
 {
 	public:
-		Tile(const int&, const int&, const tileType::tileID&);
+		Tile(const int&, const int&, const tileType::ID&);
 		~Tile();
 
-		tileType::tileID getType();
-		void setTile(const tileType::tileID&);
+		tileType::ID getType();
+		void setTile(const tileType::ID&);
 		void interact();
 
 		void draw(sf::RenderWindow&) const;
 
 		// collision detection
 		void detectCollision(Player&,
-			const tileType::tileID&, const tileType::tileID&,
-			const tileType::tileID&, const tileType::tileID&);
+			const tileType::ID&, const tileType::ID&,
+			const tileType::ID&, const tileType::ID&);
 	private:
 		sf::Sprite tile; 
-		//Animaiton blowUp
+		Animation blowUp; 
 
-		tileType::tileID type;
+		tileType::ID type;
 };

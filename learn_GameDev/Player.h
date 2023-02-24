@@ -3,59 +3,63 @@
 #include "Animation.h"
 #include "TextureHolder.h"
 
+namespace directions
+{
+	// directions 
+	enum ID { RIGHT = 0, LEFT, UP, DOWN, COUNT };
+}
+
 class Player
 {
-public:
-	// constructor/destructor
-	Player();
-	~Player();
+	public:
 
-	// Given a key, do something
-	void keyPressed(const sf::Keyboard::Key&);
-	void keyReleased(const sf::Keyboard::Key&);
+		// constructor/destructor
+		Player();
+		~Player();
 
-	// Draws player onto the screen
-	void draw(sf::RenderWindow&) const;
+		// Given a key, do something
+		void keyPressed(const sf::Keyboard::Key&);
+		void keyReleased(const sf::Keyboard::Key&);
 
-	// updates attributes of player while in main
-	void update(const float&);
+		// Draws player onto the screen
+		void draw(sf::RenderWindow&) const;
 
-	void setVelocity(const int&, const int&);
+		// updates attributes of player while in main
+		void update(const float&);
 
-	float getSpeed() const;
+		void setVelocity(const int&, const int&);
 
-	//Collision
-	void move(const float&, const float&);
-	void setCanMoveLeft(const bool&);
-	void setCanMoveRight(const bool&);
-	void setCanMoveUp(const bool&);
-	void setCanMoveDown(const bool&);
-	sf::FloatRect getBoundingBox() const;
-	sf::Vector2f getVelocity() const;
-	sf::Sprite getSprite() const;
+		float getSpeed() const;
 
-private:
-	// total animations of the player
-	enum class animIndex
-	{
-		WALKING_LEFT = 0,
-		WALKING_RIGHT,
-		WALKING_DOWN,
-		WALKING_UP,
-		DEATH,
-		COUNT
-	};
-	// visual attributes
-	sf::Sprite sprite;
-	Animation animations[int(animIndex::COUNT)];
-	animIndex curAnimation;
+		//Collision
+		void move(const float&, const float&);
+		void setCanMove(const int&, const bool&);
+		sf::FloatRect getBoundingBox() const;
+		sf::Vector2f getVelocity() const;
+		sf::Sprite getSprite() const;
 
-	// movements attributes 
-	float speed;
-	int xVel = 0, yVel = 0;
+	private:
+		// total animations of the player
+		enum class animIndex
+		{
+			WALKING_LEFT = 0,
+			WALKING_RIGHT,
+			WALKING_DOWN,
+			WALKING_UP,
+			DEATH,
+			COUNT
+		};
+		// visual attributes
+		sf::Sprite sprite;
+		Animation animations[int(animIndex::COUNT)];
+		animIndex curAnimation;
 
-	bool left = false, right = false, up = false, down = false;
-		
-	bool canMoveLeft = true, canMoveRight = true, 
-		canMoveUp = true, canMoveDown = true;
+		// movements attributes 
+		float speed;
+		int xVel = 0, yVel = 0;
+		// Direction that the player is moving 
+		bool movement[directions::COUNT];
+
+		// Directions where player 'can possibly' move
+		bool canMove[directions::COUNT]; 
 };
