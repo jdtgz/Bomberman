@@ -28,21 +28,39 @@ class Player
 		// updates attributes of player while in main
 		void update(const float&);
 		void setVelocity(const int&, const int&);
+		sf::Vector2f getVelocity() const;
 		float getSpeed() const;
-		// detonate oldest bomb  
 		void detonate(); 
 
 		//Collision
 		void move(const float&, const float&);
 		void setCanMove(const int&, const bool&);
 		sf::FloatRect getBoundingBox() const;
-		sf::Vector2f getVelocity() const;
 		sf::Sprite getSprite() const;
 
 		// powerup/player attributes 
-		bool getDetonatorStatus();
-		void activateDetonator(); 
+		int getBombCount(); 
+		void plusBombCount(); 
 
+		int getFlameRange(); 
+		void plusFlameRange(); 
+
+		bool wallPass_status();
+		void activate_wallPass(); 
+
+		bool detonator_status();
+		void activate_detonator();
+
+		bool bombPass_status(); 
+		void activate_bombPass(); 
+
+		bool flamePass_status(); 
+		void activate_flamePass(); 
+
+		bool invincible_status(); 
+		void activate_invincible(); 
+		void stop_invincible(); 
+		
 
 	private:
 		// Visual attributes
@@ -62,7 +80,6 @@ class Player
 
 
 		// Movement attributes 
-		float speed;
 		int xVel = 0, yVel = 0;
 		// Direction that the player is moving 
 		bool movement[directions::COUNT];
@@ -71,6 +88,13 @@ class Player
 
 
 		// player attirbutes 
+		int bombCount; 
+		int flameRange; 
+		float speed;
+		bool wallPass; 
 		bool detonator; 
+		bool bombPass;
+		bool flamePass; 
+		bool invincible; 
 
 };

@@ -3,15 +3,7 @@
 
 Player::Player()
 {
-	// initialize movement attributes 
-	speed = 3.f;
-	for (int i = 0; i < directions::COUNT; i++)
-	{
-		movement[i] = false; 
-		canMove[i] = true; 
-	}
-	
-	// get the texture
+	// initialize visual attributes 
 	sf::Texture* t = &TextureHolder::get(textures::PLAYER);
 
 	// setup animations 
@@ -24,6 +16,24 @@ Player::Player()
 	// set the starting animation
 	curAnimation = animIndex::WALKING_RIGHT;
 	animations[int(curAnimation)].applyToSprite(sprite);
+
+
+	// initialize movement attributes 
+	for (int i = 0; i < directions::COUNT; i++)
+	{
+		movement[i] = false; 
+		canMove[i] = true; 
+	}
+
+	// initialize the player/powerUp attributes 
+	bombCount = 1; 
+	flameRange = 1; 
+	speed = 3.f;
+	wallPass = false; 
+	detonator = false;
+	bombPass = false; 
+	flamePass = false; 
+	invincible = false; 
 
 	//Default position in the top left corner
 	sprite.setPosition(0, 100);
@@ -154,17 +164,16 @@ sf::Vector2f Player::getVelocity() const
 }
 
 
-//Get the hitbox for the player sprite
-sf::FloatRect Player::getBoundingBox() const
+//Get player move speed
+float Player::getSpeed() const
 {
-	return sprite.getGlobalBounds();
+	return speed;
 }
 
 
-// return sprite of player 
-sf::Sprite Player::getSprite() const 
+// detonate the oldest bomb
+void Player::detonate()
 {
-	return sprite;
 }
 
 
@@ -184,8 +193,125 @@ void Player::setCanMove(const int& dir, const bool& v)
 }
 
 
-//Get player move speed
-float Player::getSpeed() const
+//Get the hitbox for the player sprite
+sf::FloatRect Player::getBoundingBox() const
 {
-	return speed;
+	return sprite.getGlobalBounds();
+}
+
+
+// return sprite of player 
+sf::Sprite Player::getSprite() const 
+{
+	return sprite;
+}
+
+
+// return number of bombs player can place at a time 
+int Player::getBombCount()
+{
+	return bombCount; 
+}
+
+
+// +1 number of bombs player can place at a time 
+void Player::plusBombCount()
+{
+	bombCount++; 
+}
+
+
+// return range of the bomb explosions
+int Player::getFlameRange()
+{
+	return flameRange; 
+}
+
+
+// +1 range of bomb explosion
+void Player::plusFlameRange()
+{
+	flameRange++; 
+}
+
+
+// return if player can move through walls 
+bool Player::wallPass_status()
+{
+	return wallPass;
+}
+
+
+// activate the wallPass powerUp
+void Player::activate_wallPass()
+{
+	if(!wallPass)
+		wallPass = true; 
+}
+
+
+// return if player can detonate bombs 
+bool Player::detonator_status()
+{
+	return detonator; 
+}
+
+
+// activate the detonator powerUp
+void Player::activate_detonator()
+{
+	if(!detonator)
+		detonator = true; 
+}
+
+
+// return if player can walk through bombs 
+bool Player::bombPass_status()
+{
+	return bombPass; 
+}
+
+
+// activate the active bombPass powerUp
+void Player::activate_bombPass()
+{
+	if (!bombPass)
+		bombPass = true; 
+}
+
+
+// return if player can move through flames 
+bool Player::flamePass_status()
+{
+	return flamePass;
+}
+
+
+// activate the flamePass powerUp
+void Player::activate_flamePass()
+{
+	if (!flamePass)
+		flamePass = true; 
+}
+
+
+// return if player is invincible
+bool Player::invincible_status()
+{
+	return invincible; 
+}
+
+
+// activate the invincibility powerUp
+void Player::activate_invincible()
+{
+	if (!invincible)
+		invincible = true; 
+}
+
+
+// deactivate the invincibility powerUp
+void Player::stop_invincible()
+{
+	invincible = false; 
 }
