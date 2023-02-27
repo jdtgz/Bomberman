@@ -42,62 +42,53 @@ void Bomb::draw(sf::RenderTarget& target)
 
 	else
 	{
-		//Center explosion
-		m_animations[(int)animationIndex::CENTER].applyToSprite(m_sprite);
-		target.draw(m_sprite);
+		//Decrease line count with lambda function to draw sprites
+		auto drawSprite = [&](const sf::Vector2f position, animationIndex type)
+		{
+			m_animations[(int)type].applyToSprite(m_sprite);
+			m_sprite.setPosition(position);
+			target.draw(m_sprite);
+		};
 
-		auto drawSprite = [&]() { target.draw(m_sprite); };
+		//Center explosion
+		sf::Vector2f centerPos(m_position.x * 16, m_position.y * 16);
+		drawSprite(centerPos, animationIndex::CENTER);
 
 		for (int i = 0; i < m_range; i++)
 		{
-			m_sprite.setPosition(sf::Vector2f(m_position.x * 16, m_position.y * 16));
-			sf::Vector2f leftPos = m_sprite.getPosition() - sf::Vector2f((m_sprite.getLocalBounds().width * (i + 1)) * 16, 0);
-			sf::Vector2f rightPos = m_sprite.getPosition() + sf::Vector2f((m_sprite.getLocalBounds().width * (i + 1)) * 16, 0);
-			sf::Vector2f downPos = m_sprite.getPosition() + sf::Vector2f(0, (m_sprite.getLocalBounds().height * (i + 1)) * 16);
-			sf::Vector2f upPos = m_sprite.getPosition() - sf::Vector2f(0, (m_sprite.getLocalBounds().height * (i + 1)) * 16);
+			int k = i + 2;
+			sf::Vector2f leftPos = sf::Vector2f(centerPos.x - (16 * k), centerPos.y);
+			sf::Vector2f rightPos = sf::Vector2f(centerPos.x + (16 * k), centerPos.y);
+			sf::Vector2f downPos = sf::Vector2f(centerPos.x, centerPos.y + (16 * k));
+			sf::Vector2f upPos = sf::Vector2f(centerPos.x, centerPos.y - (16 * k));
 
 			if (i < m_range)
 			{
 				//Left explosion line
-				m_animations[(int)animationIndex::HORIZONTAL].applyToSprite(m_sprite);
-				m_sprite.setPosition(leftPos);
-				drawSprite();
+				drawSprite(leftPos, animationIndex::HORIZONTAL);
 
 				//Right explosion line
-				m_sprite.setPosition(rightPos);
-				drawSprite();
+				drawSprite(rightPos, animationIndex::HORIZONTAL);
 				
 				//Down explosion line
-				m_animations[(int)animationIndex::VERTICAL].applyToSprite(m_sprite);
-				m_sprite.setPosition(downPos);
-				drawSprite();
+				drawSprite(downPos, animationIndex::VERTICAL);
 				
 				//Up explosion line
-				m_sprite.setPosition(upPos);
-				drawSprite();
+				drawSprite(upPos, animationIndex::VERTICAL);
 			}
-
 			else
 			{
 				//Left explosion end
-				m_animations[(int)animationIndex::LEFT].applyToSprite(m_sprite);
-				m_sprite.setPosition(leftPos);
-				drawSprite();
+				drawSprite(leftPos, animationIndex::LEFT);
 
 				//Right explosion end
-				m_animations[(int)animationIndex::RIGHT].applyToSprite(m_sprite);
-				m_sprite.setPosition(rightPos);
-				drawSprite();
+				drawSprite(rightPos, animationIndex::RIGHT);
 
 				//Down explosion end
-				m_animations[(int)animationIndex::DOWN].applyToSprite(m_sprite);
-				m_sprite.setPosition(downPos);
-				drawSprite();
+				drawSprite(downPos, animationIndex::DOWN);
 
 				//Up explosion end
-				m_animations[(int)animationIndex::UP].applyToSprite(m_sprite);
-				m_sprite.setPosition(upPos);
-				drawSprite();
+				drawSprite(upPos, animationIndex::UP);
 			}
 		}
 	}
@@ -157,10 +148,10 @@ void Bomb::initAnimation()
 
 	m_animations[(int)animationIndex::BOMB].setUp(*bomb, 0, 16 * 0, 16, 16, 3);
 	m_animations[(int)animationIndex::CENTER].setUp(*explosion, 0, 16 * 0, 16, 16, 4);
-	m_animations[(int)animationIndex::RIGHT].setUp(*explosion, 0, 16 * 1, 16, 16, 4);
-	m_animations[(int)animationIndex::LEFT].setUp(*explosion, 0, 16 * 2, 16, 16, 4);
-	m_animations[(int)animationIndex::UP].setUp(*explosion, 0, 16 * 3, 16, 16, 4);
-	m_animations[(int)animationIndex::DOWN].setUp(*explosion, 0, 16 * 4, 16, 16, 4);
-	m_animations[(int)animationIndex::HORIZONTAL].setUp(*explosion, 0, 16 * 5, 16, 16, 4);
-	m_animations[(int)animationIndex::VERTICAL].setUp(*explosion, 0, 16 * 5, 6, 16, 4);
+	m_animations[(int)animationIndex::UP].setUp(*explosion, 0, 16 * 1, 16, 16, 4);
+	m_animations[(int)animationIndex::RIGHT].setUp(*explosion, 0, 16 * 2, 16, 16, 4);
+	m_animations[(int)animationIndex::DOWN].setUp(*explosion, 0, 16 * 3, 16, 16, 4);
+	m_animations[(int)animationIndex::LEFT].setUp(*explosion, 0, 16 * 4, 16, 16, 4);
+	m_animations[(int)animationIndex::VERTICAL].setUp(*explosion, 0, 16 * 5, 16, 16, 4);
+	m_animations[(int)animationIndex::HORIZONTAL].setUp(*explosion, 0, 16 * 6, 16, 16, 4);
 }

@@ -46,5 +46,7 @@ private:
 	int m_current_frame;
 	bool m_exploded;
 	int m_range;
+
+	float scaled_size = 16 * 3;
 };
 

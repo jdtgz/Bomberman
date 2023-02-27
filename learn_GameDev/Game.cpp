@@ -1,6 +1,6 @@
 #include "Game.h"
 
-Game::Game() : m_bomb(5, 20, 1, true) /*	TESTING PURPOSE	*/
+Game::Game() : m_bomb(5, 20, 2, true) /*	TESTING PURPOSE	*/
 {
 	//Randomize generator
 	//srand(time(NULL));
