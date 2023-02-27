@@ -46,19 +46,59 @@ void Bomb::draw(sf::RenderTarget& target)
 		m_animations[(int)animationIndex::CENTER].applyToSprite(m_sprite);
 		target.draw(m_sprite);
 
+		auto drawSprite = [&]() { target.draw(m_sprite); };
+
 		for (int i = 0; i < m_range; i++)
 		{
+			sf::Vector2f leftPos = m_sprite.getPosition() - sf::Vector2f(m_sprite.getLocalBounds().width * (i + 1), 0);
+			sf::Vector2f rightPos = m_sprite.getPosition() + sf::Vector2f(m_sprite.getLocalBounds().width * (i + 1), 0);
+			sf::Vector2f downPos = m_sprite.getPosition() + sf::Vector2f(0, m_sprite.getLocalBounds().height * (i + 1));
+			sf::Vector2f upPos = m_sprite.getPosition() - sf::Vector2f(0, m_sprite.getLocalBounds().height * (i + 1));
 
-			for (int i = 0; i < 4; i++)
+			if (i < m_range)
 			{
+				//Left explosion line
+				m_animations[(int)animationIndex::HORIZONTAL].applyToSprite(m_sprite);
+				m_sprite.setPosition(leftPos);
+				drawSprite();
 
+				//Right explosion line
+				m_sprite.setPosition(rightPos);
+				drawSprite();
+				
+				//Down explosion line
+				m_animations[(int)animationIndex::VERTICAL].applyToSprite(m_sprite);
+				m_sprite.setPosition(downPos);
+				drawSprite();
+				
+				//Up explosion line
+				m_sprite.setPosition(upPos);
+				drawSprite();
+			}
+
+			else
+			{
+				//Left explosion end
+				m_animations[(int)animationIndex::LEFT].applyToSprite(m_sprite);
+				m_sprite.setPosition(leftPos);
+				drawSprite();
+
+				//Right explosion end
+				m_animations[(int)animationIndex::RIGHT].applyToSprite(m_sprite);
+				m_sprite.setPosition(rightPos);
+				drawSprite();
+
+				//Down explosion end
+				m_animations[(int)animationIndex::DOWN].applyToSprite(m_sprite);
+				m_sprite.setPosition(downPos);
+				drawSprite();
+
+				//Up explosion end
+				m_animations[(int)animationIndex::UP].applyToSprite(m_sprite);
+				m_sprite.setPosition(upPos);
+				drawSprite();
 			}
 		}
-		//Left explosion
-		//Right explosion
-		//Down explosion
-		//Up explosion
-
 	}
 }
 
