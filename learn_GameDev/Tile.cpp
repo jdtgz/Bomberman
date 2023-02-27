@@ -152,3 +152,9 @@ void Tile::detectCollision(Player& plr, const tileType::ID& u, const tileType::I
 		}
 	}
 }
+
+
+sf::Vector2f Tile::getPosition() const
+{
+	return tile.getPosition();
+}

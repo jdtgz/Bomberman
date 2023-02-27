@@ -1,4 +1,5 @@
 #include "Level.h"
+#include <math.h>
 
 
 Level::Level()
@@ -162,6 +163,8 @@ void Level::draw(sf::RenderWindow& window) const
 //Detect collisions between player and tile
 void Level::collisions(Player& plr)
 {
+	getClosestTile(plr.getSprite().getPosition());
+
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 			tilemap[x][y]->detectCollision(plr,
@@ -179,4 +182,30 @@ void Level::collisions(Player& plr)
 			tileType::AIR : tileType::TILE,
 			i % 2 != MAP_LENGTH % 2 && i >= MAP_LENGTH + MAP_LENGTH + 4 ?
 			tileType::AIR : tileType::TILE);
+}
+
+
+Tile* Level::getTilemap()
+{
+	return tilemap[0][0];
+}
+
+
+Tile* Level::getClosestTile(const sf::Vector2f& v2)
+{
+	Tile* closestTile = tilemap[0][0];
+
+	for (int x = 0; x < MAP_LENGTH; x++)
+	{
+		for (int y = 0; y < MAP_HEIGHT; y++)
+		{
+			if (sqrt(pow(tilemap[x][y]->getPosition().x - v2.x, 2) +
+				pow(tilemap[x][y]->getPosition().y - v2.y, 2)) <
+				sqrt(pow(closestTile->getPosition().x - v2.x, 2) +
+				pow(closestTile->getPosition().y - v2.y, 2)))
+				closestTile = tilemap[x][y];
+		}
+	}
+
+	return closestTile;
 }

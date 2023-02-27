@@ -28,6 +28,8 @@ class Tile
 		void detectCollision(Player&,
 			const tileType::ID&, const tileType::ID&,
 			const tileType::ID&, const tileType::ID&);
+
+		sf::Vector2f getPosition() const;
 	private:
 		sf::Sprite tile; 
 		Animation blowUp; 

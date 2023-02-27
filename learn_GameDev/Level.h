@@ -2,6 +2,7 @@
 #include "Tile.h"
 #include "SFML/Graphics.hpp"
 #include <vector>
+#include "Enemy.h"
 
 
 class Level
@@ -27,6 +28,9 @@ class Level
 		void collisions(Player&);
 		// track enemy collisions 
 		//void collisions(Enemy&);
+
+		Tile* getTilemap();
+		Tile* getClosestTile(const sf::Vector2f&);
 	private:
 		static const int MAP_LENGTH = 31;
 		static const int MAP_HEIGHT = 13;
@@ -34,4 +38,6 @@ class Level
 
 		Tile* tilemap[MAP_LENGTH][MAP_HEIGHT];
 		Tile* border[BORDER_COUNT];
+
+		//std::vector<Enemy*> enemies;
 };
