@@ -2,7 +2,7 @@
 
 
 // place a tile of type t at (xCoord, yCoord)
-Tile::Tile(const int& x, const int& y, const tileType::tileID& t)
+Tile::Tile(const int& x, const int& y, const tileType::ID& t)
 {
 	// set the tileID, if it is a block and not a Bomb/PowerUp
 	if(t != tileType::BOMB && t != tileType::POWERUP)
@@ -11,6 +11,9 @@ Tile::Tile(const int& x, const int& y, const tileType::tileID& t)
 	// load the texture and set the sprite for tile
 	tile.setTexture(TextureHolder::get(textures::ITEMS));
 	setTile(t);
+
+	// blow up animation ONLY for tileType::BRICK
+	blowUp.setUp(TextureHolder::get(textures::ITEMS), 0, 16 * 2, 16, 16, 6); 
 
 	// place the tile 
 	tile.setPosition(x, y);
@@ -37,32 +40,30 @@ void Tile::draw(sf::RenderWindow& window) const
 
 
 //Returns the tileID of tile
-tileType::tileID Tile::getType()
+tileType::ID Tile::getType()
 {
 	return type;
 }
 
 
 //Given an tileID, set the proper textureRect & scale it 
-void Tile::setTile(const tileType::tileID& t)
+void Tile::setTile(const tileType::ID& t)
 {
 	type = t;
 	switch (t)
 	{
 		//put anything related to tile type changes here
 		case tileType::AIR:
-		case tileType::BOMB:
-			tile.setTextureRect({ 96,32,16,16 });
+			tile.setTextureRect({ 16 * 6, 16 * 2, 16, 16 });
 			break;
 		case tileType::BRICK:
-			tile.setTextureRect({ 16,16,16,16 });
-			//set the frames for Brick's blowup animaiton
+			tile.setTextureRect({ 16 * 1,16 * 1,16,16 });
 			break;
 		case tileType::TILE:
-			tile.setTextureRect({ 0,16,16,16 });
+			tile.setTextureRect({ 16 * 0, 16, 16, 16 });
 			break;
 		case tileType::DOOR:
-			tile.setTextureRect({ 32,16,16,16 });
+			tile.setTextureRect({ 16 * 2, 16 * 1, 16, 16 });
 	}
 	tile.setScale(3, 3);
 }
@@ -83,9 +84,8 @@ void Tile::destroy()
 
 //tracks collisions between the player and the tile, 
 //pushes them away from the tile
-void Tile::detectCollision(Player& plr,
-	const tileType::tileID& u, const tileType::tileID& d,
-	const tileType::tileID& l, const tileType::tileID& r)
+void Tile::detectCollision(Player& plr, const tileType::ID& u, const tileType::ID& d,
+	const tileType::ID& l, const tileType::ID& r)
 {
 	//Get hitboxes
 	sf::FloatRect pB = plr.getBoundingBox();
@@ -122,9 +122,9 @@ void Tile::detectCollision(Player& plr,
 			{
 				//Prevent player from moving into tile
 				if (plr.getVelocity().x > 0)
-					plr.setCanMoveRight(false);
+					plr.setCanMove(directions::RIGHT, false);
 				else
-					plr.setCanMoveLeft(false);
+					plr.setCanMove(directions::LEFT, false);
 			}
 		}
 		//Moving vertically
@@ -145,9 +145,9 @@ void Tile::detectCollision(Player& plr,
 			{
 				//Prevent player from moving into tile
 				if (plr.getVelocity().y > 0)
-					plr.setCanMoveDown(false);
+					plr.setCanMove(directions::DOWN, false);
 				else
-					plr.setCanMoveUp(false);
+					plr.setCanMove(directions::UP, false);
 			}
 		}
 	}

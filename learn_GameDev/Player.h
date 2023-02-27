@@ -3,59 +3,98 @@
 #include "Animation.h"
 #include "TextureHolder.h"
 
+
+namespace directions
+{
+	// directions 
+	enum ID { RIGHT = 0, LEFT, UP, DOWN, COUNT };
+}
+
+
 class Player
 {
-public:
-	// constructor/destructor
-	Player();
-	~Player();
+	public:
+		// constructor/destructor
+		Player();
+		~Player();
 
-	// Given a key, do something
-	void keyPressed(const sf::Keyboard::Key&);
-	void keyReleased(const sf::Keyboard::Key&);
+		// Given a key, do something
+		void keyPressed(const sf::Keyboard::Key&);
+		void keyReleased(const sf::Keyboard::Key&);
 
-	// Draws player onto the screen
-	void draw(sf::RenderWindow&) const;
+		// Draws player onto the screen
+		void draw(sf::RenderWindow&) const;
 
-	// updates attributes of player while in main
-	void update(const float&);
+		// updates attributes of player while in main
+		void update(const float&);
+		void setVelocity(const int&, const int&);
+		sf::Vector2f getVelocity() const;
+		float getSpeed() const;
+		void detonate(); 
 
-	void setVelocity(const int&, const int&);
+		//Collision
+		void move(const float&, const float&);
+		void setCanMove(const int&, const bool&);
+		sf::FloatRect getBoundingBox() const;
+		sf::Sprite getSprite() const;
 
-	float getSpeed() const;
+		// powerup/player attributes 
+		int getBombCount(); 
+		void plusBombCount(); 
 
-	//Collision
-	void move(const float&, const float&);
-	void setCanMoveLeft(const bool&);
-	void setCanMoveRight(const bool&);
-	void setCanMoveUp(const bool&);
-	void setCanMoveDown(const bool&);
-	sf::FloatRect getBoundingBox() const;
-	sf::Vector2f getVelocity() const;
-	sf::Sprite getSprite() const;
+		int getFlameRange(); 
+		void plusFlameRange(); 
 
-private:
-	// total animations of the player
-	enum class animIndex
-	{
-		WALKING_LEFT = 0,
-		WALKING_RIGHT,
-		WALKING_DOWN,
-		WALKING_UP,
-		DEATH,
-		COUNT
-	};
-	// visual attributes
-	sf::Sprite sprite;
-	Animation animations[int(animIndex::COUNT)];
-	animIndex curAnimation;
+		bool wallPass_status();
+		void activate_wallPass(); 
 
-	// movements attributes 
-	float speed;
-	int xVel = 0, yVel = 0;
+		bool detonator_status();
+		void activate_detonator();
 
-	bool left = false, right = false, up = false, down = false;
+		bool bombPass_status(); 
+		void activate_bombPass(); 
+
+		bool flamePass_status(); 
+		void activate_flamePass(); 
+
+		bool invincible_status(); 
+		void activate_invincible(); 
+		void stop_invincible(); 
 		
-	bool canMoveLeft = true, canMoveRight = true, 
-		canMoveUp = true, canMoveDown = true;
+
+	private:
+		// Visual attributes
+		// total animations of the player
+		enum class animIndex
+		{
+			WALKING_LEFT = 0,
+			WALKING_RIGHT,
+			WALKING_DOWN,
+			WALKING_UP,
+			DEATH,
+			COUNT
+		};
+		sf::Sprite sprite;
+		Animation animations[int(animIndex::COUNT)];
+		animIndex curAnimation;
+
+
+		// Movement attributes 
+		int xVel = 0, yVel = 0;
+		// Direction that the player is moving 
+		bool movement[directions::COUNT];
+		// Directions where player 'can possibly' move
+		bool canMove[directions::COUNT];
+
+
+		// player attirbutes 
+		int bombCount; 
+		int flameRange; 
+		float speed;
+		bool wallPass; 
+		bool detonator; 
+		bool bombPass;
+		bool flamePass; 
+		bool invincible; 
+
 };

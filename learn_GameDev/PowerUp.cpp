@@ -1,14 +1,14 @@
 #include "PowerUp.h"
 
 
-PowerUp::PowerUp(const int& type)
+PowerUp::PowerUp(const int& typ)
 {	
 	// initialize the "fake" sprite for the powerup
 	sprite.setTexture(TextureHolder::get(textures::ITEMS));
 	sprite.setTextureRect({ 16, 16, 16, 16 });
 
 	revealed = false; 
-	powerType = type;
+	type = typ;
 }
 
 
@@ -23,7 +23,7 @@ void PowerUp::revealPowerUp()
 {
 	revealed = true;
 	std::cout << "Revealed: ";
-	switch (powerType)
+	switch (type)
 	{
 		case powerups::BOMB_UP:
 			sprite.setTextureRect({ 0, 48, 16, 16 });
@@ -62,12 +62,20 @@ void PowerUp::revealPowerUp()
 }
 
 
+// detect the collision between a player and the powerup
+// if revealed = false, push player back like a normal tile 
+// if revealed = true, applyPowerUp
+void PowerUp::detectCollisions(Player& plr)
+{
+}
+
+
 // aceess the player once & adjust its powerUp attirbutes
 void PowerUp::applyPowerUp(Player& player)
 {
 	//determine what type of power up it is & update player
 	std::cout << "Obtained: ";
-	switch (powerType)
+	switch (type)
 	{
 		case powerups::BOMB_UP:
 			std::cout << "BOMB UP\n";
@@ -97,16 +105,19 @@ void PowerUp::applyPowerUp(Player& player)
 }
 
 
-// detect the collision between a player and the powerup
-// if revealed = false, push player back like a normal tile 
-// if revealed = true, applyPowerUp
-void PowerUp::detectCollisions(Player& plr)
-{
-}
-
-
 // detects the collisions between the power up and flames from bomb
 // if colliding & revealed = false, reveal true sprite of power up
 void PowerUp::detectCollisions(Bomb& bomb)
+{
+	if (!revealed)
+		revealPowerUp(); 
+	else
+		spawnEnemies();
+}
+
+
+// if the powerUp has already been revealed && collides with a bomb,
+// then spwan enemies and sel-destruct
+void PowerUp::spawnEnemies()
 {
 }

@@ -3,22 +3,37 @@
 
 Player::Player()
 {
-	// initialize movement attributes 
-	speed = 3.f;
-	
-	// get the texture
+	// initialize visual attributes 
 	sf::Texture* t = &TextureHolder::get(textures::PLAYER);
 
 	// setup animations 
-	animations[int(animIndex::WALKING_LEFT)].setUp(*t, 0, 0, 12, 16, 3);
-	animations[int(animIndex::WALKING_RIGHT)].setUp(*t, 0, 16, 12, 16, 3);
-	animations[int(animIndex::WALKING_DOWN)].setUp(*t, 0, 32, 12, 16, 3);
-	animations[int(animIndex::WALKING_UP)].setUp(*t, 0, 48, 12, 16, 3);
-	animations[int(animIndex::DEATH)].setUp(*t, 0, 64, 16, 16, 7);
+	animations[int(animIndex::WALKING_LEFT)].setUp(*t, 0, 16 * 0, 12, 16, 3);
+	animations[int(animIndex::WALKING_RIGHT)].setUp(*t, 0, 16 * 1, 12, 16, 3);
+	animations[int(animIndex::WALKING_DOWN)].setUp(*t, 0, 16 * 2, 12, 16, 3);
+	animations[int(animIndex::WALKING_UP)].setUp(*t, 0, 16 * 3, 12, 16, 3);
+	animations[int(animIndex::DEATH)].setUp(*t, 0, 16 * 4, 16, 16, 7);
 
 	// set the starting animation
 	curAnimation = animIndex::WALKING_RIGHT;
 	animations[int(curAnimation)].applyToSprite(sprite);
+
+
+	// initialize movement attributes 
+	for (int i = 0; i < directions::COUNT; i++)
+	{
+		movement[i] = false; 
+		canMove[i] = true; 
+	}
+
+	// initialize the player/powerUp attributes 
+	bombCount = 1; 
+	flameRange = 1; 
+	speed = 3.f;
+	wallPass = false; 
+	detonator = false;
+	bombPass = false; 
+	flamePass = false; 
+	invincible = false; 
 
 	//Default position in the top left corner
 	sprite.setPosition(0, 100);
@@ -38,36 +53,36 @@ void Player::keyPressed(const sf::Keyboard::Key &key)
 	switch (key)
 	{
 		case sf::Keyboard::Up:
-			up = true; 
+			movement[directions::UP] = true;
 			curAnimation = animIndex::WALKING_UP;
 			//Reset 'can moves' for all other directions
-			canMoveDown = true;
-			canMoveLeft = true;
-			canMoveRight = true;
+			canMove[directions::RIGHT] = true; 
+			canMove[directions::LEFT] = true;
+			canMove[directions::DOWN] = true;
 			break;
 		case sf::Keyboard::Down:
-			down = true; 
+			movement[directions::DOWN] = true;
 			curAnimation = animIndex::WALKING_DOWN;
 			//Reset 'can moves' for all other directions
-			canMoveUp = true;
-			canMoveLeft = true;
-			canMoveRight = true;
+			canMove[directions::RIGHT] = true;
+			canMove[directions::LEFT] = true;
+			canMove[directions::UP] = true;
 			break;
 		case sf::Keyboard::Left:
-			left = true;
+			movement[directions::LEFT] = true;
 			curAnimation = animIndex::WALKING_LEFT;
 			//Reset 'can moves' for all other directions
-			canMoveUp = true;
-			canMoveDown = true;
-			canMoveRight = true;
+			canMove[directions::UP] = true;
+			canMove[directions::DOWN] = true;
+			canMove[directions::RIGHT] = true;
 			break;
 		case sf::Keyboard::Right:
-			right = true; 
+			movement[directions::RIGHT] = true;
 			curAnimation = animIndex::WALKING_RIGHT;
 			//Reset 'can moves' for all other directions
-			canMoveUp = true;
-			canMoveDown = true;
-			canMoveLeft = true;
+			canMove[directions::UP] = true;
+			canMove[directions::DOWN] = true;
+			canMove[directions::LEFT] = true;
 			break;
 		case sf::Keyboard::A:
 			// place a bomb
@@ -86,16 +101,16 @@ void Player::keyReleased(const sf::Keyboard::Key &key)
 	switch (key)
 	{
 	case sf::Keyboard::Up:
-		up = false;
+		movement[directions::UP] = false;
 		break;
 	case sf::Keyboard::Down:
-		down = false;
+		movement[directions::DOWN] = false;
 		break;
 	case sf::Keyboard::Left:
-		left = false;
+		movement[directions::LEFT] = false;
 		break;
 	case sf::Keyboard::Right:
-		right = false;
+		movement[directions::RIGHT] = false;
 		break;
 	}
 }
@@ -112,18 +127,22 @@ void Player::draw(sf::RenderWindow& window) const
 void Player::update(const float& dt)
 {
 	// update animations 
-	if (right || left || down || up)
+	if (movement[directions::UP] || movement[directions::DOWN] 
+		|| movement[directions::LEFT] || movement[directions::RIGHT])
 	{
 		animations[int(curAnimation)].update(dt);
 		animations[int(curAnimation)].applyToSprite(sprite);
 	}
-	// if plr collides with fire (witout flameUp powerUp)
-	// or enemy -> death animation...
 
 	//Update velocity based on user input, move speed, and
 	//the directions the player can currently move in
-	setVelocity((canMoveLeft * left * -speed) + (canMoveRight * right * speed),
-		(canMoveUp * up * -speed) + (canMoveDown * down * speed));
+	int x = canMove[directions::LEFT] * movement[directions::LEFT] * -speed; 
+	x += canMove[directions::RIGHT] * movement[directions::RIGHT] * speed; 
+
+	int y = canMove[directions::UP] * movement[directions::UP] * -speed;
+	y += canMove[directions::DOWN] * movement[directions::DOWN] * speed;
+
+	setVelocity(x, y);
 
 	//Move sprite by velocity
 	move(xVel, yVel);
@@ -145,6 +164,35 @@ sf::Vector2f Player::getVelocity() const
 }
 
 
+//Get player move speed
+float Player::getSpeed() const
+{
+	return speed;
+}
+
+
+// detonate the oldest bomb
+void Player::detonate()
+{
+}
+
+
+//Move player sprite by x, y
+void Player::move(const float& x, const float& y)
+{
+	sprite.move(x, y);
+	return;
+}
+
+
+//Set if the player can move left or not
+void Player::setCanMove(const int& dir, const bool& v)
+{
+	canMove[dir] = v;
+	return;
+}
+
+
 //Get the hitbox for the player sprite
 sf::FloatRect Player::getBoundingBox() const
 {
@@ -159,48 +207,111 @@ sf::Sprite Player::getSprite() const
 }
 
 
-//Move player sprite by x, y
-void Player::move(const float& x, const float& y)
+// return number of bombs player can place at a time 
+int Player::getBombCount()
 {
-	sprite.move(x, y);
-	return;
+	return bombCount; 
 }
 
 
-//Set if the player can move left or not
-void Player::setCanMoveLeft(const bool& v)
+// +1 number of bombs player can place at a time 
+void Player::plusBombCount()
 {
-	canMoveLeft = v;
-	return;
+	bombCount++; 
 }
 
 
-//Set if the player can move right or not
-void Player::setCanMoveRight(const bool& v)
+// return range of the bomb explosions
+int Player::getFlameRange()
 {
-	canMoveRight = v;
-	return;
+	return flameRange; 
 }
 
 
-//Set if the player can move up or not
-void Player::setCanMoveUp(const bool& v)
+// +1 range of bomb explosion
+void Player::plusFlameRange()
 {
-	canMoveUp = v;
-	return;
+	flameRange++; 
 }
 
 
-//Set if the player can move down or not
-void Player::setCanMoveDown(const bool& v)
+// return if player can move through walls 
+bool Player::wallPass_status()
 {
-	canMoveDown = v;
-	return;
+	return wallPass;
 }
 
 
-//Get player move speed
-float Player::getSpeed() const
+// activate the wallPass powerUp
+void Player::activate_wallPass()
 {
-	return speed;
+	if(!wallPass)
+		wallPass = true; 
+}
+
+
+// return if player can detonate bombs 
+bool Player::detonator_status()
+{
+	return detonator; 
+}
+
+
+// activate the detonator powerUp
+void Player::activate_detonator()
+{
+	if(!detonator)
+		detonator = true; 
+}
+
+
+// return if player can walk through bombs 
+bool Player::bombPass_status()
+{
+	return bombPass; 
+}
+
+
+// activate the active bombPass powerUp
+void Player::activate_bombPass()
+{
+	if (!bombPass)
+		bombPass = true; 
+}
+
+
+// return if player can move through flames 
+bool Player::flamePass_status()
+{
+	return flamePass;
+}
+
+
+// activate the flamePass powerUp
+void Player::activate_flamePass()
+{
+	if (!flamePass)
+		flamePass = true; 
+}
+
+
+// return if player is invincible
+bool Player::invincible_status()
+{
+	return invincible; 
+}
+
+
+// activate the invincibility powerUp
+void Player::activate_invincible()
+{
+	if (!invincible)
+		invincible = true; 
+}
+
+
+// deactivate the invincibility powerUp
+void Player::stop_invincible()
+{
+	invincible = false; 
 }
