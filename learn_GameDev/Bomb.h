@@ -35,8 +35,7 @@ private:
 	void initAnimation();
 
 	sf::Texture* m_explosion_sheet, * m_bomb_sheet;
-	std::vector<sf::IntRect*> m_frames;
-	sf::Time m_timer, m_frame_time;
+	sf::Time m_timer;
 	sf::Clock m_explode_clock;
 	sf::Sprite m_sprite;
 	sf::Vector2i m_position;

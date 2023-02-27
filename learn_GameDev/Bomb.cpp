@@ -12,9 +12,7 @@ Bomb::Bomb(int x, int y, int range, bool has_timer)
 	else if (!has_timer)
 		m_timer = sf::seconds(-1);
 
-	m_frame_time = sf::seconds(0.1f);
-
-	m_sprite.setPosition(x * 16, y * 16);
+	m_sprite.setPosition(8 + (x * 48), 8 + (y * 48)); //Bomb position is leftmost explosion 
 	m_position = sf::Vector2i(x, y);
 
 	initAnimation();
@@ -23,11 +21,6 @@ Bomb::Bomb(int x, int y, int range, bool has_timer)
 
 Bomb::~Bomb()
 {
-	while (m_frames.size() > 0)
-	{
-		delete m_frames.at(0);
-		m_frames.erase(m_frames.begin());
-	}
 }
 
 
@@ -51,18 +44,18 @@ void Bomb::draw(sf::RenderTarget& target)
 		};
 
 		//Center explosion
-		sf::Vector2f centerPos(m_position.x * 16, m_position.y * 16);
+		sf::Vector2f centerPos(8 + (m_position.x * 48), 8 + (m_position.y * 48));
 		drawSprite(centerPos, animationIndex::CENTER);
 
 		for (int i = 0; i < m_range; i++)
 		{
-			int k = i + 2;
-			sf::Vector2f leftPos = sf::Vector2f(centerPos.x - (16 * k), centerPos.y);
-			sf::Vector2f rightPos = sf::Vector2f(centerPos.x + (16 * k), centerPos.y);
-			sf::Vector2f downPos = sf::Vector2f(centerPos.x, centerPos.y + (16 * k));
-			sf::Vector2f upPos = sf::Vector2f(centerPos.x, centerPos.y - (16 * k));
+			int k = i + 1;
+			sf::Vector2f leftPos = sf::Vector2f(centerPos.x - (48 * k), centerPos.y);
+			sf::Vector2f rightPos = sf::Vector2f(centerPos.x + (48 * k), centerPos.y);
+			sf::Vector2f downPos = sf::Vector2f(centerPos.x, centerPos.y + (48 * k));
+			sf::Vector2f upPos = sf::Vector2f(centerPos.x, centerPos.y - (48 * k));
 
-			if (i < m_range)
+			if (i < m_range && m_range > 1)
 			{
 				//Left explosion line
 				drawSprite(leftPos, animationIndex::HORIZONTAL);
@@ -106,14 +99,6 @@ void Bomb::update(float dt)
 	if (m_explode_clock.getElapsedTime() > m_timer && !m_exploded)
 	{
 		explode();
-		m_explode_clock.restart();
-	}
-	else if (m_explode_clock.getElapsedTime() > m_frame_time && m_exploded)
-	{
-		m_current_frame = (m_current_frame + 1) % 4;
-
-
-
 		m_explode_clock.restart();
 	}
 
