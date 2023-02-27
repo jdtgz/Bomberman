@@ -1,7 +1,6 @@
 #include "Game.h"
 
-
-Game::Game()
+Game::Game() : m_bomb(5, 20, 1, true) /*	TESTING PURPOSE	*/
 {
 	//Randomize generator
 	//srand(time(NULL));
@@ -110,6 +109,10 @@ void Game::update(const sf::Time& dt)
 		view.setCenter(sf::Vector2f((31 * 48) - (view.getSize().x / 3),
 			window->getSize().y / 2 + 48));
 	}
+
+
+	/*							TESTING PURPOSE								*/
+	m_bomb.update(dt.asSeconds());
 }
 
 
@@ -124,6 +127,9 @@ void Game::render()
 	// draw the level and player 
 	level.draw(*window);
 	player.draw(*window); 
+
+	/*							TESTING PURPOSE								*/
+	m_bomb.draw(*window);
   
 	window->display(); 
 }

@@ -50,10 +50,11 @@ void Bomb::draw(sf::RenderTarget& target)
 
 		for (int i = 0; i < m_range; i++)
 		{
-			sf::Vector2f leftPos = m_sprite.getPosition() - sf::Vector2f(m_sprite.getLocalBounds().width * (i + 1), 0);
-			sf::Vector2f rightPos = m_sprite.getPosition() + sf::Vector2f(m_sprite.getLocalBounds().width * (i + 1), 0);
-			sf::Vector2f downPos = m_sprite.getPosition() + sf::Vector2f(0, m_sprite.getLocalBounds().height * (i + 1));
-			sf::Vector2f upPos = m_sprite.getPosition() - sf::Vector2f(0, m_sprite.getLocalBounds().height * (i + 1));
+			m_sprite.setPosition(sf::Vector2f(m_position.x * 16, m_position.y * 16));
+			sf::Vector2f leftPos = m_sprite.getPosition() - sf::Vector2f((m_sprite.getLocalBounds().width * (i + 1)) * 16, 0);
+			sf::Vector2f rightPos = m_sprite.getPosition() + sf::Vector2f((m_sprite.getLocalBounds().width * (i + 1)) * 16, 0);
+			sf::Vector2f downPos = m_sprite.getPosition() + sf::Vector2f(0, (m_sprite.getLocalBounds().height * (i + 1)) * 16);
+			sf::Vector2f upPos = m_sprite.getPosition() - sf::Vector2f(0, (m_sprite.getLocalBounds().height * (i + 1)) * 16);
 
 			if (i < m_range)
 			{
@@ -152,7 +153,7 @@ void Bomb::initAnimation()
 {
 	//Loading frames from small explosion to large explosion
 	sf::Texture* bomb = &TextureHolder::get(textures::ITEMS);
-	sf::Texture* explosion = &TextureHolder::get(textures::ITEMS);
+	sf::Texture* explosion = &TextureHolder::get(textures::EXPLOSION);
 
 	m_animations[(int)animationIndex::BOMB].setUp(*bomb, 0, 16 * 0, 16, 16, 3);
 	m_animations[(int)animationIndex::CENTER].setUp(*explosion, 0, 16 * 0, 16, 16, 4);

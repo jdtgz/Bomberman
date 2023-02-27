@@ -4,6 +4,9 @@
 #include "Player.h"
 #include "Level.h"
 
+
+#include "Bomb.h"
+
 class Game
 {
 	public:
@@ -38,4 +41,7 @@ class Game
 
 		// Level Number
 		int levelNumber = 0;
+
+		/*							TESTING PURPOSE								*/
+		Bomb m_bomb;
 };
