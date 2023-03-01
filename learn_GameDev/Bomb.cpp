@@ -129,7 +129,8 @@ bool Bomb::isColliding(sf::Sprite& sprite)
 {
 	sf::Vector2f centerPos(8 + ((m_position.x - 1) * 48), 8 + ((m_position.y + 1) * 48));
 
-	//returns a boolean depending on if the sprites bounding box intersects with bomb
+	//returns a boolean depending on if the sprites 
+	//bounding box intersects with bomb
 	auto intersectionCheck = [&](sf::Vector2f positionToCheck) -> bool
 	{
 		m_sprite.setPosition(positionToCheck);
@@ -138,7 +139,8 @@ bool Bomb::isColliding(sf::Sprite& sprite)
 		m_sprite.setPosition(centerPos);
 	};
 
-	intersectionCheck(centerPos);
+	if (intersectionCheck(centerPos))
+		return true;
 
 	//Loop through the range of the bomb
 	for (int i = 0; i < m_range; i++)

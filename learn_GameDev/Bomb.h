@@ -2,7 +2,6 @@
 #include "TextureHolder.h"
 #include "Animation.h"
 
-
 class Bomb
 {
 public:
@@ -40,6 +39,7 @@ private:
 	sf::Time m_timer;
 	sf::Clock m_explode_clock;
 	sf::Sprite m_sprite;
+	//This is for tile map coordinates, separate from the sprite coordinates
 	sf::Vector2i m_position;
 
 	Animation m_animations[(int)animationIndex::COUNT];
