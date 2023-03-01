@@ -17,6 +17,7 @@ public:
 
 	int getRange() const { return m_range; }
 	sf::Vector2i getPosition() const { return m_position; }
+	bool getExploded() { return m_explosion_finished; };
 
 private:
 	enum class animationIndex

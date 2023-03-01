@@ -85,7 +85,16 @@ void Player::keyPressed(const sf::Keyboard::Key &key)
 			canMove[directions::LEFT] = true;
 			break;
 		case sf::Keyboard::A:
-			// place a bomb
+			for (int i = 0; i < bombCount; i++)
+			{
+				if (bombManager[i] == false)
+				{
+					bombManager[i] = true;
+					std::cout << "Current position: " << i << '\n';
+					bombs.push_back(new Bomb(getPosition().x, getPosition().y, flameRange, true));
+					break;
+				}
+			}
 			break;
 		case sf::Keyboard::B:
 			// detonate a bomb IF detonate powerUp == true
@@ -120,6 +129,10 @@ void Player::keyReleased(const sf::Keyboard::Key &key)
 void Player::draw(sf::RenderWindow& window) const
 {
 	window.draw(sprite);
+	for (int i = 0; i < bombs.size(); i++)
+	{
+		bombs[i]->draw(window);
+	}
 }
 
 
@@ -146,6 +159,25 @@ void Player::update(const float& dt)
 
 	//Move sprite by velocity
 	move(xVel, yVel);
+	
+	
+	//Clear bombs
+	for (int i = 0; i < bombs.size(); i++)
+	{
+		if (bombs[i]->getExploded() && bombManager[i] == true)
+		{
+			bombManager[i] = false;
+			delete bombs[i];
+			bombs.erase(bombs.begin() + i);
+			std::cout << bombManager[0] << bombManager[1] << bombManager[2] << '\n';
+		}
+	}
+
+	//Update bombs
+	for (int i = 0; i < bombs.size(); i++)
+	{
+		bombs[i]->update(dt);
+	}
 }
 
 
@@ -192,6 +224,13 @@ void Player::setCanMove(const int& dir, const bool& v)
 	return;
 }
 
+sf::Vector2f Player::getPosition()
+{
+	int x = (sprite.getPosition().x + 24) / 48;
+	int y = (sprite.getPosition().y + 24) / 48;
+	//std::cout << x + 1 << "," << y - 1 << '\n';
+	return sf::Vector2f(x + 1, y - 1);
+}
 
 //Get the hitbox for the player sprite
 sf::FloatRect Player::getBoundingBox() const
