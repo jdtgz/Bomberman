@@ -91,7 +91,13 @@ void Player::keyPressed(const sf::Keyboard::Key &key)
 				{
 					bombManager[i] = true;
 					std::cout << "Current position: " << i << '\n';
-					bombs.push_back(new Bomb(getPosition().x, getPosition().y, flameRange, true));
+					
+					// initialize the bomb
+					if (detonator = true)
+						bombs.push_back(new Bomb(getPosition().x, getPosition().y, flameRange, true));
+					else
+						bombs.push_back(new Bomb(getPosition().x, getPosition().y, flameRange, false));
+
 					break;
 				}
 			}
@@ -164,8 +170,10 @@ void Player::update(const float& dt)
 	//Clear bombs
 	for (int i = 0; i < bombs.size(); i++)
 	{
+		// if the bomb exploded and the bomb is active
 		if (bombs[i]->getExploded() && bombManager[i] == true)
 		{
+			// de-activate the bomb and delete it 
 			bombManager[i] = false;
 			delete bombs[i];
 			bombs.erase(bombs.begin() + i);
