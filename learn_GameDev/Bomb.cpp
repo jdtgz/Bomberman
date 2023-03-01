@@ -97,7 +97,7 @@ void Bomb::explode()
 
 void Bomb::update(float dt)
 {
-	if (m_explode_clock.getElapsedTime() > m_timer && !m_exploded)
+	if (m_explode_clock.getElapsedTime() > m_timer && !m_exploded && m_timer.asSeconds() != -1)
 	{
 		explode();
 		m_explode_clock.restart();
