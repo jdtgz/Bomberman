@@ -6,6 +6,7 @@ Bomb::Bomb(int x, int y, int range, bool has_timer)
 	m_explosion_sheet = &TextureHolder::get(textures::EXPLOSION);
 	m_range = range;
 	m_exploded = false;
+	m_explosion_finished = false;
 
 	if (has_timer)
 		m_timer = sf::seconds(2.5);
@@ -33,7 +34,7 @@ void Bomb::draw(sf::RenderTarget& target)
 		target.draw(m_sprite);
 	}
 
-	else
+	else if (!m_explosion_finished)
 	{
 		//Decrease line count with lambda function to draw sprites
 		auto drawSprite = [&](const sf::Vector2f position, animationIndex type)
@@ -102,10 +103,10 @@ void Bomb::update(float dt)
 		m_explode_clock.restart();
 	}
 
-	if (m_exploded)
+	if (m_exploded && !m_explosion_finished)
 	{
 
-		if (m_animations[(int)animationIndex::CENTER].getCurrentFrame() < 4)
+		if (m_animations[(int)animationIndex::CENTER].getCurrentFrame() < 3)
 		{
 			m_animations[(int)animationIndex::CENTER].update(dt);
 			m_animations[(int)animationIndex::LEFT].update(dt);
@@ -117,7 +118,7 @@ void Bomb::update(float dt)
 		}
 		else
 		{
-
+			m_explosion_finished = true;
 		}
 	}
 
