@@ -67,6 +67,15 @@ void PowerUp::revealPowerUp()
 // if revealed = true, applyPowerUp
 void PowerUp::detectCollisions(Player& plr)
 {
+	if (revealed)
+	{
+		//Check if the players bounding box is intersecting with the sprite
+		//of powerup
+		if (plr.getBoundingBox().intersects(sprite.getGlobalBounds()))
+		{
+
+		}
+	}
 }
 
 
@@ -109,10 +118,13 @@ void PowerUp::applyPowerUp(Player& player)
 // if colliding & revealed = false, reveal true sprite of power up
 void PowerUp::detectCollisions(Bomb& bomb)
 {
-	if (!revealed)
-		revealPowerUp(); 
-	else
-		spawnEnemies();
+	if (bomb.isColliding(sprite))
+	{
+		if (!revealed)
+			revealPowerUp();
+		else
+			spawnEnemies();
+	}
 }
 
 
