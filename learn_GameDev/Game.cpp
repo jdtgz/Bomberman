@@ -110,6 +110,7 @@ void Game::update(const sf::Time& dt)
 			window->getSize().y / 2 + 48));
 	}
 
+	level.update(dt.asSeconds());
 
 	/*							TESTING PURPOSE								*/
 	m_bomb.update(dt.asSeconds());

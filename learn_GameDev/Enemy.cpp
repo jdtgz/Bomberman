@@ -3,19 +3,32 @@
 
 Enemy::Enemy()
 {
-	// initialize visual attributes 
-	sf::Texture* t = &TextureHolder::get(textures::PLAYER);
+	curAnim = animIndex::WALKING_LEFT;
+	moveSpeed = 0.f;
+	alive = true;
+}
 
-	// setup animations 
-	anims[int(animIndex::WALKING_LEFT)].setUp(*t, 0, 16 * 0, 12, 16, 3);
-	anims[int(animIndex::WALKING_RIGHT)].setUp(*t, 0, 16 * 1, 12, 16, 3);
-	anims[int(animIndex::WALKING_DOWN)].setUp(*t, 0, 16 * 2, 12, 16, 3);
-	anims[int(animIndex::WALKING_UP)].setUp(*t, 0, 16 * 3, 12, 16, 3);
-	anims[int(animIndex::DEATH)].setUp(*t, 0, 16 * 4, 16, 16, 7);
 
-	// set the starting animation
-	curAnim = animIndex::WALKING_RIGHT;
-	anims[int(curAnim)].applyToSprite(sprite);
+void Enemy::draw(sf::RenderWindow& w) const
+{
+	w.draw(sprite);
+}
+
+
+void Enemy::die()
+{
+	alive = false;
+}
+
+
+bool Enemy::isAlive() const
+{
+	return alive;
+}
+
+sf::Vector2f Enemy::getPosition() const
+{
+	return sprite.getPosition();
 }
 
 

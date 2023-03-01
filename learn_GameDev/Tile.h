@@ -18,7 +18,7 @@ class Tile
 		Tile(const int&, const int&, const tileType::ID&);
 		~Tile();
 
-		tileType::ID getType();
+		tileType::ID getType() const;
 		void setTile(const tileType::ID&);
 		void interact();
 

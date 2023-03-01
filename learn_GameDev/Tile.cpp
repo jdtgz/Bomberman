@@ -40,7 +40,7 @@ void Tile::draw(sf::RenderWindow& window) const
 
 
 //Returns the tileID of tile
-tileType::ID Tile::getType()
+tileType::ID Tile::getType() const
 {
 	return type;
 }
