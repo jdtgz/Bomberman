@@ -26,11 +26,11 @@ Player::Player()
 	}
 
 	// initialize the player/powerUp attributes 
-	bombCount = 1; 
-	flameRange = 1; 
+	bombCount = 10; 
+	flameRange = 5; 
 	speed = 3.f;
 	wallPass = false; 
-	detonator = false;
+	detonator = true;
 	bombPass = false; 
 	flamePass = false; 
 	invincible = false; 
@@ -93,7 +93,7 @@ void Player::keyPressed(const sf::Keyboard::Key &key)
 					std::cout << "Current position: " << i << '\n';
 					
 					// initialize the bomb
-					if (detonator = true)
+					if (detonator = false)
 						bombs.push_back(new Bomb(getPosition().x, getPosition().y, flameRange, true));
 					else
 						bombs.push_back(new Bomb(getPosition().x, getPosition().y, flameRange, false));
@@ -103,7 +103,11 @@ void Player::keyPressed(const sf::Keyboard::Key &key)
 			}
 			break;
 		case sf::Keyboard::B:
-			// detonate a bomb IF detonate powerUp == true
+			for (int i = 0; i < bombCount; i++)
+			{
+				if (bombManager[i] = true)
+					bombs[i]->explode(); 
+			}
 			break;
 	}
 }
