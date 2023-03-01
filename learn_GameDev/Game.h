@@ -41,7 +41,4 @@ class Game
 
 		// Level Number
 		int levelNumber = 0;
-
-		/*							TESTING PURPOSE								*/
-		Bomb m_bomb;
 };

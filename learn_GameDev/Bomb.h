@@ -38,7 +38,6 @@ private:
 
 	void initAnimation();
 
-	sf::Texture* m_explosion_sheet, * m_bomb_sheet;
 	sf::Time m_timer;
 	sf::Clock m_explode_clock;
 	sf::Sprite m_sprite;

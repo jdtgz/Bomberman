@@ -26,11 +26,11 @@ Player::Player()
 	}
 
 	// initialize the player/powerUp attributes 
-	bombCount = 1; 
-	flameRange = 1; 
+	bombCount = 10; 
+	flameRange = 5; 
 	speed = 3.f;
 	wallPass = false; 
-	detonator = false;
+	detonator = true;
 	bombPass = false; 
 	flamePass = false; 
 	invincible = false; 
@@ -89,15 +89,31 @@ void Player::keyPressed(const sf::Keyboard::Key &key)
 			{
 				if (bombManager[i] == false)
 				{
+					for (int i = 0; i < bombs.size(); i++)
+					{
+						if (bombs[i]->isColliding(sprite))
+						{
+							std::cout << "COLLIDE!\n";
+							return;
+						}
+					}
 					bombManager[i] = true;
-					std::cout << "Current position: " << i << '\n';
-					bombs.push_back(new Bomb(getPosition().x, getPosition().y, flameRange, true));
+
+					// initialize the bomb
+					if (detonator = false)
+						bombs.push_back(new Bomb(getPosition().x, getPosition().y, flameRange, true));
+					else
+						bombs.push_back(new Bomb(getPosition().x, getPosition().y, flameRange, false));
 					break;
 				}
 			}
 			break;
 		case sf::Keyboard::B:
-			// detonate a bomb IF detonate powerUp == true
+			for (int i = 0; i < bombs.size(); i++)
+			{
+				if (bombManager[i] = true)
+					bombs[i]->explode(); 
+			}
 			break;
 	}
 }
@@ -164,8 +180,10 @@ void Player::update(const float& dt)
 	//Clear bombs
 	for (int i = 0; i < bombs.size(); i++)
 	{
+		// if the bomb exploded and the bomb is active
 		if (bombs[i]->getExploded() && bombManager[i] == true)
 		{
+			// de-activate the bomb and delete it 
 			bombManager[i] = false;
 			delete bombs[i];
 			bombs.erase(bombs.begin() + i);

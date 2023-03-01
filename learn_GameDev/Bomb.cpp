@@ -2,8 +2,6 @@
 
 Bomb::Bomb(int x, int y, int range, bool has_timer)
 {
-	m_bomb_sheet = &TextureHolder::get(textures::ITEMS);
-	m_explosion_sheet = &TextureHolder::get(textures::EXPLOSION);
 	m_range = range;
 	m_exploded = false;
 	m_explosion_finished = false;
