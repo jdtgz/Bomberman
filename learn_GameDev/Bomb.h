@@ -19,6 +19,9 @@ public:
 	bool getExploded() { return m_explosion_finished; };
 	bool isColliding(sf::Sprite& sprite);
 
+	//Accepts a window and rendertexture
+	void showCollisions(sf::RenderTarget& target);
+
 private:
 	enum class animationIndex
 	{

@@ -133,10 +133,12 @@ bool Bomb::isColliding(sf::Sprite& sprite)
 	//bounding box intersects with bomb
 	auto intersectionCheck = [&](sf::Vector2f positionToCheck) -> bool
 	{
+		bool result = false;
 		m_sprite.setPosition(positionToCheck);
 		if (sprite.getGlobalBounds().intersects(m_sprite.getGlobalBounds()))
-			return true;
+			result = true;
 		m_sprite.setPosition(centerPos);
+		return result;
 	};
 
 	if (intersectionCheck(centerPos))
@@ -156,6 +158,36 @@ bool Bomb::isColliding(sf::Sprite& sprite)
 			return true;
 	}
 	return false;
+}
+
+void Bomb::showCollisions(sf::RenderTarget& target)
+{
+	sf::Vector2f centerPos(8 + ((m_position.x - 1) * 48), 8 + ((m_position.y + 1) * 48));
+	m_sprite.setPosition(centerPos);
+	target.draw(m_sprite);
+
+	//Loop through the range of the bomb
+	for (int i = 0; i < m_range; i++)
+	{
+		int k = i + 1;
+		sf::Vector2f leftPos = sf::Vector2f(centerPos.x - (48 * k), centerPos.y);
+		sf::Vector2f rightPos = sf::Vector2f(centerPos.x + (48 * k), centerPos.y);
+		sf::Vector2f downPos = sf::Vector2f(centerPos.x, centerPos.y + (48 * k));
+		sf::Vector2f upPos = sf::Vector2f(centerPos.x, centerPos.y - (48 * k));
+
+
+		m_sprite.setPosition(leftPos);
+		target.draw(m_sprite);
+
+		m_sprite.setPosition(rightPos);
+		target.draw(m_sprite);
+
+		m_sprite.setPosition(downPos);
+		target.draw(m_sprite);
+
+		m_sprite.setPosition(upPos);
+		target.draw(m_sprite);
+	}
 }
 
 

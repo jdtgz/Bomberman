@@ -130,6 +130,6 @@ void Game::render()
 
 	/*							TESTING PURPOSE								*/
 	m_bomb.draw(*window);
-  
+
 	window->display(); 
 }
