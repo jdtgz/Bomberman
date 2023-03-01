@@ -43,6 +43,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StartMenu.cpp">
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Valcom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -72,6 +76,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StartMenu.h">
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Valcom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

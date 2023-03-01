@@ -109,6 +109,9 @@ void Game::update(const sf::Time& dt)
 		view.setCenter(sf::Vector2f((31 * 48) - (view.getSize().x / 3),
 			window->getSize().y / 2 + 48));
 	}
+  
+	level.update(dt.asSeconds());
+
 }
 
 

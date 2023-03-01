@@ -136,6 +136,7 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="learn_GameDev.cpp" />
     <ClCompile Include="Level.cpp" />
@@ -144,10 +145,12 @@
     <ClCompile Include="StartMenu.cpp" />
     <ClCompile Include="TextureHolder.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="Valcom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="Player.h" />
@@ -155,6 +158,7 @@
     <ClInclude Include="StartMenu.h" />
     <ClInclude Include="TextureHolder.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="Valcom.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="bomberman_enemies.png" />

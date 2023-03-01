@@ -1,4 +1,6 @@
 #include "Level.h"
+#include <math.h>
+#include "Valcom.h"
 
 
 Level::Level()
@@ -47,6 +49,8 @@ Level::Level()
 			}
 		}
 	}
+
+	enemies.push_back(new Valcom());
 }
 
 
@@ -59,6 +63,9 @@ Level::~Level()
 
 	for (int i = 0; i < BORDER_COUNT; i++)
 		delete border[i];
+
+	for (int i = 0; i < enemies.size(); i++)
+		delete enemies[i];
 }
 
 
@@ -154,14 +161,16 @@ void Level::draw(sf::RenderWindow& window) const
 	for (int i = 0; i < BORDER_COUNT; i++)
 		border[i]->draw(window);
 	
-	// for(int i = 0; i < enemies.length; i++)
-	//		enemies[i]->draw(window); 
+	for(int i = 0; i < enemies.size(); i++)
+		enemies[i]->draw(window);
 }
 
 
 //Detect collisions between player and tile
 void Level::collisions(Player& plr)
 {
+	getClosestTile(plr.getSprite().getPosition());
+
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 			tilemap[x][y]->detectCollision(plr,
@@ -179,4 +188,43 @@ void Level::collisions(Player& plr)
 			tileType::AIR : tileType::TILE,
 			i % 2 != MAP_LENGTH % 2 && i >= MAP_LENGTH + MAP_LENGTH + 4 ?
 			tileType::AIR : tileType::TILE);
+}
+
+
+Tile* Level::getTilemap()
+{
+	return tilemap[0][0];
+}
+
+
+sf::Vector2i Level::getClosestTile(const sf::Vector2f& v2)
+{
+	int x = 0, y = 0;
+	Tile* closestTile = tilemap[x][y];
+
+	for (int a = 0; a < MAP_LENGTH; a++)
+	{
+		for (int b = 0; b < MAP_HEIGHT; b++)
+		{
+			if (sqrt(pow(closestTile->getPosition().x - v2.x, 2) +
+				pow(closestTile->getPosition().y - v2.y, 2)) >
+				sqrt(pow(tilemap[a][b]->getPosition().x - v2.x, 2) +
+					pow(tilemap[a][b]->getPosition().y - v2.y, 2)))
+			{
+				closestTile = tilemap[a][b];
+				x = a;
+				y = b;
+			}
+		}
+	}
+
+	return sf::Vector2i(x, y);
+}
+
+
+void Level::update(const float& dt)
+{
+	for (int i = 0; i < enemies.size(); i++)
+		enemies[i]->move(tilemap, sf::Vector2i(MAP_LENGTH, MAP_HEIGHT),
+			getClosestTile(enemies[i]->getPosition()));
 }

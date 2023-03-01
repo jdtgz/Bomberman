@@ -40,7 +40,7 @@ void Tile::draw(sf::RenderWindow& window) const
 
 
 //Returns the tileID of tile
-tileType::ID Tile::getType()
+tileType::ID Tile::getType() const
 {
 	return type;
 }
@@ -151,4 +151,10 @@ void Tile::detectCollision(Player& plr, const tileType::ID& u, const tileType::I
 			}
 		}
 	}
+}
+
+
+sf::Vector2f Tile::getPosition() const
+{
+	return tile.getPosition();
 }
