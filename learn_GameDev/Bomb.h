@@ -2,7 +2,6 @@
 #include "TextureHolder.h"
 #include "Animation.h"
 
-
 class Bomb
 {
 public:
@@ -17,6 +16,11 @@ public:
 
 	int getRange() const { return m_range; }
 	sf::Vector2i getPosition() const { return m_position; }
+	bool getExploded() { return m_explosion_finished; };
+	bool isColliding(sf::Sprite& sprite);
+
+	//Accepts a window and rendertexture
+	void showCollisions(sf::RenderTarget& target);
 
 private:
 	enum class animationIndex
@@ -34,11 +38,10 @@ private:
 
 	void initAnimation();
 
-	sf::Texture* m_explosion_sheet, * m_bomb_sheet;
-	std::vector<sf::IntRect*> m_frames;
-	sf::Time m_timer, m_frame_time;
+	sf::Time m_timer;
 	sf::Clock m_explode_clock;
 	sf::Sprite m_sprite;
+	//This is for tile map coordinates, separate from the sprite coordinates
 	sf::Vector2i m_position;
 
 	Animation m_animations[(int)animationIndex::COUNT];
@@ -46,5 +49,9 @@ private:
 	int m_current_frame;
 	bool m_exploded;
 	int m_range;
+
+	bool m_explosion_finished;
+
+	float scaled_size = 16 * 3;
 };
 

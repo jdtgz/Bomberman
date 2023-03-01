@@ -142,6 +142,7 @@
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PowerUp.cpp" />
+    <ClCompile Include="StartMenu.cpp" />
     <ClCompile Include="TextureHolder.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Valcom.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Level.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PowerUp.h" />
+    <ClInclude Include="StartMenu.h" />
     <ClInclude Include="TextureHolder.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Valcom.h" />

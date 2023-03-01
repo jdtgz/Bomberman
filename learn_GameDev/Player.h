@@ -2,6 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include "Animation.h"
 #include "TextureHolder.h"
+#include "Bomb.h"
 
 
 namespace directions
@@ -35,6 +36,7 @@ class Player
 		//Collision
 		void move(const float&, const float&);
 		void setCanMove(const int&, const bool&);
+		sf::Vector2f getPosition();
 		sf::FloatRect getBoundingBox() const;
 		sf::Sprite getSprite() const;
 
@@ -86,6 +88,9 @@ class Player
 		// Directions where player 'can possibly' move
 		bool canMove[directions::COUNT];
 
+		//bomb manager
+		bool bombManager[10] = {false};
+		std::vector<Bomb*> bombs;
 
 		// player attirbutes 
 		int bombCount; 

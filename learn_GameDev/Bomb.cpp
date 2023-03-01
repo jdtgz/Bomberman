@@ -2,19 +2,16 @@
 
 Bomb::Bomb(int x, int y, int range, bool has_timer)
 {
-	m_bomb_sheet = &TextureHolder::get(textures::ITEMS);
-	m_explosion_sheet = &TextureHolder::get(textures::EXPLOSION);
 	m_range = range;
 	m_exploded = false;
+	m_explosion_finished = false;
 
 	if (has_timer)
 		m_timer = sf::seconds(2.5);
 	else if (!has_timer)
 		m_timer = sf::seconds(-1);
 
-	m_frame_time = sf::seconds(0.1f);
-
-	m_sprite.setPosition(x * 16, y * 16);
+	m_sprite.setPosition(8 + ((x - 1) * 48), 8 + ((y + 1) * 48)); //Bomb position is leftmost explosion 
 	m_position = sf::Vector2i(x, y);
 
 	initAnimation();
@@ -23,11 +20,6 @@ Bomb::Bomb(int x, int y, int range, bool has_timer)
 
 Bomb::~Bomb()
 {
-	while (m_frames.size() > 0)
-	{
-		delete m_frames.at(0);
-		m_frames.erase(m_frames.begin());
-	}
 }
 
 
@@ -40,64 +32,55 @@ void Bomb::draw(sf::RenderTarget& target)
 		target.draw(m_sprite);
 	}
 
-	else
+	else if (!m_explosion_finished)
 	{
-		//Center explosion
-		m_animations[(int)animationIndex::CENTER].applyToSprite(m_sprite);
-		target.draw(m_sprite);
+		//Decrease line count with lambda function to draw sprites
+		auto drawSprite = [&](const sf::Vector2f position, animationIndex type)
+		{
+			m_animations[(int)type].applyToSprite(m_sprite);
+			m_sprite.setPosition(position);
+			target.draw(m_sprite);
+		};
 
-		auto drawSprite = [&]() { target.draw(m_sprite); };
+		//Center explosion
+		sf::Vector2f centerPos(8 + ((m_position.x - 1) * 48), 8 + ((m_position.y+1) * 48));
+		drawSprite(centerPos, animationIndex::CENTER);
 
 		for (int i = 0; i < m_range; i++)
 		{
-			m_sprite.setPosition(sf::Vector2f(m_position.x * 16, m_position.y * 16));
-			sf::Vector2f leftPos = m_sprite.getPosition() - sf::Vector2f((m_sprite.getLocalBounds().width * (i + 1)) * 16, 0);
-			sf::Vector2f rightPos = m_sprite.getPosition() + sf::Vector2f((m_sprite.getLocalBounds().width * (i + 1)) * 16, 0);
-			sf::Vector2f downPos = m_sprite.getPosition() + sf::Vector2f(0, (m_sprite.getLocalBounds().height * (i + 1)) * 16);
-			sf::Vector2f upPos = m_sprite.getPosition() - sf::Vector2f(0, (m_sprite.getLocalBounds().height * (i + 1)) * 16);
+			int k = i + 1;
+			sf::Vector2f leftPos = sf::Vector2f(centerPos.x - (48 * k), centerPos.y);
+			sf::Vector2f rightPos = sf::Vector2f(centerPos.x + (48 * k), centerPos.y);
+			sf::Vector2f downPos = sf::Vector2f(centerPos.x, centerPos.y + (48 * k));
+			sf::Vector2f upPos = sf::Vector2f(centerPos.x, centerPos.y - (48 * k));
 
-			if (i < m_range)
+			if (i < m_range-1)
 			{
 				//Left explosion line
-				m_animations[(int)animationIndex::HORIZONTAL].applyToSprite(m_sprite);
-				m_sprite.setPosition(leftPos);
-				drawSprite();
+				drawSprite(leftPos, animationIndex::HORIZONTAL);
 
 				//Right explosion line
-				m_sprite.setPosition(rightPos);
-				drawSprite();
+				drawSprite(rightPos, animationIndex::HORIZONTAL);
 				
 				//Down explosion line
-				m_animations[(int)animationIndex::VERTICAL].applyToSprite(m_sprite);
-				m_sprite.setPosition(downPos);
-				drawSprite();
+				drawSprite(downPos, animationIndex::VERTICAL);
 				
 				//Up explosion line
-				m_sprite.setPosition(upPos);
-				drawSprite();
+				drawSprite(upPos, animationIndex::VERTICAL);
 			}
-
 			else
 			{
 				//Left explosion end
-				m_animations[(int)animationIndex::LEFT].applyToSprite(m_sprite);
-				m_sprite.setPosition(leftPos);
-				drawSprite();
+				drawSprite(leftPos, animationIndex::LEFT);
 
 				//Right explosion end
-				m_animations[(int)animationIndex::RIGHT].applyToSprite(m_sprite);
-				m_sprite.setPosition(rightPos);
-				drawSprite();
+				drawSprite(rightPos, animationIndex::RIGHT);
 
 				//Down explosion end
-				m_animations[(int)animationIndex::DOWN].applyToSprite(m_sprite);
-				m_sprite.setPosition(downPos);
-				drawSprite();
+				drawSprite(downPos, animationIndex::DOWN);
 
 				//Up explosion end
-				m_animations[(int)animationIndex::UP].applyToSprite(m_sprite);
-				m_sprite.setPosition(upPos);
-				drawSprite();
+				drawSprite(upPos, animationIndex::UP);
 			}
 		}
 	}
@@ -112,24 +95,16 @@ void Bomb::explode()
 
 void Bomb::update(float dt)
 {
-	if (m_explode_clock.getElapsedTime() > m_timer && !m_exploded)
+	if (m_explode_clock.getElapsedTime() > m_timer && !m_exploded && m_timer.asSeconds() != -1)
 	{
 		explode();
 		m_explode_clock.restart();
 	}
-	else if (m_explode_clock.getElapsedTime() > m_frame_time && m_exploded)
-	{
-		m_current_frame = (m_current_frame + 1) % 4;
 
-
-
-		m_explode_clock.restart();
-	}
-
-	if (m_exploded)
+	if (m_exploded && !m_explosion_finished)
 	{
 
-		if (m_animations[(int)animationIndex::CENTER].getCurrentFrame() < 4)
+		if (m_animations[(int)animationIndex::CENTER].getCurrentFrame() < 3)
 		{
 			m_animations[(int)animationIndex::CENTER].update(dt);
 			m_animations[(int)animationIndex::LEFT].update(dt);
@@ -141,11 +116,76 @@ void Bomb::update(float dt)
 		}
 		else
 		{
-
+			m_explosion_finished = true;
 		}
 	}
 
 	m_animations[0].update(dt);
+}
+
+bool Bomb::isColliding(sf::Sprite& sprite)
+{
+	sf::Vector2f centerPos(8 + ((m_position.x - 1) * 48), 8 + ((m_position.y + 1) * 48));
+
+	//returns a boolean depending on if the sprites 
+	//bounding box intersects with bomb
+	auto intersectionCheck = [&](sf::Vector2f positionToCheck) -> bool
+	{
+		bool result = false;
+		m_sprite.setPosition(positionToCheck);
+		if (sprite.getGlobalBounds().intersects(m_sprite.getGlobalBounds()))
+			result = true;
+		m_sprite.setPosition(centerPos);
+		return result;
+	};
+
+	if (intersectionCheck(centerPos))
+		return true;
+
+	//Loop through the range of the bomb
+	for (int i = 0; i < m_range; i++)
+	{
+		int k = i + 1;
+		sf::Vector2f leftPos = sf::Vector2f(centerPos.x - (48 * k), centerPos.y);
+		sf::Vector2f rightPos = sf::Vector2f(centerPos.x + (48 * k), centerPos.y);
+		sf::Vector2f downPos = sf::Vector2f(centerPos.x, centerPos.y + (48 * k));
+		sf::Vector2f upPos = sf::Vector2f(centerPos.x, centerPos.y - (48 * k));
+
+		if (intersectionCheck(leftPos) || intersectionCheck(rightPos) ||
+			intersectionCheck(downPos) || intersectionCheck(upPos))
+			return true;
+	}
+	return false;
+}
+
+void Bomb::showCollisions(sf::RenderTarget& target)
+{
+	sf::Vector2f centerPos(8 + ((m_position.x - 1) * 48), 8 + ((m_position.y + 1) * 48));
+	m_sprite.setPosition(centerPos);
+	target.draw(m_sprite);
+
+	//Loop through the range of the bomb
+	for (int i = 0; i < m_range; i++)
+	{
+		int k = i + 1;
+		sf::Vector2f leftPos = sf::Vector2f(centerPos.x - (48 * k), centerPos.y);
+		sf::Vector2f rightPos = sf::Vector2f(centerPos.x + (48 * k), centerPos.y);
+		sf::Vector2f downPos = sf::Vector2f(centerPos.x, centerPos.y + (48 * k));
+		sf::Vector2f upPos = sf::Vector2f(centerPos.x, centerPos.y - (48 * k));
+
+
+		m_sprite.setPosition(leftPos);
+		target.draw(m_sprite);
+
+		m_sprite.setPosition(rightPos);
+		target.draw(m_sprite);
+
+		m_sprite.setPosition(downPos);
+		target.draw(m_sprite);
+
+		m_sprite.setPosition(upPos);
+		target.draw(m_sprite);
+	}
 }
 
 
@@ -157,10 +197,10 @@ void Bomb::initAnimation()
 
 	m_animations[(int)animationIndex::BOMB].setUp(*bomb, 0, 16 * 0, 16, 16, 3);
 	m_animations[(int)animationIndex::CENTER].setUp(*explosion, 0, 16 * 0, 16, 16, 4);
-	m_animations[(int)animationIndex::RIGHT].setUp(*explosion, 0, 16 * 1, 16, 16, 4);
-	m_animations[(int)animationIndex::LEFT].setUp(*explosion, 0, 16 * 2, 16, 16, 4);
-	m_animations[(int)animationIndex::UP].setUp(*explosion, 0, 16 * 3, 16, 16, 4);
-	m_animations[(int)animationIndex::DOWN].setUp(*explosion, 0, 16 * 4, 16, 16, 4);
-	m_animations[(int)animationIndex::HORIZONTAL].setUp(*explosion, 0, 16 * 5, 16, 16, 4);
-	m_animations[(int)animationIndex::VERTICAL].setUp(*explosion, 0, 16 * 5, 6, 16, 4);
+	m_animations[(int)animationIndex::UP].setUp(*explosion, 0, 16 * 1, 16, 16, 4);
+	m_animations[(int)animationIndex::RIGHT].setUp(*explosion, 0, 16 * 2, 16, 16, 4);
+	m_animations[(int)animationIndex::DOWN].setUp(*explosion, 0, 16 * 3, 16, 16, 4);
+	m_animations[(int)animationIndex::LEFT].setUp(*explosion, 0, 16 * 4, 16, 16, 4);
+	m_animations[(int)animationIndex::VERTICAL].setUp(*explosion, 0, 16 * 5, 16, 16, 4);
+	m_animations[(int)animationIndex::HORIZONTAL].setUp(*explosion, 0, 16 * 6, 16, 16, 4);
 }
