@@ -5,14 +5,13 @@ class StartMenu
 {
 public:
 	StartMenu();
-	~StartMenu();
 
 
 private:
+	//Logo
+	sf::Texture m_menu_logo;
+	
 	//Buttons
-	sf::Text m_start_button, m_continue_button;
-
-	//Additional Text
-
+	sf::Text m_start_button;
 };
 

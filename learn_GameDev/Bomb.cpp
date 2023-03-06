@@ -125,35 +125,42 @@ void Bomb::update(float dt)
 
 bool Bomb::isColliding(sf::Sprite& sprite)
 {
-	sf::Vector2f centerPos(8 + ((m_position.x - 1) * 48), 8 + ((m_position.y + 1) * 48));
-
-	//returns a boolean depending on if the sprites 
-	//bounding box intersects with bomb
-	auto intersectionCheck = [&](sf::Vector2f positionToCheck) -> bool
+	if (m_exploded)
 	{
-		bool result = false;
-		m_sprite.setPosition(positionToCheck);
-		if (sprite.getGlobalBounds().intersects(m_sprite.getGlobalBounds()))
-			result = true;
-		m_sprite.setPosition(centerPos);
-		return result;
-	};
+		sf::Vector2f centerPos(8 + ((m_position.x - 1) * 48), 8 + ((m_position.y + 1) * 48));
 
-	if (intersectionCheck(centerPos))
-		return true;
+		//returns a boolean depending on if the sprites 
+		//bounding box intersects with bomb
+		auto intersectionCheck = [&](sf::Vector2f positionToCheck) -> bool
+		{
+			bool result = false;
+			m_sprite.setPosition(positionToCheck);
+			if (sprite.getGlobalBounds().intersects(m_sprite.getGlobalBounds()))
+				result = true;
+			m_sprite.setPosition(centerPos);
+			return result;
+		};
 
-	//Loop through the range of the bomb
-	for (int i = 0; i < m_range; i++)
-	{
-		int k = i + 1;
-		sf::Vector2f leftPos = sf::Vector2f(centerPos.x - (48 * k), centerPos.y);
-		sf::Vector2f rightPos = sf::Vector2f(centerPos.x + (48 * k), centerPos.y);
-		sf::Vector2f downPos = sf::Vector2f(centerPos.x, centerPos.y + (48 * k));
-		sf::Vector2f upPos = sf::Vector2f(centerPos.x, centerPos.y - (48 * k));
-
-		if (intersectionCheck(leftPos) || intersectionCheck(rightPos) ||
-			intersectionCheck(downPos) || intersectionCheck(upPos))
+		if (intersectionCheck(centerPos))
 			return true;
+
+		//Loop through the range of the bomb
+		for (int i = 0; i < m_range; i++)
+		{
+			int k = i + 1;
+			sf::Vector2f leftPos = sf::Vector2f(centerPos.x - (48 * k), centerPos.y);
+			sf::Vector2f rightPos = sf::Vector2f(centerPos.x + (48 * k), centerPos.y);
+			sf::Vector2f downPos = sf::Vector2f(centerPos.x, centerPos.y + (48 * k));
+			sf::Vector2f upPos = sf::Vector2f(centerPos.x, centerPos.y - (48 * k));
+
+			if (intersectionCheck(leftPos) || intersectionCheck(rightPos) ||
+				intersectionCheck(downPos) || intersectionCheck(upPos))
+				return true;
+		}
+	}
+	else
+	{
+		return m_sprite.getGlobalBounds().intersects(sprite.getGlobalBounds());
 	}
 	return false;
 }
