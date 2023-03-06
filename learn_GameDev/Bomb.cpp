@@ -11,7 +11,7 @@ Bomb::Bomb(int x, int y, int range, bool has_timer)
 	else if (!has_timer)
 		m_timer = sf::seconds(-1);
 
-	m_sprite.setPosition(8 + ((x - 1) * 48), 8 + ((y + 1) * 48)); //Bomb position is leftmost explosion 
+	m_sprite.setPosition(((x - 1) * 48), ((y + 1) * 48)); //Bomb position is leftmost explosion 
 	m_position = sf::Vector2i(x, y);
 
 	initAnimation();
@@ -43,7 +43,7 @@ void Bomb::draw(sf::RenderTarget& target)
 		};
 
 		//Center explosion
-		sf::Vector2f centerPos(8 + ((m_position.x - 1) * 48), 8 + ((m_position.y+1) * 48));
+		sf::Vector2f centerPos(((m_position.x - 1) * 48), ((m_position.y+1) * 48));
 		drawSprite(centerPos, animationIndex::CENTER);
 
 		for (int i = 0; i < m_range; i++)
@@ -127,7 +127,7 @@ bool Bomb::isColliding(sf::Sprite& sprite)
 {
 	if (m_exploded)
 	{
-		sf::Vector2f centerPos(8 + ((m_position.x - 1) * 48), 8 + ((m_position.y + 1) * 48));
+		sf::Vector2f centerPos(((m_position.x - 1) * 48), ((m_position.y + 1) * 48));
 
 		//returns a boolean depending on if the sprites 
 		//bounding box intersects with bomb
@@ -167,7 +167,7 @@ bool Bomb::isColliding(sf::Sprite& sprite)
 
 void Bomb::showCollisions(sf::RenderTarget& target)
 {
-	sf::Vector2f centerPos(8 + ((m_position.x - 1) * 48), 8 + ((m_position.y + 1) * 48));
+	sf::Vector2f centerPos(((m_position.x - 1) * 48), ((m_position.y + 1) * 48));
 	m_sprite.setPosition(centerPos);
 	target.draw(m_sprite);
 

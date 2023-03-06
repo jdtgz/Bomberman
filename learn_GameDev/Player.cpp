@@ -26,7 +26,7 @@ Player::Player()
 	}
 
 	// initialize the player/powerUp attributes 
-	bombCount = 1; 
+	bombCount = 3; 
 	flameRange = 1; 
 	speed = 3.f;
 	wallPass = false; 
