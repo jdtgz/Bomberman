@@ -50,6 +50,7 @@ Level::Level()
 		}
 	}
 
+	powerup = new PowerUp(1); 
 	enemies.push_back(new Valcom());
 }
 
@@ -89,6 +90,8 @@ void Level::generate(const int& levelNum)
 			}
 		}
 	}
+
+	powerup->setPosition(48, 48); 
 
 	/*
 	while(enemies < 6)
@@ -163,6 +166,8 @@ void Level::draw(sf::RenderWindow& window) const
 	
 	for(int i = 0; i < enemies.size(); i++)
 		enemies[i]->draw(window);
+
+	powerup->draw(window); 
 }
 
 
