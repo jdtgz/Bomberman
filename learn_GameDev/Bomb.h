@@ -19,8 +19,15 @@ public:
 	bool getExploded() { return m_explosion_finished; };
 	bool isColliding(sf::Sprite& sprite);
 
+	//If the bomb itself is colliding
+	bool isBombColliding(sf::Sprite& sprite);
+	//Returns true if the explosion is colliding with sprite
+	bool isExplosionColliding(sf::Sprite& sprite);
+	//returns true only if explosion is active
+	bool isEntityColliding(sf::Sprite& sprite);
+
 	//Accepts a window and rendertexture
-	void showCollisions(sf::RenderTarget& target);
+	void showCollisions(sf::RenderWindow& target);
 
 private:
 	enum class animationIndex

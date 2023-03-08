@@ -1,6 +1,6 @@
 #include "Game.h"
 
-Game::Game()
+Game::Game() : startMenu(true)
 {
 	//Randomize generator
 	//srand(time(NULL));
@@ -69,19 +69,23 @@ void Game::processEvents()
 	sf::Event evnt;
 	while (window->pollEvent(evnt))
 	{
-		switch (evnt.type)
+		//If start menu is active, dont go through game events
+		if (!startMenu.isActive())
 		{
-			//Tell the player when a key is down
+			switch (evnt.type)
+			{
+				//Tell the player when a key is down
 			case sf::Event::KeyPressed:
-				player.keyPressed(evnt.key.code); 
+				player.keyPressed(evnt.key.code);
 				break;
-			//Tell the player when a key is released
+				//Tell the player when a key is released
 			case sf::Event::KeyReleased:
-				player.keyReleased(evnt.key.code); 
+				player.keyReleased(evnt.key.code);
 				break;
-			//Close the window
-			case sf::Event::Closed: 
+				//Close the window
+			case sf::Event::Closed:
 				window->close();
+			}
 		}
 	}
 }
@@ -90,28 +94,35 @@ void Game::processEvents()
 //Tick
 void Game::update(const sf::Time& dt)
 {
-	player.update(dt.asSeconds());
+	//If start menu is active, dont update game
+	if (!startMenu.isActive())
+	{
+		player.update(dt.asSeconds());
 
-	//Prevent viewport from going off of the map
-	if (player.getSprite().getPosition().x > (view.getSize().x / 2) - 48 &&
-		player.getSprite().getPosition().x < (31 * 48) - (view.getSize().x / 3))
-	{
-		view.setCenter(sf::Vector2f(player.getSprite().getPosition().x,
-			window->getSize().y / 2 + 48));
-	}
-	else if (player.getSprite().getPosition().x < (view.getSize().x / 2) - 48)
-	{
-		view.setCenter(sf::Vector2f((view.getSize().x / 2) - 48,
-			window->getSize().y / 2 + 48));
-	}
-	else if (player.getSprite().getPosition().x > (31 * 48) - (view.getSize().x / 3))
-	{
-		view.setCenter(sf::Vector2f((31 * 48) - (view.getSize().x / 3),
-			window->getSize().y / 2 + 48));
-	}
-  
-	level.update(dt.asSeconds());
+		//Prevent viewport from going off of the map
+		if (player.getSprite().getPosition().x > (view.getSize().x / 2) - 48 &&
+			player.getSprite().getPosition().x < (31 * 48) - (view.getSize().x / 3))
+		{
+			view.setCenter(sf::Vector2f(player.getSprite().getPosition().x,
+				window->getSize().y / 2 + 48));
+		}
+		else if (player.getSprite().getPosition().x < (view.getSize().x / 2) - 48)
+		{
+			view.setCenter(sf::Vector2f((view.getSize().x / 2) - 48,
+				window->getSize().y / 2 + 48));
+		}
+		else if (player.getSprite().getPosition().x > (31 * 48) - (view.getSize().x / 3))
+		{
+			view.setCenter(sf::Vector2f((31 * 48) - (view.getSize().x / 3),
+				window->getSize().y / 2 + 48));
+		}
 
+		level.update(dt.asSeconds());
+	}
+	else
+	{
+		startMenu.update();
+	}
 }
 
 
@@ -120,12 +131,20 @@ void Game::render()
 {
 	window->clear(); 
   
-	//Center viewport on player
-	window->setView(view);
-  
-	// draw the level and player 
-	level.draw(*window);
-	player.draw(*window); 
+	//If start menu is active, dont render game
+	if (!startMenu.isActive())
+	{
+		//Center viewport on player
+		window->setView(view);
+
+		// draw the level and player 
+		level.draw(*window);
+		player.draw(*window);
+	}
+	else
+	{
+		startMenu.draw(*window);
+	}
   
 	window->display(); 
 }
