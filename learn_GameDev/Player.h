@@ -20,7 +20,7 @@ class Player
 		~Player();
 
 		// Given a key, do something
-		void keyPressed(const sf::Keyboard::Key&);
+		sf::Vector2i keyPressed(const sf::Keyboard::Key&);
 		void keyReleased(const sf::Keyboard::Key&);
 
 		// Draws player onto the screen

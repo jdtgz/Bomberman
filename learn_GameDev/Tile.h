@@ -20,6 +20,7 @@ class Tile
 
 		tileType::ID getType() const;
 		void setTile(const tileType::ID&);
+		void setTile(int);
 		void interact();
 
 		void draw(sf::RenderWindow&) const;

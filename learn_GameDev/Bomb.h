@@ -29,6 +29,7 @@ public:
 	//Accepts a window and rendertexture
 	void showCollisions(sf::RenderWindow& target);
 
+
 private:
 	enum class animationIndex
 	{

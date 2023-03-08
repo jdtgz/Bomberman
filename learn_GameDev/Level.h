@@ -24,6 +24,8 @@ public:
 	// draw level onto sfml screen 
 	void draw(sf::RenderWindow&) const;
 
+	void setMap(sf::Vector2i, int);
+
 	// track player collisions 
 	void collisions(Player&);
 	// track enemy collisions 
@@ -38,6 +40,7 @@ private:
 	const int MAP_HEIGHT = 13;
 	const int BORDER_COUNT = 92;
 
+	int datamap[31][13];
 	Tile* tilemap[31][13];
 	Tile* border[92];
 

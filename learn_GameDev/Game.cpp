@@ -15,6 +15,9 @@ Game::Game() : startMenu(true)
 	view.setSize(sf::Vector2f(window->getSize()));
 
 	player.getSprite().setPosition(48 * 31 / 2, 48 * 13 / 2);
+
+	tempBomb.x = -1;
+	tempBomb.y = -1;
 }
 
 
@@ -76,7 +79,9 @@ void Game::processEvents()
 			{
 				//Tell the player when a key is down
 			case sf::Event::KeyPressed:
-				player.keyPressed(evnt.key.code);
+				tempBomb = player.keyPressed(evnt.key.code);
+				if (!(tempBomb.x < 0))
+					level.setMap(tempBomb, 4);
 				break;
 				//Tell the player when a key is released
 			case sf::Event::KeyReleased:
