@@ -91,8 +91,6 @@ void Level::generate(const int& levelNum)
 		}
 	}
 
-	powerup->setPosition(48, 48); 
-
 	/*
 	while(enemies < 6)
 	{
