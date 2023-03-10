@@ -165,7 +165,6 @@ void Level::draw(sf::RenderWindow& window) const
 	for(int i = 0; i < enemies.size(); i++)
 		enemies[i]->draw(window);
 
-	powerup->draw(window); 
 }
 
 
