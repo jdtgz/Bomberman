@@ -95,7 +95,7 @@ void Level::generate(const int& levelNum)
 				{
 					totalSoftBlock++;
 					tilemap[x][y]->setTile(tileType::BRICK);
-					datamap[x][y] = 1;
+					datamap[x][y] = tileType::BRICK;
 				}
 			}
 		}
@@ -249,7 +249,7 @@ void Level::update(const float& dt, int flameRange)
 	{
 		for (int b = 0; b < MAP_HEIGHT; b++)
 		{
-			tilemap[a][b]->setTile(datamap[a][b]);
+			tilemap[a][b]->setTile((tileType::ID)datamap[a][b]);
 		}
 	}
 	

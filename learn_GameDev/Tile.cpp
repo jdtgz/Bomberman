@@ -27,7 +27,7 @@ Tile::~Tile()
 
 
 //Tile interactions
-void Tile::destroy()
+void Tile::interact()
 {
 }
 
@@ -71,18 +71,6 @@ void Tile::setTile(const tileType::ID& t)
 	}
 	mSprite.setScale(3, 3);
 }
-
-/*
-//destroys the tile if its tileID is Brick
-//should be called AFTER a confirmed collision with a bomb object
-void Tile::interact()
-{
-	if (type == TileType::Brick)
-	{
-
-	}
-}
-*/
 
 
 //tracks collisions between the player and the tile, 
