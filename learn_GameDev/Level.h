@@ -43,5 +43,4 @@ class Level
 		Tile* border[92];
 
 		std::vector<Enemy*> enemies;
-		PowerUp* powerup; 
 };
