@@ -59,7 +59,8 @@ Level::Level()
 		}
 	}
 
-	enemies.push_back(new Valcom());
+
+	enemies.push_back(new Valcom(sf::Vector2i(0, 0)));
 }
 
 
@@ -173,6 +174,7 @@ void Level::draw(sf::RenderWindow& window) const
 	
 	for(int i = 0; i < enemies.size(); i++)
 		enemies[i]->draw(window);
+
 }
 
 void Level::setMap(sf::Vector2i pos, int type)
@@ -237,8 +239,10 @@ void Level::update(const float& dt, int flameRange)
 	bool collided = false;
 	
 	for (int i = 0; i < enemies.size(); i++)
-		enemies[i]->move(tilemap, sf::Vector2i(MAP_LENGTH, MAP_HEIGHT),
-			getClosestTile(enemies[i]->getPosition()));
+  {
+		enemies[i]->update(dt);
+		enemies[i]->move(tilemap, sf::Vector2i(MAP_LENGTH, MAP_HEIGHT));
+  }
 
 	//visually set all the tiles to the data map
 	for (int a = 0; a < MAP_LENGTH; a++)
@@ -248,4 +252,6 @@ void Level::update(const float& dt, int flameRange)
 			tilemap[a][b]->setTile(datamap[a][b]);
 		}
 	}
+	
 }
+

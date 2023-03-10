@@ -4,19 +4,19 @@
 // place a tile of type t at (xCoord, yCoord)
 Tile::Tile(const int& x, const int& y, const tileType::ID& t)
 {
-	// set the tileID, if it is a block and not a Bomb/PowerUp
-	if(t != tileType::BOMB && t != tileType::POWERUP)
+	// set the tileID, if it is a block and not a PowerUp
+	if(t != tileType::POWERUP)
 		type = t;
 
 	// load the texture and set the sprite for tile
-	tile.setTexture(TextureHolder::get(textures::ITEMS));
+	mSprite.setTexture(TextureHolder::get(textures::ITEMS));
 	setTile(t);
 
 	// blow up animation ONLY for tileType::BRICK
 	blowUp.setUp(TextureHolder::get(textures::ITEMS), 0, 16 * 2, 16, 16, 6); 
 
 	// place the tile 
-	tile.setPosition(x, y);
+	mSprite.setPosition(x, y);
 }
 
 
@@ -27,7 +27,7 @@ Tile::~Tile()
 
 
 //Tile interactions
-void Tile::interact()
+void Tile::destroy()
 {
 }
 
@@ -35,7 +35,7 @@ void Tile::interact()
 //Draws the tile to the screen
 void Tile::draw(sf::RenderWindow& window) const
 {
-	window.draw(tile);
+	window.draw(mSprite);
 }
 
 
@@ -58,18 +58,18 @@ void Tile::setTile(const tileType::ID& t)
 	{
 		//put anything related to tile type changes here
 		case tileType::AIR:
-			tile.setTextureRect({ 16 * 6, 16 * 2, 16, 16 });
+			mSprite.setTextureRect({ 16 * 6, 16 * 2, 16, 16 });
 			break;
 		case tileType::BRICK:
-			tile.setTextureRect({ 16 * 1,16 * 1,16,16 });
+			mSprite.setTextureRect({ 16 * 1,16 * 1,16,16 });
 			break;
 		case tileType::TILE:
-			tile.setTextureRect({ 16 * 0, 16, 16, 16 });
+			mSprite.setTextureRect({ 16 * 0, 16, 16, 16 });
 			break;
 		case tileType::DOOR:
-			tile.setTextureRect({ 16 * 2, 16 * 1, 16, 16 });
+			mSprite.setTextureRect({ 16 * 2, 16 * 1, 16, 16 });
 	}
-	tile.setScale(3, 3);
+	mSprite.setScale(3, 3);
 }
 //REMOVE AND TYPECAST
 //
@@ -121,7 +121,7 @@ void Tile::detectCollision(Player& plr, const tileType::ID& u, const tileType::I
 {
 	//Get hitboxes
 	sf::FloatRect pB = plr.getBoundingBox();
-	sf::FloatRect tB = tile.getGlobalBounds();
+	sf::FloatRect tB = mSprite.getGlobalBounds();
 
 	//For "auto correct" feature
 	const float NEAR = 0.3f; //x% from the top
@@ -188,5 +188,5 @@ void Tile::detectCollision(Player& plr, const tileType::ID& u, const tileType::I
 
 sf::Vector2f Tile::getPosition() const
 {
-	return tile.getPosition();
+	return mSprite.getPosition();
 }

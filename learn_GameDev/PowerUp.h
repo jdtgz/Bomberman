@@ -1,9 +1,10 @@
 #pragma once
 #include "Player.h"
+#include "Tile.h"
 #include "Bomb.h"
 
 
-class PowerUp
+class PowerUp: public Tile
 {
 	public:
 		// constructor/destructor
@@ -12,11 +13,10 @@ class PowerUp
 
 		// visual functions 
 		void revealPowerUp();
+		void setPowerType(const int&);
 
 		// utility funcitons 
-		void detectCollisions(Player&); 
 		void applyPowerUp(Player&);
-		void detectCollisions(Bomb&); 
 		void spawnEnemies(); 
 	private:
 		enum powerups
@@ -25,7 +25,6 @@ class PowerUp
 			BOMB_PASS, FLAME_PASS, INVINCIBILITY
 		};
 
-		sf::Sprite sprite; 
 		bool revealed; 
-		int type; 
+		int powerUpType; 
 };

@@ -4,6 +4,7 @@
 #include <vector>
 #include "Enemy.h"
 #include "Valcom.h"
+#include "PowerUp.h"
 
 class Level
 {
@@ -32,7 +33,8 @@ public:
 	//void collisions(Enemy&);
 
 	void update(const float&, int);
-
+  
+  Tile* getTilemap();
 	sf::Vector2i getClosestTile(const sf::Vector2f&);
 private:
 	const int MAP_LENGTH = 31;

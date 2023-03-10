@@ -8,19 +8,19 @@
 
 namespace tileType 
 {
-	enum ID { AIR = 0, BRICK, TILE, DOOR, BOMB, POWERUP };
+	enum ID { AIR = 0, BRICK, TILE, DOOR, POWERUP };
 }
 
 
 class Tile
 {
 	public:
+		Tile() = default; 
 		Tile(const int&, const int&, const tileType::ID&);
 		~Tile();
 
 		tileType::ID getType() const;
 		void setTile(const tileType::ID&);
-		void setTile(int);
 		void interact();
 
 		void draw(sf::RenderWindow&) const;
@@ -31,9 +31,9 @@ class Tile
 			const tileType::ID&, const tileType::ID&);
 
 		sf::Vector2f getPosition() const;
-	private:
-		sf::Sprite tile; 
-		Animation blowUp; 
 
+	protected: 
+		sf::Sprite mSprite; 
+		Animation blowUp; 
 		tileType::ID type;
 };
