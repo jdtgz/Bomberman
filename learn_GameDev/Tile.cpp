@@ -71,40 +71,11 @@ void Tile::setTile(const tileType::ID& t)
 	}
 	mSprite.setScale(3, 3);
 }
-//REMOVE AND TYPECAST
-//
-//
-
-//Given an int set the proper textureRect & scale it 
-void Tile::setTile(int t)
-{
-	switch (t)
-	{
-		//put anything related to tile type changes here
-	case 0:
-		tile.setTextureRect({ 16 * 6, 16 * 2, 16, 16 });
-		type = tileType::AIR;
-		break;
-	case 1:
-		tile.setTextureRect({ 16 * 1,16 * 1,16,16 });
-		type = tileType::BRICK;
-		break;
-	case 2:
-		tile.setTextureRect({ 16 * 0, 16, 16, 16 });
-		type = tileType::TILE;
-		break;
-	case 3:
-		tile.setTextureRect({ 16 * 2, 16 * 1, 16, 16 });
-		type = tileType::DOOR;
-	}
-	tile.setScale(3, 3);
-}
-
 
 /*
 //destroys the tile if its tileID is Brick
 //should be called AFTER a confirmed collision with a bomb object
-void Tile::destroy()
+void Tile::interact()
 {
 	if (type == TileType::Brick)
 	{
