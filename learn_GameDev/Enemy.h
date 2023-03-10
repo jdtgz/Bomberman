@@ -10,7 +10,7 @@ public:
 	Enemy();
 
 	virtual void update(const float&) = 0;
-	virtual void move(Tile*[31][13], const sf::Vector2i&, const sf::Vector2i&) = 0;
+	virtual void move(Tile*[31][13], const sf::Vector2i&) = 0;
 
 	void draw(sf::RenderWindow&) const;
 	void die();
@@ -34,6 +34,10 @@ protected:
 	Animation anims[int(animIndex::COUNT)];
 	animIndex curAnim;
 
+	enum dir { NORTH = 0, EAST, SOUTH, WEST };
+	dir heading;
+
 	bool alive;
 	float moveSpeed;
+	sf::Vector2i tilePos;
 };

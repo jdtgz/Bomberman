@@ -3,7 +3,7 @@
 Game::Game()
 {
 	//Randomize generator
-	//srand(time(NULL));
+	srand(time(NULL));
 
 	//Create a new window
 	window = new sf::RenderWindow(sf::VideoMode(750, 750), "Bomberman");

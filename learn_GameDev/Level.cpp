@@ -50,7 +50,7 @@ Level::Level()
 		}
 	}
 
-	enemies.push_back(new Valcom());
+	enemies.push_back(new Valcom(sf::Vector2i(0, 0)));
 }
 
 
@@ -225,6 +225,8 @@ sf::Vector2i Level::getClosestTile(const sf::Vector2f& v2)
 void Level::update(const float& dt)
 {
 	for (int i = 0; i < enemies.size(); i++)
-		enemies[i]->move(tilemap, sf::Vector2i(MAP_LENGTH, MAP_HEIGHT),
-			getClosestTile(enemies[i]->getPosition()));
+	{
+		enemies[i]->update(dt);
+		enemies[i]->move(tilemap, sf::Vector2i(MAP_LENGTH, MAP_HEIGHT));
+	}
 }
