@@ -47,7 +47,7 @@ Player::~Player()
 
 
 // detects whether a key has been pressed and acts accordingly
-void Player::keyPressed(const sf::Keyboard::Key &key)
+sf::Vector2i Player::keyPressed(const sf::Keyboard::Key &key)
 {
 	// change the direction of the player based on input
 	switch (key)
@@ -94,16 +94,22 @@ void Player::keyPressed(const sf::Keyboard::Key &key)
 						if (bombs[i]->isColliding(sprite))
 						{
 							std::cout << "COLLIDE!\n";
-							return;
+							return sf::Vector2i(-1, -1);
 						}
 					}
 					bombManager[i] = true;
 
 					// initialize the bomb
 					if (detonator == false)
+					{
 						bombs.push_back(new Bomb(getPosition().x, getPosition().y, flameRange, true));
+						return sf::Vector2i(getPosition().x, getPosition().y);
+					}
 					else
+					{
 						bombs.push_back(new Bomb(getPosition().x, getPosition().y, flameRange, false));
+						return sf::Vector2i(getPosition().x, getPosition().y);
+					}
 					break;
 				}
 			}
@@ -116,6 +122,7 @@ void Player::keyPressed(const sf::Keyboard::Key &key)
 			}
 			break;
 	}
+	return sf::Vector2i(-1, -1);
 }
 
 
@@ -224,6 +231,17 @@ float Player::getSpeed() const
 // detonate the oldest bomb
 void Player::detonate()
 {
+}
+
+sf::Vector2i Player::getExplotionPosition()
+{
+	for (int i = 0; i < bombs.size(); i++)
+	{
+		if (bombs[i]->getExploding())
+			return bombs[i]->getPosition();
+	}
+	
+	return sf::Vector2i();
 }
 
 

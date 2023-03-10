@@ -12,11 +12,20 @@ Level::Level()
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
 			if (y == 0 || x == 0 || y == MAP_HEIGHT - 1 || x == MAP_LENGTH - 1)
+			{
 				tilemap[x][y] = new Tile(xPos, yPos, tileType::AIR);
+				datamap[x][y] = 0;
+			}
 			else if (x % 2 != 0 && y % 2 != 0)
+			{
 				tilemap[x][y] = new Tile(xPos, yPos, tileType::TILE);
+				datamap[x][y] = 2;
+			}
 			else
+			{
 				tilemap[x][y] = new Tile(xPos, yPos, tileType::AIR);
+				datamap[x][y] = 0;
+			}
 			yPos += 48;
 		}
 		xPos += 48;
@@ -86,6 +95,7 @@ void Level::generate(const int& levelNum)
 				{
 					totalSoftBlock++;
 					tilemap[x][y]->setTile(tileType::BRICK);
+					datamap[x][y] = 1;
 				}
 			}
 		}
@@ -167,6 +177,11 @@ void Level::draw(sf::RenderWindow& window) const
 
 }
 
+void Level::setMap(sf::Vector2i pos, int type)
+{
+	datamap[pos.x][pos.y] = type;
+}
+
 
 //Detect collisions between player and tile
 void Level::collisions(Player& plr)
@@ -190,12 +205,6 @@ void Level::collisions(Player& plr)
 			tileType::AIR : tileType::TILE,
 			i % 2 != MAP_LENGTH % 2 && i >= MAP_LENGTH + MAP_LENGTH + 4 ?
 			tileType::AIR : tileType::TILE);
-}
-
-
-Tile* Level::getTilemap()
-{
-	return tilemap[0][0];
 }
 
 
@@ -224,11 +233,25 @@ sf::Vector2i Level::getClosestTile(const sf::Vector2f& v2)
 }
 
 
-void Level::update(const float& dt)
+void Level::update(const float& dt, int flameRange)
 {
+	int offset = 1;
+	bool collided = false;
+	
 	for (int i = 0; i < enemies.size(); i++)
-	{
+  {
 		enemies[i]->update(dt);
 		enemies[i]->move(tilemap, sf::Vector2i(MAP_LENGTH, MAP_HEIGHT));
+  }
+
+	//visually set all the tiles to the data map
+	for (int a = 0; a < MAP_LENGTH; a++)
+	{
+		for (int b = 0; b < MAP_HEIGHT; b++)
+		{
+			tilemap[a][b]->setTile(datamap[a][b]);
+		}
 	}
+	
 }
+

@@ -33,11 +33,14 @@ class Game
 		// FPS
 		sf::Time timePerFrame = sf::seconds(1.f / 60.f); 
 
+		// Level
+		Level level;
+
 		// Player 
 		Player player;
 
-		// Level
-		Level level;
+		// New Bomb Location
+		sf::Vector2i tempBomb;
 
 		// Level Number
 		int levelNumber = 0;
