@@ -3,7 +3,7 @@
 #include "TextureHolder.h"
 #include "Player.h"
 #include "Level.h"
-
+#include "StartMenu.h"
 
 #include "Bomb.h"
 
@@ -41,4 +41,7 @@ class Game
 
 		// Level Number
 		int levelNumber = 0;
+
+		//Start Menu
+		StartMenu startMenu;
 };

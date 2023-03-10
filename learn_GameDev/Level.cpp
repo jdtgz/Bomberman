@@ -17,38 +17,39 @@ Level::Level()
 				tilemap[x][y] = new Tile(xPos, yPos, tileType::TILE);
 			else
 				tilemap[x][y] = new Tile(xPos, yPos, tileType::AIR);
-			yPos += 50;
+			yPos += 48;
 		}
-		xPos += 50;
+		xPos += 48;
 		yPos = 100;
 	}
 
 	//Create tile border
-	xPos = -50;
+	xPos = -48;
 	yPos = 100;
 	for (int i = 0; i < BORDER_COUNT; i++)
 	{
 		if (i < MAP_LENGTH + 2)
 		{
-			border[i] = new Tile(xPos, 50, tileType::TILE);
-			xPos += 50;
+			border[i] = new Tile(xPos, 48, tileType::TILE);
+			xPos += 48;
 		}
 		else if (i < MAP_LENGTH + MAP_LENGTH + 4)
 		{
-			border[i] = new Tile(xPos - 50, (MAP_HEIGHT + 2) * 50, tileType::TILE);
-			xPos -= 50;
+			border[i] = new Tile(xPos - 48, (MAP_HEIGHT + 2) * 48, tileType::TILE);
+			xPos -= 48;
 		}
 		else
 		{
 			if (i % 2 != MAP_LENGTH % 2)
-				border[i] = new Tile(-50, yPos, tileType::TILE);
+				border[i] = new Tile(-48, yPos, tileType::TILE);
 			else
 			{
-				border[i] = new Tile(MAP_LENGTH * 50, yPos, tileType::TILE);
-				yPos += 50;
+				border[i] = new Tile(MAP_LENGTH * 48, yPos, tileType::TILE);
+				yPos += 48;
 			}
 		}
 	}
+
 
 	enemies.push_back(new Valcom(sf::Vector2i(0, 0)));
 }
@@ -89,6 +90,8 @@ void Level::generate(const int& levelNum)
 			}
 		}
 	}
+
+	powerup->setPosition(48, 48); 
 
 	/*
 	while(enemies < 6)
@@ -163,6 +166,8 @@ void Level::draw(sf::RenderWindow& window) const
 	
 	for(int i = 0; i < enemies.size(); i++)
 		enemies[i]->draw(window);
+
+	powerup->draw(window); 
 }
 
 

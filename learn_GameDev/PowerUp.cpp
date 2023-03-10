@@ -2,13 +2,16 @@
 
 
 PowerUp::PowerUp(const int& typ)
-{	
-	// initialize the "fake" sprite for the powerup
-	sprite.setTexture(TextureHolder::get(textures::ITEMS));
-	sprite.setTextureRect({ 16, 16, 16, 16 });
+{
+	// initialize the "fake" sprite
+	mSprite.setTexture(TextureHolder::get(textures::ITEMS)); 
+	setTile(tileType::BRICK);
 
-	revealed = false; 
-	type = typ;
+	// set the "real" type to ensure it is not treated like a brick in level
+	type = tileType::POWERUP; 
+
+	// set the type of powerup it is 
+	powerUpType = typ; 
 }
 
 
@@ -62,23 +65,6 @@ void PowerUp::revealPowerUp()
 }
 
 
-// detect the collision between a player and the powerup
-// if revealed = false, push player back like a normal tile 
-// if revealed = true, applyPowerUp
-void PowerUp::detectCollisions(Player& plr)
-{
-	if (revealed)
-	{
-		//Check if the players bounding box is intersecting with the sprite
-		//of powerup
-		if (plr.getBoundingBox().intersects(sprite.getGlobalBounds()))
-		{
-
-		}
-	}
-}
-
-
 // aceess the player once & adjust its powerUp attirbutes
 void PowerUp::applyPowerUp(Player& player)
 {
@@ -111,20 +97,6 @@ void PowerUp::applyPowerUp(Player& player)
 			std::cout << "INVINCIBLE\n";
 			break;
 	}	
-}
-
-
-// detects the collisions between the power up and flames from bomb
-// if colliding & revealed = false, reveal true sprite of power up
-void PowerUp::detectCollisions(Bomb& bomb)
-{
-	if (bomb.isColliding(sprite))
-	{
-		if (!revealed)
-			revealPowerUp();
-		else
-			spawnEnemies();
-	}
 }
 
 
