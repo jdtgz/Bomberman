@@ -206,12 +206,6 @@ void Level::collisions(Player& plr)
 }
 
 
-Tile* Level::getTilemap()
-{
-	return tilemap[0][0];
-}
-
-
 sf::Vector2i Level::getClosestTile(const sf::Vector2f& v2)
 {
 	int x = 0, y = 0;
@@ -237,8 +231,11 @@ sf::Vector2i Level::getClosestTile(const sf::Vector2f& v2)
 }
 
 
-void Level::update(const float& dt)
+void Level::update(const float& dt, int flameRange)
 {
+	int offset = 1;
+	bool collided = false;
+	
 	for (int i = 0; i < enemies.size(); i++)
 		enemies[i]->move(tilemap, sf::Vector2i(MAP_LENGTH, MAP_HEIGHT),
 			getClosestTile(enemies[i]->getPosition()));
@@ -249,16 +246,6 @@ void Level::update(const float& dt)
 		for (int b = 0; b < MAP_HEIGHT; b++)
 		{
 			tilemap[a][b]->setTile(datamap[a][b]);
-		}
-	}
-
-	for (int a = 0; a < MAP_LENGTH; a++)
-	{
-		for (int b = 0; b < MAP_HEIGHT; b++)
-		{
-			if (datamap[a][b] == 4)
-				std::cout << "BOMB CREATED\n";
-
 		}
 	}
 }

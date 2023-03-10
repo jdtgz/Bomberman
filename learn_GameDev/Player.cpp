@@ -233,6 +233,17 @@ void Player::detonate()
 {
 }
 
+sf::Vector2i Player::getExplotionPosition()
+{
+	for (int i = 0; i < bombs.size(); i++)
+	{
+		if (bombs[i]->getExploding())
+			return bombs[i]->getPosition();
+	}
+	
+	return sf::Vector2i();
+}
+
 
 //Move player sprite by x, y
 void Player::move(const float& x, const float& y)

@@ -122,7 +122,10 @@ void Game::update(const sf::Time& dt)
 				window->getSize().y / 2 + 48));
 		}
 
-		level.update(dt.asSeconds());
+		//update data map for all exploding tiles
+		level.setMap(player.getExplotionPosition(), 5);
+
+		level.update(dt.asSeconds(), player.getFlameRange());
 	}
 	else
 	{

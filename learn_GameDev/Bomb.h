@@ -17,6 +17,7 @@ public:
 	int getRange() const { return m_range; }
 	sf::Vector2i getPosition() const { return m_position; }
 	bool getExploded() { return m_explosion_finished; };
+	bool getExploding() { return m_exploded; };
 	bool isColliding(sf::Sprite& sprite);
 
 	//If the bomb itself is colliding

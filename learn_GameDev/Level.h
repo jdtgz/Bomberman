@@ -31,9 +31,8 @@ public:
 	// track enemy collisions 
 	//void collisions(Enemy&);
 
-	void update(const float&);
+	void update(const float&, int);
 
-	Tile* getTilemap();
 	sf::Vector2i getClosestTile(const sf::Vector2f&);
 private:
 	const int MAP_LENGTH = 31;

@@ -32,6 +32,7 @@ class Player
 		sf::Vector2f getVelocity() const;
 		float getSpeed() const;
 		void detonate(); 
+		sf::Vector2i getExplotionPosition();
 
 		//Collision
 		void move(const float&, const float&);

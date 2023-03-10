@@ -47,6 +47,10 @@ tileType::ID Tile::getType() const
 
 
 //Given an tileID, set the proper textureRect & scale it 
+
+//
+// 
+//REMOVE AND TYPECAST
 void Tile::setTile(const tileType::ID& t)
 {
 	type = t;
@@ -67,6 +71,9 @@ void Tile::setTile(const tileType::ID& t)
 	}
 	tile.setScale(3, 3);
 }
+//REMOVE AND TYPECAST
+//
+//
 
 //Given an int set the proper textureRect & scale it 
 void Tile::setTile(int t)
