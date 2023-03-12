@@ -6,6 +6,7 @@ Enemy::Enemy()
 	curAnim = animIndex::WALKING_LEFT;
 	moveSpeed = 0.f;
 	alive = true;
+	tilePos = sf::Vector2i(0, 0);
 }
 
 

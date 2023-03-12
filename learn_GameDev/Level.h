@@ -8,40 +8,42 @@
 
 class Level
 {
-	public:
-		// constructor/destructor
-		Level();
-		~Level();
+public:
+	// constructor/destructor
+	Level();
+	~Level();
 
-		// load the stage
-		void generate(const int&);
-		// end the level 
-		void end();
+	// load the stage
+	void generate(const int&);
+	// end the level 
+	void end();
 
-		// get the height/lenth of game board
-		int getLength() const;
-		int getHeight() const;
+	// get the height/lenth of game board
+	int getLength() const;
+	int getHeight() const;
 
-		// draw level onto sfml screen 
-		void draw(sf::RenderWindow&) const;
+	// draw level onto sfml screen 
+	void draw(sf::RenderWindow&) const;
 
-		// track player collisions 
-		void collisions(Player&);
-		// track enemy collisions 
-		//void collisions(Enemy&);
+	void setMap(sf::Vector2i, int);
 
-		void update(const float&);
+	// track player collisions 
+	void collisions(Player&);
+	// track enemy collisions 
+	//void collisions(Enemy&);
 
-		Tile* getTilemap();
-		sf::Vector2i getClosestTile(const sf::Vector2f&);
-	private:
-		const int MAP_LENGTH = 31;
-		const int MAP_HEIGHT = 13;
-		const int BORDER_COUNT = 92;
+	void update(const float&, int);
+  
+  Tile* getTilemap();
+	sf::Vector2i getClosestTile(const sf::Vector2f&);
+private:
+	const int MAP_LENGTH = 31;
+	const int MAP_HEIGHT = 13;
+	const int BORDER_COUNT = 92;
 
-		Tile* tilemap[31][13];
-		Tile* border[92];
+	int datamap[31][13];
+	Tile* tilemap[31][13];
+	Tile* border[92];
 
-		std::vector<Enemy*> enemies;
-		PowerUp* powerup; 
+	std::vector<Enemy*> enemies;
 };

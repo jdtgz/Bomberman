@@ -21,7 +21,7 @@ class Tile
 
 		tileType::ID getType() const;
 		void setTile(const tileType::ID&);
-		void destroy(); 
+		void interact();
 
 		void draw(sf::RenderWindow&) const;
 
