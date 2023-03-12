@@ -8,8 +8,7 @@ public:
 	Bomb(int x, int y, int range, bool timer);
 	~Bomb();
 
-	//Can accept sf::RenderWindow and sf::RenderTexture
-	void draw(sf::RenderTarget& target);
+	void draw(sf::RenderWindow& target);
 	void explode();
 
 	void update(float dt);
@@ -23,13 +22,14 @@ public:
 	bool isBombColliding(sf::Sprite& sprite);
 	//Returns true if the explosion is colliding with sprite
 	bool isExplosionColliding(sf::Sprite& sprite);
+	bool datamapExplosionCollision(int datamap[31][13]);
 	//returns true only if explosion is active
 	bool isEntityColliding(sf::Sprite& sprite);
 
-	//Accepts a window and rendertexture
-	void showCollisions(sf::RenderWindow& target);
+	void showCollisions(sf::RenderWindow& window);
 
 private:
+	/* Main bomb info */
 	enum class animationIndex
 	{
 		BOMB,
@@ -60,5 +60,11 @@ private:
 	bool m_explosion_finished;
 
 	float scaled_size = 16 * 3;
+
+
+	//How far the explosion can go.
+	// [0] N -> [1] E -> [2] S -> [3] W
+	//Default will be m_range
+	int m_exploding_range[4];
 };
 
