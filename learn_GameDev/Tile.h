@@ -14,26 +14,26 @@ namespace tileType
 
 class Tile
 {
-	public:
-		Tile() = default; 
-		Tile(const int&, const int&, const tileType::ID&);
-		~Tile();
+public:
+	Tile() = default; 
+	Tile(const int&, const int&, const tileType::ID&);
+	~Tile();
 
-		tileType::ID getType() const;
-		void setTile(const tileType::ID&);
-		void interact();
+	tileType::ID getType() const;
+	void setTile(const tileType::ID&);
+	void interact();
 
-		void draw(sf::RenderWindow&) const;
+	void draw(sf::RenderWindow&) const;
 
 		// collision detection
-		void detectCollision(Player&,
-			const tileType::ID&, const tileType::ID&,
-			const tileType::ID&, const tileType::ID&);
+	void detectCollision(Player&,
+		const tileType::ID&, const tileType::ID&,
+		const tileType::ID&, const tileType::ID&);
 
-		sf::Vector2f getPosition() const;
+	sf::Vector2f getPosition() const;
 
-	protected: 
-		sf::Sprite mSprite; 
-		Animation blowUp; 
-		tileType::ID type;
+protected: 
+	sf::Sprite sprite; 
+	Animation blowUp; 
+	tileType::ID type;
 };

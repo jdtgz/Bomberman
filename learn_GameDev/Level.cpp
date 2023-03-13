@@ -1,6 +1,7 @@
 #include "Level.h"
 #include <math.h>
 #include "Valcom.h"
+#include "Door.h"
 
 
 Level::Level()
@@ -39,12 +40,12 @@ Level::Level()
 	{
 		if (i < MAP_LENGTH + 2)
 		{
-			border[i] = new Tile(xPos, 48, tileType::TILE);
+			border[i] = new Tile(xPos, 50, tileType::TILE);
 			xPos += 48;
 		}
 		else if (i < MAP_LENGTH + MAP_LENGTH + 4)
 		{
-			border[i] = new Tile(xPos - 48, (MAP_HEIGHT + 2) * 48, tileType::TILE);
+			border[i] = new Tile(xPos - 48, MAP_HEIGHT * 48 + 100, tileType::TILE);
 			xPos -= 48;
 		}
 		else
@@ -59,8 +60,7 @@ Level::Level()
 		}
 	}
 
-
-	enemies.push_back(new Valcom(sf::Vector2i(0, 0)));
+	//enemies.push_back(new Valcom(sf::Vector2i(0, 0)));
 }
 
 
@@ -81,7 +81,7 @@ Level::~Level()
 
 void Level::generate(const int& levelNum)
 {
-	int random = 0, randX = 0, randY = 0, totalSoftBlock = 0, i = 0;
+	int totalBrickCount = 0, targetBrick = 0, i = 0;
 	//int enemies = 0;
 
 	for (int x = 0; x < MAP_LENGTH; x++)
@@ -90,11 +90,12 @@ void Level::generate(const int& levelNum)
 		{
 			if (!(x % 2 != 0 && y % 2 != 0) && x + y > 1) // keep top left corner open
 			{
-				random = rand() % 4;
-				if (random == 1)
+				//Reset on regeneration
+				datamap[x][y] = tileType::AIR;
+
+				if (rand() % 4 == 1)
 				{
-					totalSoftBlock++;
-					tilemap[x][y]->setTile(tileType::BRICK);
+					totalBrickCount++;
 					datamap[x][y] = tileType::BRICK;
 				}
 			}
@@ -112,7 +113,7 @@ void Level::generate(const int& levelNum)
 	}
 
 	//PowerUp Set
-	random = rand % totalSoftBlock; //pick random soft block
+	targetBrick = rand % totalBrickCount; //pick random brick block
 
 	for (int x = 0; x < mapLength; x++)
 	{
@@ -120,26 +121,29 @@ void Level::generate(const int& levelNum)
 		{
 			if(tilemap[x][y]->getType() == 1)
 				i++;
-			if(random == i)
+			if(targetBrick == i)
 				// set x,y to a powerup
 		}
 	}
+	*/
 
-	//Exit Set
-	random = rand % totalSoftBlock; //pick random soft block
+	targetBrick = rand() % totalBrickCount + 1; //pick random brick block
 	i = 0;
 
-	for (int x = 0; x < mapLength; x++)
+	for (int x = 0; x < MAP_LENGTH; x++)
 	{
-		for (int y = 0; y < mapHeight; y++)
+		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			if(tilemap[x][y]->getType() == 1)
+			if (tilemap[x][y]->getType() == tileType::BRICK)
 				i++;
-			if(random == i)
-				// set x,y to a exit
+			if (targetBrick == i)
+			{
+				i++;
+				std::cout << "DOOR: " << x << ", " << y << '\n';
+				datamap[x][y] = tileType::DOOR;
+			}
 		}
 	}
-  */
 }
 
 
@@ -176,6 +180,7 @@ void Level::draw(sf::RenderWindow& window) const
 		enemies[i]->draw(window);
 
 }
+
 
 void Level::setMap(sf::Vector2i pos, int type)
 {
@@ -252,6 +257,4 @@ void Level::update(const float& dt, int flameRange)
 			tilemap[a][b]->setTile((tileType::ID)datamap[a][b]);
 		}
 	}
-	
 }
-

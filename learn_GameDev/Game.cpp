@@ -9,15 +9,16 @@ Game::Game() : startMenu(true)
 	window = new sf::RenderWindow(sf::VideoMode(750, 750), "Bomberman");
 	window->setFramerateLimit(144);
 
-	//Generate the level
-	level.generate(levelNumber);
-
 	view.setSize(sf::Vector2f(window->getSize()));
 
 	player.getSprite().setPosition(48 * 31 / 2, 48 * 13 / 2);
 
 	tempBomb.x = -1;
 	tempBomb.y = -1;
+
+	//Generate the level
+	levelNumber = 0;
+	level.generate(levelNumber);
 }
 
 
@@ -59,6 +60,9 @@ void Game::run()
 			//Tick
 			update(timePerFrame); 
 		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+			level.generate(levelNumber);
 
 		//Display updated gamestate
 		render();

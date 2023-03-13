@@ -4,22 +4,21 @@
 class StartMenu
 {
 public:
-	StartMenu(bool active = true);
+	StartMenu(const bool&);
 
-	bool isActive() const { return m_active; }
+	bool isActive() const { return active; }
 
 	void update();
 	void draw(sf::RenderWindow& window);
 private:
 	//Logo
-	sf::Texture m_menu_logo;
-	sf::Sprite m_logo_sprite;
+	sf::Texture menuLogo;
+	sf::Sprite logoSprite;
 	
 	//Buttons
-	sf::Text m_start_button;
-	sf::Font m_font;
+	sf::Text startButton;
+	sf::Font font;
 
 	//Is menu still active
-	bool m_active;
+	bool active;
 };
-

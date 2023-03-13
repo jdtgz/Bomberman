@@ -1,17 +1,11 @@
 #include "PowerUp.h"
 
 
-PowerUp::PowerUp(const int& typ)
+PowerUp::PowerUp(const int& x, const int& y, const int& typ)
+	: Tile(x, y, tileType::POWERUP)
 {
-	// initialize the "fake" mSprite
-	mSprite.setTexture(TextureHolder::get(textures::ITEMS)); 
-	setTile(tileType::BRICK);
-
-	// set the "real" type to ensure it is not treated like a brick in level
-	type = tileType::POWERUP; 
-
-	// set the type of powerup it is 
-	powerUpType = typ; 
+	powerUpType = typ;
+	revealed = false;
 }
 
 
@@ -29,35 +23,35 @@ void PowerUp::revealPowerUp()
 	switch (type)
 	{
 		case powerups::BOMB_UP:
-			mSprite.setTextureRect({ 0, 48, 16, 16 });
+			sprite.setTextureRect({ 0, 48, 16, 16 });
 			std::cout << "BOMB UP\n";
 			break;
 		case powerups::FLAME_UP:
-			mSprite.setTextureRect({ 16, 48, 16, 16 });
+			sprite.setTextureRect({ 16, 48, 16, 16 });
 			std::cout << "FLAME UP\n";
 			break;
 		case powerups::SPEED_UP:
-			mSprite.setTextureRect({ 32, 48, 16, 16 });
+			sprite.setTextureRect({ 32, 48, 16, 16 });
 			std::cout << "SPEED UP\n";
 			break;
 		case powerups::WALL_PASS:
-			mSprite.setTextureRect({ 48, 48, 16, 16 });
+			sprite.setTextureRect({ 48, 48, 16, 16 });
 			std::cout << "WALL PASS\n";
 			break;
 		case powerups::DETONATOR:
-			mSprite.setTextureRect({ 64, 48, 16, 16 });
+			sprite.setTextureRect({ 64, 48, 16, 16 });
 			std::cout << "DETONATOR\n";
 			break;
 		case powerups::BOMB_PASS:
-			mSprite.setTextureRect({ 80, 48, 16, 16 });
+			sprite.setTextureRect({ 80, 48, 16, 16 });
 			std::cout << "BOMB PASS\n";
 			break;
 		case powerups::FLAME_PASS:
-			mSprite.setTextureRect({ 96, 48, 16, 16 });
+			sprite.setTextureRect({ 96, 48, 16, 16 });
 			std::cout << "FLAME PASS\n";
 			break;
 		case powerups::INVINCIBILITY:
-			mSprite.setTextureRect({ 112, 48, 16, 16 });
+			sprite.setTextureRect({ 112, 48, 16, 16 });
 			std::cout << "INVINCIBLE\n";
 			break;
 	}
