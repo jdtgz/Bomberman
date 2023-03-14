@@ -10,6 +10,7 @@ Tile::Tile(const int& x, const int& y, const tileType::ID& typ)
 
 	// blow up animation ONLY for tileType::BRICK
 	blowUp.setUp(TextureHolder::get(textures::ITEMS), 0, 16 * 2, 16, 16, 6); 
+	blowUp.showOnce(); 
 
 	// place the tile 
 	mSprite.setPosition(x, y);
@@ -43,18 +44,21 @@ void Tile::draw(sf::RenderWindow& window) const
 // updates the block's display 
 void Tile::update(const float& dt)
 {
+	std::cout << "Update";
 	// initiate the blowUp animation IF the tile has been destoryed 
 	if (destroyed == true && type == tileType::BRICK)
 	{
+		std::cout << "Animate";
 		// display one cycle of the blowUp animation
-		while (blowUp.getCurrentFrame() <= 6)
+		blowUp.applyToSprite(mSprite);
+		blowUp.update(dt); 
+	
+		if (blowUp.getCurrentFrame() == 5)
 		{
-			blowUp.applyToSprite(mSprite);
-			blowUp.update(dt); 
+			// set the tile to air 
+			setTile(tileType::AIR);
 		}
-
-		// set the tile to air 
-		setTile(tileType::AIR);
+		
 	}
 }
 

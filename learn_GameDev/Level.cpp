@@ -191,8 +191,6 @@ void Level::setMap(sf::Vector2i pos, int type)
 //Detect collisions between player and tile
 void Level::collisions(Player& plr)
 {
-	getClosestTile(plr.getSprite().getPosition());
-
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 			tilemap[x][y]->detectCollision(plr,
@@ -254,7 +252,8 @@ void Level::update(const float& dt, int flameRange)
 	{
 		for (int b = 0; b < MAP_HEIGHT; b++)
 		{
-			tilemap[a][b]->setTile((tileType::ID)datamap[a][b]);
+			tilemap[a][b]->update(dt);
+			//tilemap[a][b]->setTile((tileType::ID)datamap[a][b]);
 		}
 	}
 }

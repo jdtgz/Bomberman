@@ -127,7 +127,7 @@ void Game::update(const sf::Time& dt)
 		}
 
 		//update data map for all exploding tiles
-		level.setMap(player.getExplotionPosition(), 0); // constantly called for 0,0 bug
+		//level.setMap(player.getExplotionPosition(), 0); // constantly called for 0,0 bug
 
 		level.update(dt.asSeconds(), player.getFlameRange());
 	}
