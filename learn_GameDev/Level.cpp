@@ -1,7 +1,6 @@
 #include "Level.h"
 #include <math.h>
 #include "Valcom.h"
-#include "Door.h"
 
 
 Level::Level()
