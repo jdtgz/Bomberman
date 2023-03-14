@@ -30,7 +30,6 @@ class Player
 		void update(const float&);
 		void setVelocity(const int&, const int&);
 		sf::Vector2f getVelocity() const;
-		float getSpeed() const;
 		void detonate(); 
 		sf::Vector2i getExplotionPosition();
 
@@ -42,28 +41,29 @@ class Player
 		sf::Sprite getSprite() const;
 
 		// powerup/player attributes 
-		int getBombCount(); 
-		void plusBombCount(); 
+		int getBombCount() const; 
+		void plusBomb(); 
 
-		int getFlameRange(); 
-		void plusFlameRange(); 
+		int getFlameRange() const; 
+		void plusFlame(); 
 
-		bool wallPass_status();
+		float getSpeed() const;
+		void plusSpeed(); 
+
+		bool wallPass_status() const;
 		void activate_wallPass(); 
-
-		bool detonator_status();
+		 
+		bool detonator_status() const;
 		void activate_detonator();
 
-		bool bombPass_status(); 
+		bool bombPass_status() const; 
 		void activate_bombPass(); 
 
-		bool flamePass_status(); 
+		bool flamePass_status() const; 
 		void activate_flamePass(); 
 
-		bool invincible_status(); 
-		void activate_invincible(); 
-		void stop_invincible(); 
-		
+		bool invincible_status() const; 
+		void activate_invincible(); 		
 
 	private:
 		// Visual attributes

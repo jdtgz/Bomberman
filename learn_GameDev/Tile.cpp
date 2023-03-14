@@ -2,17 +2,17 @@
 
 
 // place a tile of type t at (xCoord, yCoord)
-Tile::Tile(const int& x, const int& y, const tileType::ID& t)
+Tile::Tile(const int& x, const int& y, const tileType::ID& typ)
 {
 	// load the texture and set the sprite for tile
-	sprite.setTexture(TextureHolder::get(textures::ITEMS));
-	setTile(t);
+	mSprite.setTexture(TextureHolder::get(textures::ITEMS));
+	setTile(typ);
 
 	// blow up animation ONLY for tileType::BRICK
 	blowUp.setUp(TextureHolder::get(textures::ITEMS), 0, 16 * 2, 16, 16, 6); 
 
 	// place the tile 
-	sprite.setPosition(x, y);
+	mSprite.setPosition(x, y);
 }
 
 
@@ -22,16 +22,40 @@ Tile::~Tile()
 }
 
 
-//Tile interactions
+//Tile interactions when colliding with a bomb/explosion
 void Tile::interact()
 {
+	if (type == tileType::BRICK)
+	{
+		// destory the brick 
+		destroyed = true; 
+	}
 }
 
 
 //Draws the tile to the screen
 void Tile::draw(sf::RenderWindow& window) const
 {
-	window.draw(sprite);
+	window.draw(mSprite);
+}
+
+
+// updates the block's display 
+void Tile::update(const float& dt)
+{
+	// initiate the blowUp animation IF the tile has been destoryed 
+	if (destroyed == true && type == tileType::BRICK)
+	{
+		// display one cycle of the blowUp animation
+		while (blowUp.getCurrentFrame() <= 6)
+		{
+			blowUp.applyToSprite(mSprite);
+			blowUp.update(dt); 
+		}
+
+		// set the tile to air 
+		setTile(tileType::AIR);
+	}
 }
 
 
@@ -43,10 +67,6 @@ tileType::ID Tile::getType() const
 
 
 //Given an tileID, set the proper textureRect & scale it 
-
-//
-// 
-//REMOVE AND TYPECAST
 void Tile::setTile(const tileType::ID& t)
 {
 	type = t;
@@ -54,19 +74,21 @@ void Tile::setTile(const tileType::ID& t)
 	{
 		//put anything related to tile type changes here
 		case tileType::AIR:
-			sprite.setTextureRect({ 16 * 6, 16 * 2, 16, 16 });
+			mSprite.setTextureRect({ 16 * 6, 16 * 2, 16, 16 });
 			break;
 		case tileType::BRICK:
-		case tileType::POWERUP:
-			sprite.setTextureRect({ 16 * 1,16 * 1,16,16 });
+			mSprite.setTextureRect({ 16 * 1,16 * 1,16,16 });
 			break;
 		case tileType::TILE:
-			sprite.setTextureRect({ 16 * 0, 16, 16, 16 });
+			mSprite.setTextureRect({ 16 * 0, 16, 16, 16 });
 			break;
 		case tileType::DOOR:
-			sprite.setTextureRect({ 16 * 2, 16 * 1, 16, 16 });
+			mSprite.setTextureRect({ 16 * 1, 16 * 1, 16, 16 });
+			break; 
+		case tileType::POWERUP:
+			mSprite.setTextureRect({ 16 * 1,16 * 1,16,16 });
 	}
-	sprite.setScale(3, 3);
+	mSprite.setScale(3, 3);
 }
 
 
@@ -77,7 +99,7 @@ void Tile::detectCollision(Player& plr, const tileType::ID& u, const tileType::I
 {
 	//Get hitboxes
 	sf::FloatRect pB = plr.getBoundingBox();
-	sf::FloatRect tB = sprite.getGlobalBounds();
+	sf::FloatRect tB = mSprite.getGlobalBounds();
 
 	//For "auto correct" feature
 	const float NEAR = 0.3f; //x% from the top
@@ -144,5 +166,5 @@ void Tile::detectCollision(Player& plr, const tileType::ID& u, const tileType::I
 
 sf::Vector2f Tile::getPosition() const
 {
-	return sprite.getPosition();
+	return mSprite.getPosition();
 }

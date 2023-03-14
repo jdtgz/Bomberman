@@ -13,11 +13,17 @@ public:
 
 	// visual functions 
 	void revealPowerUp();
-	void setPowerType(const int&);
+	virtual void interact(); 
+	virtual void update(const float&); 
 
 	// utility funcitons 
 	void applyPowerUp(Player&);
 	void spawnEnemies(); 
+
+	// player collisions & powerUps involved 
+	virtual void detectCollision(Player&,
+		const tileType::ID&, const tileType::ID&,
+		const tileType::ID&, const tileType::ID&);
 private:
 	enum powerups
 	{
