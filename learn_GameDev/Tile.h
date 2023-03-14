@@ -4,15 +4,10 @@
 #include "TextureHolder.h"
 #include "Player.h"
 #include "Animation.h"
+#include "Enum.h"
 
 
-namespace tileType 
-{
-	enum ID { AIR = 0, BRICK, TILE, DOOR, POWERUP };
-}
-
-
-class Tile
+class Tile : public Collidable
 {
 	public:
 		Tile() = default; 
@@ -23,7 +18,7 @@ class Tile
 		void setTile(const tileType::ID&);
 		void interact();
 
-		void draw(sf::RenderWindow&) const;
+		void draw(sf::RenderWindow&);
 
 		// collision detection
 		void detectCollision(Player&,

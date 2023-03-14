@@ -33,8 +33,9 @@ void Tile::interact()
 
 
 //Draws the tile to the screen
-void Tile::draw(sf::RenderWindow& window) const
+void Tile::draw(sf::RenderWindow& window)
 {
+	Collidable::updateRect(mSprite.getGlobalBounds());
 	window.draw(mSprite);
 }
 
