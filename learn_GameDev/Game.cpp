@@ -61,9 +61,6 @@ void Game::run()
 			update(timePerFrame); 
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-			level.generate(levelNumber);
-
 		//Display updated gamestate
 		render();
 	}

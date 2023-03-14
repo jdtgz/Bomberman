@@ -133,7 +133,7 @@ void Level::generate(const int& levelNum)
 	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			if (tilemap[x][y]->getType() == tileType::BRICK)
+			if (datamap[x][y] == tileType::BRICK)
 				i++;
 			if (targetBrick == i)
 			{
