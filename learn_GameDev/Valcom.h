@@ -12,9 +12,10 @@ public:
 
 	~Valcom();
 private:
-	void init(const sf::Vector2i&, const dir&);
-
-	const double CLIPPING_MARGIN = 2.5;
-	int debounce;
+	int debounce = 0;
 	const int DEBOUNCE_MAX = 10;
+
+protected:
+	virtual void init(const sf::Vector2i&, const dir&);
+	virtual double getClippingMargin() const;
 };

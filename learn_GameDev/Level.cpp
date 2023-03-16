@@ -1,6 +1,7 @@
 #include "Level.h"
 #include <math.h>
 #include "Valcom.h"
+#include "ONeal.h"
 
 
 Level::Level()
@@ -59,7 +60,8 @@ Level::Level()
 		}
 	}
 
-	//enemies.push_back(new Valcom(sf::Vector2i(0, 0)));
+	enemies.push_back(new Valcom(sf::Vector2i(0, 0)));
+	enemies.push_back(new ONeal(sf::Vector2i(0, 0)));
 }
 
 

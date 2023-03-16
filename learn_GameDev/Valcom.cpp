@@ -17,8 +17,7 @@ Valcom::Valcom(const sf::Vector2i& tile, const dir& face)
 void Valcom::init(const sf::Vector2i& tile, const dir& face)
 {
 	heading = face;
-	moveSpeed = 3.f;
-	debounce = 0;
+	moveSpeed = 1.f;
 
 	sf::Texture* t = &TextureHolder::get(textures::PLAYER);
 
@@ -39,8 +38,8 @@ void Valcom::move(Tile* tilemap[31][13],
 	const sf::Vector2i& mapSize)
 {
 	//Update current tile position
-	tilePos = sf::Vector2i(sprite.getPosition().x / 50,
-		(sprite.getPosition().y - 100) / 50);
+	tilePos = sf::Vector2i(sprite.getPosition().x / 48,
+		(sprite.getPosition().y - 100) / 48);
 	
 	//Update current position or change heading
 	switch (heading)
@@ -79,7 +78,7 @@ void Valcom::move(Tile* tilemap[31][13],
 	{
 		if ((heading == dir::NORTH || heading == dir::SOUTH) &&
 			abs(sprite.getPosition().y -
-				tilemap[tilePos.x][tilePos.y]->getPosition().y) < CLIPPING_MARGIN &&
+				tilemap[tilePos.x][tilePos.y]->getPosition().y) < getClippingMargin() &&
 			sprite.getPosition().y >= tilemap[tilePos.x][tilePos.y]->getPosition().y)
 		{
 			//Go West
@@ -105,7 +104,7 @@ void Valcom::move(Tile* tilemap[31][13],
 		}
 		else if ((heading == dir::EAST || heading == dir::WEST) &&
 			abs(sprite.getPosition().x -
-				tilemap[tilePos.x][tilePos.y]->getPosition().x) < CLIPPING_MARGIN &&
+				tilemap[tilePos.x][tilePos.y]->getPosition().x) < getClippingMargin() &&
 			sprite.getPosition().x >= tilemap[tilePos.x][tilePos.y]->getPosition().x)
 		{
 			//Go North
@@ -140,6 +139,12 @@ void Valcom::update(const float& dt)
 	//update sprite
 
 	return;
+}
+
+
+double Valcom::getClippingMargin() const
+{
+	return 0.8;
 }
 
 
