@@ -190,7 +190,7 @@ void Level::collisions(Player& plr)
 
 	sf::Vector2f offset;
 	for (int x = 0; x < MAP_LENGTH; x++)
-		for (int y = 0; y < MAP_LENGTH; y++)
+		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
 			if (tilemap[x][y]->getType() != tileType::AIR)
 			{
@@ -209,32 +209,12 @@ void Level::collisions(Player& plr)
 
 				if (distance < 48 * 2)
 				{
-					if (plr.check(*tilemap[x][y], offset, sf::Vector2f()))
-					{
-					}
+					plr.check(*tilemap[x][y], offset, sf::Vector2f());
 				}
 			}
 		}
 
-	plr.move(offset.x, offset.y); 
-
-	//for (int x = 0; x < MAP_LENGTH; x++)
-	//	for (int y = 0; y < MAP_HEIGHT; y++)
-	//		tilemap[x][y]->detectCollision(plr,
-	//			y > 0 ? tilemap[x][y - 1]->getType() : tileType::TILE,
-	//			y < MAP_HEIGHT - 1 ? tilemap[x][y + 1]->getType() : tileType::TILE,
-	//			x > 0 ? tilemap[x - 1][y]->getType() : tileType::TILE,
-	//			x < MAP_LENGTH - 1 ? tilemap[x + 1][y]->getType() : tileType::TILE);
-	//
-	//for (int i = 0; i < BORDER_COUNT; i++)
-	//	border[i]->detectCollision(plr,
-	//		i < MAP_LENGTH + MAP_LENGTH + 4 && i >= MAP_LENGTH + 2 ?
-	//		tileType::AIR : tileType::TILE,
-	//		i < MAP_LENGTH + 2 ? tileType::AIR : tileType::TILE,
-	//		i % 2 == MAP_LENGTH % 2 && i >= MAP_LENGTH + MAP_LENGTH + 4 ?
-	//		tileType::AIR : tileType::TILE,
-	//		i % 2 != MAP_LENGTH % 2 && i >= MAP_LENGTH + MAP_LENGTH + 4 ?
-	//		tileType::AIR : tileType::TILE);
+	plr.move(offset.x, offset.y);
 }
 
 
