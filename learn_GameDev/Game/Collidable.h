@@ -12,10 +12,11 @@ public:
 
 	//Does the same as check(Collidable&), 
 	//but modifies the correction/offset accordingly
-	bool check(Collidable& other, sf::Vector2f& correction, const sf::Vector2f& velocity);
+	bool check(Collidable& other, sf::Vector2f& correction);
 
 	/* Gets the bounds of the collider */
 	const sf::FloatRect& getBounds() const;
+
 	/* Returns a RectangleShape in case you want to draw the collision to the screen */
 	sf::RectangleShape getVisualBounds();
 
