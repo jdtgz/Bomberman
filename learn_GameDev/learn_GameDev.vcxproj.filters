@@ -1,42 +1,118 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="Bomb.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="learn_GameDev.cpp" />
-    <ClCompile Include="Level.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PowerUp.cpp" />
-    <ClCompile Include="StartMenu.cpp" />
-    <ClCompile Include="TextureHolder.cpp" />
-    <ClCompile Include="Tile.cpp" />
-    <ClCompile Include="Valcom.cpp" />
-    <ClCompile Include="Collidable.cpp" />
-    <ClCompile Include="ONeal.cpp" />
-
+    <ClCompile Include="Enemies\Enemy.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemies\ONeal.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemies\Valcom.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\TextureHolder.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Animation.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Level.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Collidable.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile\Tile.cpp">
+      <Filter>Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile\PowerUp.cpp">
+      <Filter>Tiles</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\StartMenu.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile\Bomb.cpp">
+      <Filter>Tiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animation.h" />
-    <ClInclude Include="Bomb.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Level.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="PowerUp.h" />
-    <ClInclude Include="StartMenu.h" />
-    <ClInclude Include="TextureHolder.h" />
-    <ClInclude Include="Tile.h" />
-    <ClInclude Include="Valcom.h" />
-    <ClInclude Include="Collidable.h" />
     <ClInclude Include="Enum.h" />
-    <ClInclude Include="ONeal.h" />
+    <ClInclude Include="Enemies\Enemy.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemies\ONeal.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemies\Valcom.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\TextureHolder.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Animation.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Level.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Collidable.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile\Tile.h">
+      <Filter>Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile\PowerUp.h">
+      <Filter>Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\StartMenu.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile\Bomb.h">
+      <Filter>Tiles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="bomberman_enemies.png" />
-    <Image Include="bomberman_explosion.png" />
-    <Image Include="bomberman_items.png" />
-    <Image Include="bomberman_player.png" />
+    <Image Include="Textures\bomberman_player.png">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="Textures\bomberman_enemies.png">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="Textures\bomberman_explosion.png">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="Textures\bomberman_items.png">
+      <Filter>Textures</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Enemies">
+      <UniqueIdentifier>{9ca7e61c-93a9-4df3-a6a2-ea10923ad5ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{bc9a6fc3-57b8-4122-854d-6998a785e391}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures">
+      <UniqueIdentifier>{9b48f1f0-de22-4afe-a27d-266ef011f2e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{75594c86-6fea-440a-8207-5c3d76ebc235}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tiles">
+      <UniqueIdentifier>{7fe7a29c-acf3-48ca-a88c-b54b9f66de17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

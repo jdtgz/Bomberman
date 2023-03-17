@@ -55,7 +55,8 @@ void Level::generate(const int& levelNum)
 		for (int y = 0; y < MAP_HEIGHT - 1; y++)
 		{
 			if ((datamap[x][y] == tileType::AIR || datamap[x][y] == tileType::BRICK ||
-				datamap[x][y] == tileType::DOOR) && !(x == 1 && y == 1) &&
+				datamap[x][y] == tileType::DOOR) &&
+				(x + y - 2 > 1) &&
 				x >= 1 && y >= 1)
 			{
 				//Reset on regeneration
@@ -227,10 +228,9 @@ void Level::update(const float& dt, int flameRange)
 	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
+			tilemap[x][y]->update(dt);
 			if (datamap[x][y] != tilemap[x][y]->getType())
-			  tilemap[x][y]->setTile((tileType::ID)datamap[x][y]);
-        
-			  tilemap[x][y]->update(dt);
+				tilemap[x][y]->setTile((tileType::ID)datamap[x][y]);
 		}
 	}
 }
