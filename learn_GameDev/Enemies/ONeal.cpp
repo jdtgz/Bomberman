@@ -3,17 +3,17 @@
 
 ONeal::ONeal(const sf::Vector2i& tile) : Valcom(tile)
 {
-	init(tile, dir::NORTH);
+	init(tile, directions::NORTH);
 }
 
 
-ONeal::ONeal(const sf::Vector2i& tile, const dir& face) : Valcom(tile)
+ONeal::ONeal(const sf::Vector2i& tile, const directions& face) : Valcom(tile)
 {
 	init(tile, face);
 }
 
 
-void ONeal::init(const sf::Vector2i& tile, const dir& face)
+void ONeal::init(const sf::Vector2i& tile, const directions& face)
 {
 	heading = face;
 	moveSpeed = 1.5f;
@@ -23,7 +23,7 @@ void ONeal::init(const sf::Vector2i& tile, const dir& face)
 	anims[int(animIndex::LEFT)].setUp(*t, 0, 16 * 4, 16, 16, 3);
 	anims[int(animIndex::DEATH)].setUp(*t, 0, 16 * 5, 16, 16, 5);
 
-	if (face == dir::WEST)
+	if (face == directions::WEST)
 		curAnim = animIndex::LEFT;
 	else
 		curAnim = animIndex::RIGHT;

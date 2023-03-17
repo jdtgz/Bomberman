@@ -3,6 +3,7 @@
 #include "../Graphics/TextureHolder.h"
 #include "../Graphics/Animation.h"
 #include "../Tile/Tile.h"
+#include "../Enum.h"
 
 class Enemy
 {
@@ -34,8 +35,7 @@ protected:
 	Animation anims[int(animIndex::COUNT)];
 	animIndex curAnim;
 
-	enum dir { NORTH = 0, EAST, SOUTH, WEST };
-	dir heading;
+	directions heading;
 
 	bool alive;
 	float moveSpeed;
