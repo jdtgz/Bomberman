@@ -22,7 +22,7 @@ public:
 	virtual void interact();
 
 	// game funcitons 
-	void draw(sf::RenderWindow&) const;
+	void draw(sf::RenderWindow&);
 	virtual void update(const float&); 
 
 	// collision detection
