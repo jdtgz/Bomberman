@@ -2,10 +2,11 @@
 #include <SFML/Graphics.hpp>
 #include "../Graphics/TextureHolder.h"
 #include "../Graphics/Animation.h"
+#include "../Game/Collidable.h"
 #include "../Tile/Tile.h"
 #include "../Enum.h"
 
-class Enemy
+class Enemy : public Collidable
 {
 public:
 	Enemy();
@@ -26,8 +27,6 @@ protected:
 	{
 		LEFT = 0,
 		RIGHT,
-		UP,
-		DOWN,
 		DEATH,
 		COUNT
 	};

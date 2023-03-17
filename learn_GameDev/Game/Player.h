@@ -26,9 +26,6 @@ class Player : public Collidable
 		void setVelocity(const int&, const int&);
 		sf::Vector2f getVelocity() const;
 
-		void detonate(); 
-		sf::Vector2i getExplosionPosition();
-
 		//Collision
 		void move(const float&, const float&);
 		void setCanMove(const int&, const bool&);

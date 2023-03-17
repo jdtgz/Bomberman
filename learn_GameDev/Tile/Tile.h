@@ -25,11 +25,6 @@ public:
 	void draw(sf::RenderWindow&);
 	virtual void update(const float&); 
 
-	// collision detection
-	virtual void detectCollision(Player&,
-		const tileType::ID&, const tileType::ID&,
-		const tileType::ID&, const tileType::ID&);
-
 	sf::Vector2f getPosition() const;
 
 protected: 

@@ -1,12 +1,14 @@
 #include "Collidable.h"
 #include <iostream>
 
+
 bool Collidable::check(Collidable& other)
 {
     return m_rect.intersects(other.m_rect);
 }
 
-bool Collidable::check(Collidable& other, sf::Vector2f& v_correction, const sf::Vector2f& velocity)
+
+bool Collidable::check(Collidable& other, sf::Vector2f& v_correction)
 {
     sf::FloatRect inter;
     if (m_rect.intersects(other.m_rect, inter))
@@ -49,10 +51,12 @@ bool Collidable::check(Collidable& other, sf::Vector2f& v_correction, const sf::
     return false;
 }
 
+
 const sf::FloatRect& Collidable::getBounds() const
 {
     return m_rect;
 }
+
 
 sf::RectangleShape Collidable::getVisualBounds()
 {
@@ -64,6 +68,7 @@ sf::RectangleShape Collidable::getVisualBounds()
 
     return temp;
 }
+
 
 void Collidable::updateRect(sf::FloatRect rect)
 {

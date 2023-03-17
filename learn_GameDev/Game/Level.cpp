@@ -178,37 +178,12 @@ void Level::collisions(Player& plr)
 
 				if (distance < 48 * 2)
 				{
-					plr.check(*tilemap[x][y], offset, sf::Vector2f());
+					plr.check(*tilemap[x][y], offset);
 				}
 			}
 		}
 
 	plr.move(offset.x, offset.y);
-}
-
-
-sf::Vector2i Level::getClosestTile(const sf::Vector2f& v2)
-{
-	int x = 0, y = 0;
-	Tile* closestTile = tilemap[x][y];
-
-	for (int a = 0; a < MAP_LENGTH; a++)
-	{
-		for (int b = 0; b < MAP_HEIGHT; b++)
-		{
-			if (sqrt(pow(closestTile->getPosition().x - v2.x, 2) +
-				pow(closestTile->getPosition().y - v2.y, 2)) >
-				sqrt(pow(tilemap[a][b]->getPosition().x - v2.x, 2) +
-					pow(tilemap[a][b]->getPosition().y - v2.y, 2)))
-			{
-				closestTile = tilemap[a][b];
-				x = a;
-				y = b;
-			}
-		}
-	}
-
-	return sf::Vector2i(x, y);
 }
 
 
