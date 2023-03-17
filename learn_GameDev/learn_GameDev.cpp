@@ -3,7 +3,7 @@
 // used to remove the console window --> to bring console window back, 
 // put this in linker-->system: Windows (/SUBSYSTEM:WINDOWS)
 //#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
-#include "Game.h"
+#include "Game/Game.h"
 #include <iostream>
 
 

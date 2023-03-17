@@ -7,10 +7,10 @@ std::map<textures::id,
 
 TextureHolder::TextureHolder()
 {
-	load(textures::PLAYER, "bomberman_player.png");
-	load(textures::ITEMS, "bomberman_items.png");
-	load(textures::ENEMIES, "bomberman_enemies.png");
-	load(textures::EXPLOSION, "bomberman_explosion.png");
+	load(textures::PLAYER, "Textures/bomberman_player.png");
+	load(textures::ITEMS, "Textures/bomberman_items.png");
+	load(textures::ENEMIES, "Textures/bomberman_enemies.png");
+	load(textures::EXPLOSION, "Textures/bomberman_explosion.png");
 }
 
 

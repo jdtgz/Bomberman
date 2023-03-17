@@ -3,12 +3,12 @@
 
 StartMenu::StartMenu(const bool& actv)
 {
-	menuLogo.loadFromFile("Logo.png");
+	menuLogo.loadFromFile("Textures/Logo.png");
 
 	logoSprite.setTexture(menuLogo);
 	logoSprite.setOrigin(menuLogo.getSize().x / 2, 0);
 
-	font.loadFromFile("font.TTF");
+	font.loadFromFile("Textures/font.TTF");
 
 	startButton.setString("Start");
 	startButton.setFont(font);

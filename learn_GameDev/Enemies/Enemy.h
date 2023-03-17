@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "TextureHolder.h"
-#include "Animation.h"
-#include "Tile.h"
+#include "../Graphics/TextureHolder.h"
+#include "../Graphics/Animation.h"
+#include "../Tile/Tile.h"
 
 class Enemy
 {

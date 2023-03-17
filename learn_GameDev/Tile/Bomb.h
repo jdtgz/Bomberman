@@ -1,6 +1,6 @@
 #pragma once
-#include "TextureHolder.h"
-#include "Animation.h"
+#include "../Graphics/TextureHolder.h"
+#include "../Graphics/Animation.h"
 
 class Bomb
 {

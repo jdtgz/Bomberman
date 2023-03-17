@@ -45,7 +45,7 @@ void Tile::draw(sf::RenderWindow& window)
 // updates the block's display 
 void Tile::update(const float& dt)
 {
-	std::cout << "Update";
+	//std::cout << "Update";
 	// initiate the blowUp animation IF the tile has been destoryed 
 	if (destroyed == true && type == tileType::BRICK)
 	{

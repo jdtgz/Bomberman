@@ -1,10 +1,10 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-#include "Animation.h"
-#include "TextureHolder.h"
-#include "Bomb.h"
+#include "../Graphics/Animation.h"
+#include "../Graphics/TextureHolder.h"
+#include "../Tile/Bomb.h"
 #include "Collidable.h"
-#include "Enum.h"
+#include "../Enum.h"
 
 
 class Player : public Collidable

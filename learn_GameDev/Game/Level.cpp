@@ -1,7 +1,7 @@
 #include "Level.h"
+#include "../Enemies/Valcom.h"
+#include "../Enemies/ONeal.h"
 #include <math.h>
-#include "Valcom.h"
-#include "ONeal.h"
 
 Level::Level()
 {

@@ -1,11 +1,11 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-#include "TextureHolder.h"
+#include "../Graphics/TextureHolder.h"
 #include "Player.h"
 #include "Level.h"
 #include "StartMenu.h"
+#include "../Tile/Bomb.h"
 
-#include "Bomb.h"
 
 class Game
 {

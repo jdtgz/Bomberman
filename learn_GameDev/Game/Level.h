@@ -1,10 +1,10 @@
 #pragma once
-#include "Tile.h"
 #include "SFML/Graphics.hpp"
 #include <vector>
-#include "Enemy.h"
-#include "Valcom.h"
-#include "PowerUp.h"
+#include "../Tile/Tile.h"
+#include "../Enemies/Enemy.h"
+#include "../Enemies/Valcom.h"
+#include "../Tile/Tile.h"
 
 class Level
 {

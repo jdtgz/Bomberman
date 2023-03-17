@@ -1,6 +1,6 @@
 #pragma once
-#include "iostream"
-#include "SFML/Graphics.hpp"
+#include <iostream>
+#include <SFML/Graphics.hpp>
 #include <string>
 
 namespace textures

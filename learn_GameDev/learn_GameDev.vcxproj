@@ -134,42 +134,42 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="Bomb.cpp" />
-    <ClCompile Include="Collidable.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Graphics\Animation.cpp" />
+    <ClCompile Include="Tile\Bomb.cpp" />
+    <ClCompile Include="Game\Collidable.cpp" />
+    <ClCompile Include="Enemies\Enemy.cpp" />
+    <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="learn_GameDev.cpp" />
-    <ClCompile Include="Level.cpp" />
-    <ClCompile Include="ONeal.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PowerUp.cpp" />
-    <ClCompile Include="StartMenu.cpp" />
-    <ClCompile Include="TextureHolder.cpp" />
-    <ClCompile Include="Tile.cpp" />
-    <ClCompile Include="Valcom.cpp" />
+    <ClCompile Include="Game\Level.cpp" />
+    <ClCompile Include="Enemies\ONeal.cpp" />
+    <ClCompile Include="Game\Player.cpp" />
+    <ClCompile Include="Tile\PowerUp.cpp" />
+    <ClCompile Include="Game\StartMenu.cpp" />
+    <ClCompile Include="Graphics\TextureHolder.cpp" />
+    <ClCompile Include="Tile\Tile.cpp" />
+    <ClCompile Include="Enemies\Valcom.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animation.h" />
-    <ClInclude Include="Bomb.h" />
-    <ClInclude Include="Collidable.h" />
-    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Graphics\Animation.h" />
+    <ClInclude Include="Tile\Bomb.h" />
+    <ClInclude Include="Game\Collidable.h" />
+    <ClInclude Include="Enemies\Enemy.h" />
     <ClInclude Include="Enum.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Level.h" />
-    <ClInclude Include="ONeal.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="PowerUp.h" />
-    <ClInclude Include="StartMenu.h" />
-    <ClInclude Include="TextureHolder.h" />
-    <ClInclude Include="Tile.h" />
-    <ClInclude Include="Valcom.h" />
+    <ClInclude Include="Game\Game.h" />
+    <ClInclude Include="Game\Level.h" />
+    <ClInclude Include="Enemies\ONeal.h" />
+    <ClInclude Include="Game\Player.h" />
+    <ClInclude Include="Tile\PowerUp.h" />
+    <ClInclude Include="Game\StartMenu.h" />
+    <ClInclude Include="Graphics\TextureHolder.h" />
+    <ClInclude Include="Tile\Tile.h" />
+    <ClInclude Include="Enemies\Valcom.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="bomberman_enemies.png" />
-    <Image Include="bomberman_explosion.png" />
-    <Image Include="bomberman_items.png" />
-    <Image Include="bomberman_player.png" />
+    <Image Include="Textures\bomberman_enemies.png" />
+    <Image Include="Textures\bomberman_explosion.png" />
+    <Image Include="Textures\bomberman_items.png" />
+    <Image Include="Textures\bomberman_player.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
