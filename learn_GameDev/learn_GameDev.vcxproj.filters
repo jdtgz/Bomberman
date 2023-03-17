@@ -13,6 +13,7 @@
     <ClCompile Include="TextureHolder.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Valcom.cpp" />
+    <ClCompile Include="ONeal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -26,6 +27,7 @@
     <ClInclude Include="TextureHolder.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Valcom.h" />
+    <ClInclude Include="ONeal.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="bomberman_enemies.png" />
