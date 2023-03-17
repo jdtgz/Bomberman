@@ -4,17 +4,17 @@
 
 Valcom::Valcom(const sf::Vector2i& tile)
 {
-	init(tile, dir::NORTH);
+	init(tile, directions::NORTH);
 }
 
 
-Valcom::Valcom(const sf::Vector2i& tile, const dir& face)
+Valcom::Valcom(const sf::Vector2i& tile, const directions& face)
 {
 	init(tile, face);
 }
 
 
-void Valcom::init(const sf::Vector2i& tile, const dir& face)
+void Valcom::init(const sf::Vector2i& tile, const directions& face)
 {
 	heading = face;
 	moveSpeed = 1.f;
@@ -24,7 +24,7 @@ void Valcom::init(const sf::Vector2i& tile, const dir& face)
 	anims[int(animIndex::LEFT)].setUp(* t, 0, 16 * 1, 16, 16, 3);
 	anims[int(animIndex::DEATH)].setUp(*t, 0, 16 * 2, 16, 16, 5);
 
-	if (face == dir::WEST)
+	if (face == directions::WEST)
 		curAnim = animIndex::LEFT;
 	else
 		curAnim = animIndex::RIGHT;
@@ -45,37 +45,37 @@ void Valcom::move(Tile* tilemap[33][15],
 	//Update current position or change heading
 	switch (heading)
 	{
-	case NORTH:
+	case directions::NORTH:
 		if (tilePos.y >= 0 && sprite.getPosition().y >= 100 &&
 			tilemap[tilePos.x + 1][tilePos.y + 1]->getType() == tileType::AIR)
 			sprite.move(0, -moveSpeed);
 		else
-			heading = SOUTH;
+			heading = directions::SOUTH;
 		break;
-	case SOUTH:
+	case directions::SOUTH:
 		if (tilePos.y < mapSize.y - 2 && sprite.getPosition().y < 48 * 12 + 100 &&
 			tilemap[tilePos.x + 1][tilePos.y + 2]->getType() == tileType::AIR)
 			sprite.move(0, moveSpeed);
 		else
-			heading = NORTH;
+			heading = directions::NORTH;
 		break;
-	case EAST:
+	case directions::EAST:
 		if (tilePos.x >= 0 && sprite.getPosition().x < 48 * 30 &&
 			tilemap[tilePos.x + 2][tilePos.y + 1]->getType() == tileType::AIR)
 			sprite.move(moveSpeed, 0);
 		else
 		{
-			heading = WEST;
+			heading = directions::WEST;
 			curAnim = animIndex::LEFT;
 		}
 		break;
-	case WEST:
+	case directions::WEST:
 		if (tilePos.x < mapSize.x - 1 && sprite.getPosition().x >= 0 &&
 			tilemap[tilePos.x + 1][tilePos.y + 1]->getType() == tileType::AIR)
 			sprite.move(-moveSpeed, 0);
 		else
 		{
-			heading = EAST;
+			heading = directions::EAST;
 			curAnim = animIndex::RIGHT;
 		}
 	}
@@ -83,10 +83,11 @@ void Valcom::move(Tile* tilemap[33][15],
 	//Change direction
 	if (rand() % 10 < 8 && debounce >= DEBOUNCE_MAX)
 	{
-		if ((heading == dir::NORTH || heading == dir::SOUTH) &&
+		if ((heading == directions::NORTH || heading == directions::SOUTH) &&
 			abs(sprite.getPosition().y -
-				tilemap[tilePos.x + 1][tilePos.y + 1]->getPosition().y) < getClippingMargin() &&
-			sprite.getPosition().y >= tilemap[tilePos.x + 1][tilePos.y + 1]->getPosition().y)
+				tilemap[tilePos.x + 1][tilePos.y + 1]->getPosition().y) <
+			getClippingMargin() && sprite.getPosition().y >=
+			tilemap[tilePos.x + 1][tilePos.y + 1]->getPosition().y)
 		{
 			//Go West
 			if (rand() % 2)
@@ -94,7 +95,7 @@ void Valcom::move(Tile* tilemap[33][15],
 				if (tilePos.x > 1 &&
 					tilemap[tilePos.x][tilePos.y + 1]->getType() == tileType::AIR)
 				{
-					heading = dir::WEST;
+					heading = directions::WEST;
 					debounce = 0;
 				}
 			}
@@ -104,15 +105,16 @@ void Valcom::move(Tile* tilemap[33][15],
 				if (tilePos.x < mapSize.x - 2 &&
 					tilemap[tilePos.x + 2][tilePos.y + 1]->getType() == tileType::AIR)
 				{
-					heading = dir::EAST;
+					heading = directions::EAST;
 					debounce = 0;
 				}
 			}
 		}
-		else if ((heading == dir::EAST || heading == dir::WEST) &&
+		else if ((heading == directions::EAST || heading == directions::WEST) &&
 			abs(sprite.getPosition().x -
-				tilemap[tilePos.x + 1][tilePos.y + 1]->getPosition().x) < getClippingMargin() &&
-			sprite.getPosition().x >= tilemap[tilePos.x + 1][tilePos.y + 1]->getPosition().x)
+				tilemap[tilePos.x + 1][tilePos.y + 1]->getPosition().x) <
+			getClippingMargin() && sprite.getPosition().x >=
+			tilemap[tilePos.x + 1][tilePos.y + 1]->getPosition().x)
 		{
 			//Go North
 			if (rand() % 2)
@@ -120,7 +122,7 @@ void Valcom::move(Tile* tilemap[33][15],
 				if (tilePos.y > 1 &&
 					tilemap[tilePos.x + 1][tilePos.y]->getType() == tileType::AIR)
 				{
-					heading = dir::NORTH;
+					heading = directions::NORTH;
 					debounce = 0;
 				}
 			}
@@ -130,7 +132,7 @@ void Valcom::move(Tile* tilemap[33][15],
 				if (tilePos.y < mapSize.y - 2 &&
 					tilemap[tilePos.x + 1][tilePos.y + 2]->getType() == tileType::AIR)
 				{
-					heading = dir::SOUTH;
+					heading = directions::SOUTH;
 					debounce = 0;
 				}
 			}

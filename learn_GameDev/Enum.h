@@ -1,10 +1,6 @@
 #pragma once
 
-namespace directions
-{
-	// directions 
-	enum ID { RIGHT = 0, LEFT, UP, DOWN, COUNT };
-}
+enum directions { NORTH = 0, EAST, SOUTH, WEST, COUNT };
 
 namespace tileType
 {

@@ -53,36 +53,36 @@ sf::Vector2i Player::keyPressed(const sf::Keyboard::Key &key)
 	switch (key)
 	{
 		case sf::Keyboard::Up:
-			movement[directions::UP] = true;
+			movement[directions::NORTH] = true;
 			curAnimation = animIndex::WALKING_UP;
 			//Reset 'can moves' for all other directions
-			canMove[directions::RIGHT] = true; 
-			canMove[directions::LEFT] = true;
-			canMove[directions::DOWN] = true;
+			canMove[directions::EAST] = true; 
+			canMove[directions::WEST] = true;
+			canMove[directions::SOUTH] = true;
 			break;
 		case sf::Keyboard::Down:
-			movement[directions::DOWN] = true;
+			movement[directions::SOUTH] = true;
 			curAnimation = animIndex::WALKING_DOWN;
 			//Reset 'can moves' for all other directions
-			canMove[directions::RIGHT] = true;
-			canMove[directions::LEFT] = true;
-			canMove[directions::UP] = true;
+			canMove[directions::EAST] = true;
+			canMove[directions::WEST] = true;
+			canMove[directions::NORTH] = true;
 			break;
 		case sf::Keyboard::Left:
-			movement[directions::LEFT] = true;
+			movement[directions::WEST] = true;
 			curAnimation = animIndex::WALKING_LEFT;
 			//Reset 'can moves' for all other directions
-			canMove[directions::UP] = true;
-			canMove[directions::DOWN] = true;
-			canMove[directions::RIGHT] = true;
+			canMove[directions::NORTH] = true;
+			canMove[directions::SOUTH] = true;
+			canMove[directions::EAST] = true;
 			break;
 		case sf::Keyboard::Right:
-			movement[directions::RIGHT] = true;
+			movement[directions::EAST] = true;
 			curAnimation = animIndex::WALKING_RIGHT;
 			//Reset 'can moves' for all other directions
-			canMove[directions::UP] = true;
-			canMove[directions::DOWN] = true;
-			canMove[directions::LEFT] = true;
+			canMove[directions::NORTH] = true;
+			canMove[directions::SOUTH] = true;
+			canMove[directions::WEST] = true;
 			break;
 		case sf::Keyboard::A:
 			for (int i = 0; i < bombCount; i++)
@@ -133,16 +133,16 @@ void Player::keyReleased(const sf::Keyboard::Key &key)
 	switch (key)
 	{
 	case sf::Keyboard::Up:
-		movement[directions::UP] = false;
+		movement[directions::NORTH] = false;
 		break;
 	case sf::Keyboard::Down:
-		movement[directions::DOWN] = false;
+		movement[directions::SOUTH] = false;
 		break;
 	case sf::Keyboard::Left:
-		movement[directions::LEFT] = false;
+		movement[directions::WEST] = false;
 		break;
 	case sf::Keyboard::Right:
-		movement[directions::RIGHT] = false;
+		movement[directions::EAST] = false;
 		break;
 	}
 }
@@ -163,8 +163,8 @@ void Player::draw(sf::RenderWindow& window) const
 void Player::update(const float& dt)
 {
 	// update animations 
-	if (movement[directions::UP] || movement[directions::DOWN] 
-		|| movement[directions::LEFT] || movement[directions::RIGHT])
+	if (movement[directions::NORTH] || movement[directions::SOUTH] 
+		|| movement[directions::WEST] || movement[directions::EAST])
 	{
 		animations[int(curAnimation)].update(dt);
 		animations[int(curAnimation)].applyToSprite(sprite);
@@ -172,11 +172,11 @@ void Player::update(const float& dt)
 
 	//Update velocity based on user input, move speed, and
 	//the directions the player can currently move in
-	int x = canMove[directions::LEFT] * movement[directions::LEFT] * -speed; 
-	x += canMove[directions::RIGHT] * movement[directions::RIGHT] * speed; 
+	int x = canMove[directions::WEST] * movement[directions::WEST] * -speed; 
+	x += canMove[directions::EAST] * movement[directions::EAST] * speed; 
 
-	int y = canMove[directions::UP] * movement[directions::UP] * -speed;
-	y += canMove[directions::DOWN] * movement[directions::DOWN] * speed;
+	int y = canMove[directions::NORTH] * movement[directions::NORTH] * -speed;
+	y += canMove[directions::SOUTH] * movement[directions::SOUTH] * speed;
 
 	setVelocity(x, y);
 

@@ -4,6 +4,7 @@
 #include "../Graphics/Animation.h"
 #include "../Game/Collidable.h"
 #include "../Tile/Tile.h"
+#include "../Enum.h"
 
 class Enemy : public Collidable
 {
@@ -33,8 +34,7 @@ protected:
 	Animation anims[int(animIndex::COUNT)];
 	animIndex curAnim;
 
-	enum dir { NORTH = 0, EAST, SOUTH, WEST };
-	dir heading;
+	directions heading;
 
 	bool alive;
 	float moveSpeed;
