@@ -82,7 +82,7 @@ void Game::processEvents()
 			case sf::Event::KeyPressed:
 				tempBomb = player.keyPressed(evnt.key.code);
 				if (tempBomb.x >= 0)
-					level.setMap(tempBomb, 4);
+					level.setMap(tempBomb, 0);
 				break;
 				//Tell the player when a key is released
 			case sf::Event::KeyReleased:

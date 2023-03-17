@@ -222,25 +222,6 @@ sf::Vector2f Player::getVelocity() const
 	return sf::Vector2f(xVel, yVel);
 }
 
-
-// detonate the oldest bomb
-void Player::detonate()
-{
-}
-
-
-sf::Vector2i Player::getExplosionPosition()
-{
-	for (int i = 0; i < bombs.size(); i++)
-	{
-		if (bombs[i]->getExploding())
-			return bombs[i]->getPosition();
-	}
-	
-	return sf::Vector2i();
-}
-
-
 //Move player sprite by x, y
 void Player::move(const float& x, const float& y)
 {
