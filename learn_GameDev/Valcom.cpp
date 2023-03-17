@@ -17,20 +17,21 @@ Valcom::Valcom(const sf::Vector2i& tile, const dir& face)
 void Valcom::init(const sf::Vector2i& tile, const dir& face)
 {
 	heading = face;
-	moveSpeed = 1.f;
+	moveSpeed = 1.0f;
 
-	sf::Texture* t = &TextureHolder::get(textures::PLAYER);
+	sf::Texture* t = &TextureHolder::get(textures::ENEMIES);
+	anims[int(animIndex::RIGHT)].setUp(*t, 0, 16 * 0, 16, 16, 3);
+	anims[int(animIndex::LEFT)].setUp(* t, 0, 16 * 1, 16, 16, 3);
+	anims[int(animIndex::DEATH)].setUp(*t, 0, 16 * 2, 16, 16, 5);
 
-	anims[int(animIndex::WALKING_LEFT)].setUp(*t, 0, 16 * 0, 12, 16, 3);
-	anims[int(animIndex::WALKING_RIGHT)].setUp(*t, 0, 16 * 1, 12, 16, 3);
-	anims[int(animIndex::WALKING_DOWN)].setUp(*t, 0, 16 * 2, 12, 16, 3);
-	anims[int(animIndex::WALKING_UP)].setUp(*t, 0, 16 * 3, 12, 16, 3);
-	anims[int(animIndex::DEATH)].setUp(*t, 0, 16 * 4, 16, 16, 7);
+	if (face == dir::WEST)
+		curAnim = animIndex::LEFT;
+	else
+		curAnim = animIndex::RIGHT;
 
-	curAnim = animIndex::WALKING_RIGHT;
 	anims[int(curAnim)].applyToSprite(sprite);
 
-	sprite.setPosition(50 * tile.x, 100 + 50 * tile.y);
+	sprite.setPosition(48 * tile.x, 100 + 48 * tile.y);
 }
 
 
@@ -63,14 +64,20 @@ void Valcom::move(Tile* tilemap[31][13],
 			tilemap[tilePos.x + 1][tilePos.y]->getType() == tileType::AIR)
 			sprite.move(moveSpeed, 0);
 		else
+		{
 			heading = WEST;
+			curAnim = animIndex::LEFT;
+		}
 		break;
 	case WEST:
 		if (tilePos.x < mapSize.x && sprite.getPosition().x >= 0 &&
 			tilemap[tilePos.x][tilePos.y]->getType() == tileType::AIR)
 			sprite.move(-moveSpeed, 0);
 		else
+		{
 			heading = EAST;
+			curAnim = animIndex::RIGHT;
+		}
 	}
 
 	//Change direction
@@ -136,7 +143,8 @@ void Valcom::update(const float& dt)
 {
 	debounce++;
 
-	//update sprite
+	anims[int(curAnim)].update(dt);
+	anims[int(curAnim)].applyToSprite(sprite);
 
 	return;
 }

@@ -16,20 +16,22 @@ ONeal::ONeal(const sf::Vector2i& tile, const dir& face) : Valcom(tile)
 void ONeal::init(const sf::Vector2i& tile, const dir& face)
 {
 	heading = face;
-	moveSpeed = 3.f;
+	moveSpeed = 1.5f;
 
-	sf::Texture* t = &TextureHolder::get(textures::PLAYER);
+	sf::Texture* t = &TextureHolder::get(textures::ENEMIES);
+	anims[int(animIndex::RIGHT)].setUp(*t, 0, 16 * 3, 16, 16, 3);
+	anims[int(animIndex::LEFT)].setUp(*t, 0, 16 * 4, 16, 16, 3);
+	anims[int(animIndex::DEATH)].setUp(*t, 0, 16 * 5, 16, 16, 5);
 
-	anims[int(animIndex::WALKING_LEFT)].setUp(*t, 0, 16 * 0, 12, 16, 3);
-	anims[int(animIndex::WALKING_RIGHT)].setUp(*t, 0, 16 * 1, 12, 16, 3);
-	anims[int(animIndex::WALKING_DOWN)].setUp(*t, 0, 16 * 2, 12, 16, 3);
-	anims[int(animIndex::WALKING_UP)].setUp(*t, 0, 16 * 3, 12, 16, 3);
-	anims[int(animIndex::DEATH)].setUp(*t, 0, 16 * 4, 16, 16, 7);
+	if (face == dir::WEST)
+		curAnim = animIndex::LEFT;
+	else
+		curAnim = animIndex::RIGHT;
 
-	curAnim = animIndex::WALKING_RIGHT;
+	curAnim = animIndex::RIGHT;
 	anims[int(curAnim)].applyToSprite(sprite);
 
-	sprite.setPosition(50 * tile.x, 100 + 50 * tile.y);
+	sprite.setPosition(48 * tile.x, 100 + 48 * tile.y);
 }
 
 

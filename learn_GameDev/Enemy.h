@@ -23,10 +23,10 @@ public:
 protected:
 	enum class animIndex
 	{
-		WALKING_LEFT = 0,
-		WALKING_RIGHT,
-		WALKING_DOWN,
-		WALKING_UP,
+		LEFT = 0,
+		RIGHT,
+		UP,
+		DOWN,
 		DEATH,
 		COUNT
 	};
