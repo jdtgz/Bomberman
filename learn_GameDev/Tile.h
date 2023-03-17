@@ -19,21 +19,31 @@ public:
 	Tile(const int&, const int&, const tileType::ID&);
 	~Tile();
 
+	// tile identification functions
 	tileType::ID getType() const;
 	void setTile(const tileType::ID&);
-	void interact();
+	
+	// based on a collision, take the appropriate action(s) 
+	virtual void interact();
 
+	// game funcitons 
 	void draw(sf::RenderWindow&) const;
+	virtual void update(const float&); 
 
-		// collision detection
-	void detectCollision(Player&,
+	// collision detection
+	virtual void detectCollision(Player&,
 		const tileType::ID&, const tileType::ID&,
 		const tileType::ID&, const tileType::ID&);
 
 	sf::Vector2f getPosition() const;
 
 protected: 
-	sf::Sprite sprite; 
+	// visual attributes 
+	sf::Sprite mSprite; 
 	Animation blowUp; 
+
+	// functionality attributes  
 	tileType::ID type;
+	bool destroyed; 
+
 };
