@@ -156,13 +156,33 @@ void Level::setMap(sf::Vector2i pos, int type)
 //Detect collisions between player and tile
 void Level::collisions(Player& plr)
 {
+	sf::Vector2f offset;
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
-			tilemap[x][y]->detectCollision(plr,
-				y > 0 ? tilemap[x][y - 1]->getType() : tileType::TILE,
-				y < MAP_HEIGHT - 1 ? tilemap[x][y + 1]->getType() : tileType::TILE,
-				x > 0 ? tilemap[x - 1][y]->getType() : tileType::TILE,
-				x < MAP_LENGTH - 1 ? tilemap[x + 1][y]->getType() : tileType::TILE);
+		{
+			if (tilemap[x][y]->getType() != tileType::AIR)
+			{
+				sf::Vector2f center_tile = {
+									tilemap[x][y]->getBounds().left + (tilemap[x][y]->getBounds().width / 2),
+									tilemap[x][y]->getBounds().top + (tilemap[x][y]->getBounds().height / 2)
+				};
+				sf::Vector2f center_other =
+				{
+					plr.getBounds().left + (plr.getBounds().width / 2),
+					plr.getBounds().top + (plr.getBounds().height / 2)
+				};
+
+				float distance = sqrt(pow(center_other.x - center_tile.x, 2) +
+					pow(center_other.y - center_tile.y, 2));
+
+				if (distance < 48 * 2)
+				{
+					plr.check(*tilemap[x][y], offset, sf::Vector2f());
+				}
+			}
+		}
+
+	plr.move(offset.x, offset.y);
 }
 
 

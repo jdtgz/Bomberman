@@ -3,16 +3,11 @@
 #include "Animation.h"
 #include "TextureHolder.h"
 #include "Bomb.h"
+#include "Collidable.h"
+#include "Enum.h"
 
 
-namespace directions
-{
-	// directions 
-	enum ID { RIGHT = 0, LEFT, UP, DOWN, COUNT };
-}
-
-
-class Player
+class Player : public Collidable
 {
 	public:
 		// constructor/destructor

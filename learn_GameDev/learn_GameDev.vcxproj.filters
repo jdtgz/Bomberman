@@ -13,7 +13,9 @@
     <ClCompile Include="TextureHolder.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Valcom.cpp" />
+    <ClCompile Include="Collidable.cpp" />
     <ClCompile Include="ONeal.cpp" />
+
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -27,6 +29,8 @@
     <ClInclude Include="TextureHolder.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Valcom.h" />
+    <ClInclude Include="Collidable.h" />
+    <ClInclude Include="Enum.h" />
     <ClInclude Include="ONeal.h" />
   </ItemGroup>
   <ItemGroup>

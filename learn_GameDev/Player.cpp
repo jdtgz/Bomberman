@@ -203,6 +203,8 @@ void Player::update(const float& dt)
 	{
 		bombs[i]->update(dt);
 	}
+
+	Collidable::updateRect(sprite.getGlobalBounds());
 }
 
 
