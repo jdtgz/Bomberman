@@ -226,7 +226,8 @@ void Player::detonate()
 {
 }
 
-sf::Vector2i Player::getExplotionPosition()
+
+sf::Vector2i Player::getExplosionPosition()
 {
 	for (int i = 0; i < bombs.size(); i++)
 	{

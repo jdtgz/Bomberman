@@ -61,9 +61,6 @@ void Game::run()
 			update(timePerFrame); 
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-			level.generate(levelNumber);
-
 		//Display updated gamestate
 		render();
 	}
@@ -84,7 +81,7 @@ void Game::processEvents()
 				//Tell the player when a key is down
 			case sf::Event::KeyPressed:
 				tempBomb = player.keyPressed(evnt.key.code);
-				if (!(tempBomb.x < 0))
+				if (tempBomb.x >= 0)
 					level.setMap(tempBomb, 4);
 				break;
 				//Tell the player when a key is released
