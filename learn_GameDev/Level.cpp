@@ -7,57 +7,26 @@
 Level::Level()
 {
 	//Set positions and sizes of the tiles
-	int xPos = 0, yPos = 100;
+	int xPos = -48, yPos = 52;
 	for (int x = 0; x < MAP_LENGTH; x++)
 	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			if (y == 0 || x == 0 || y == MAP_HEIGHT - 1 || x == MAP_LENGTH - 1)
+			if ((x == 1 || y == 1 || x == MAP_LENGTH - 2 || y == MAP_HEIGHT - 2 ||
+				x % 2 != 0 || y % 2 != 0) && (x > 0 && y > 0 && x < MAP_LENGTH - 1 && y < MAP_HEIGHT - 1))
 			{
 				tilemap[x][y] = new Tile(xPos, yPos, tileType::AIR);
-				datamap[x][y] = 0;
-			}
-			else if (x % 2 != 0 && y % 2 != 0)
-			{
-				tilemap[x][y] = new Tile(xPos, yPos, tileType::TILE);
-				datamap[x][y] = 2;
+				datamap[x][y] = tileType::AIR;
 			}
 			else
 			{
-				tilemap[x][y] = new Tile(xPos, yPos, tileType::AIR);
-				datamap[x][y] = 0;
+				tilemap[x][y] = new Tile(xPos, yPos, tileType::TILE);
+				datamap[x][y] = tileType::TILE;
 			}
 			yPos += 48;
 		}
 		xPos += 48;
-		yPos = 100;
-	}
-
-	//Create tile border
-	xPos = -48;
-	yPos = 100;
-	for (int i = 0; i < BORDER_COUNT; i++)
-	{
-		if (i < MAP_LENGTH + 2)
-		{
-			border[i] = new Tile(xPos, 50, tileType::TILE);
-			xPos += 48;
-		}
-		else if (i < MAP_LENGTH + MAP_LENGTH + 4)
-		{
-			border[i] = new Tile(xPos - 48, MAP_HEIGHT * 48 + 100, tileType::TILE);
-			xPos -= 48;
-		}
-		else
-		{
-			if (i % 2 != MAP_LENGTH % 2)
-				border[i] = new Tile(-48, yPos, tileType::TILE);
-			else
-			{
-				border[i] = new Tile(MAP_LENGTH * 48, yPos, tileType::TILE);
-				yPos += 48;
-			}
-		}
+		yPos = 52;
 	}
 
 	enemies.push_back(new Valcom(sf::Vector2i(0, 0)));
@@ -72,9 +41,6 @@ Level::~Level()
 		for (int y = 0; y < MAP_HEIGHT; y++)
 			delete tilemap[x][y];
 
-	for (int i = 0; i < BORDER_COUNT; i++)
-		delete border[i];
-
 	for (int i = 0; i < enemies.size(); i++)
 		delete enemies[i];
 }
@@ -85,11 +51,13 @@ void Level::generate(const int& levelNum)
 	int totalBrickCount = 0, targetBrick = 0, i = 0;
 	//int enemies = 0;
 
-	for (int x = 0; x < MAP_LENGTH; x++)
+	for (int x = 0; x < MAP_LENGTH - 1; x++)
 	{
-		for (int y = 0; y < MAP_HEIGHT; y++)
+		for (int y = 0; y < MAP_HEIGHT - 1; y++)
 		{
-			if (!(x % 2 != 0 && y % 2 != 0) && x + y > 1) // keep top left corner open
+			if ((datamap[x][y] == tileType::AIR || datamap[x][y] == tileType::BRICK ||
+				datamap[x][y] == tileType::DOOR) && !(x == 1 && y == 1) &&
+				x >= 1 && y >= 1)
 			{
 				//Reset on regeneration
 				datamap[x][y] = tileType::AIR;
@@ -173,9 +141,6 @@ void Level::draw(sf::RenderWindow& window) const
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 			tilemap[x][y]->draw(window);
-
-	for (int i = 0; i < BORDER_COUNT; i++)
-		border[i]->draw(window);
 	
 	for(int i = 0; i < enemies.size(); i++)
 		enemies[i]->draw(window);
@@ -201,16 +166,6 @@ void Level::collisions(Player& plr)
 				y < MAP_HEIGHT - 1 ? tilemap[x][y + 1]->getType() : tileType::TILE,
 				x > 0 ? tilemap[x - 1][y]->getType() : tileType::TILE,
 				x < MAP_LENGTH - 1 ? tilemap[x + 1][y]->getType() : tileType::TILE);
-
-	for (int i = 0; i < BORDER_COUNT; i++)
-		border[i]->detectCollision(plr,
-			i < MAP_LENGTH + MAP_LENGTH + 4 && i >= MAP_LENGTH + 2 ?
-			tileType::AIR : tileType::TILE,
-			i < MAP_LENGTH + 2 ? tileType::AIR : tileType::TILE,
-			i % 2 == MAP_LENGTH % 2 && i >= MAP_LENGTH + MAP_LENGTH + 4 ?
-			tileType::AIR : tileType::TILE,
-			i % 2 != MAP_LENGTH % 2 && i >= MAP_LENGTH + MAP_LENGTH + 4 ?
-			tileType::AIR : tileType::TILE);
 }
 
 
@@ -245,17 +200,18 @@ void Level::update(const float& dt, int flameRange)
 	bool collided = false;
 	
 	for (int i = 0; i < enemies.size(); i++)
-  {
+	{
 		enemies[i]->update(dt);
 		enemies[i]->move(tilemap, sf::Vector2i(MAP_LENGTH, MAP_HEIGHT));
-  }
+	}
 
 	//visually set all the tiles to the data map
-	for (int a = 0; a < MAP_LENGTH; a++)
+	for (int x = 0; x < MAP_LENGTH; x++)
 	{
-		for (int b = 0; b < MAP_HEIGHT; b++)
+		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			tilemap[a][b]->setTile((tileType::ID)datamap[a][b]);
+			if (datamap[x][y] != tilemap[x][y]->getType())
+				tilemap[x][y]->setTile((tileType::ID)datamap[x][y]);
 		}
 	}
 }

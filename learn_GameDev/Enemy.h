@@ -10,7 +10,7 @@ public:
 	Enemy();
 
 	virtual void update(const float&) = 0;
-	virtual void move(Tile*[31][13], const sf::Vector2i&) = 0;
+	virtual void move(Tile*[33][15], const sf::Vector2i&) = 0;
 
 	void draw(sf::RenderWindow&) const;
 	void die();

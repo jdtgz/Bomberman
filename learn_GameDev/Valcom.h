@@ -8,7 +8,7 @@ public:
 	Valcom(const sf::Vector2i&, const dir&);
 
 	virtual void update(const float&) override;
-	virtual void move(Tile*[31][13], const sf::Vector2i&) override;
+	virtual void move(Tile*[33][15], const sf::Vector2i&) override;
 
 	~Valcom();
 private:
