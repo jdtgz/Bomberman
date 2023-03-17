@@ -9,15 +9,16 @@ Game::Game() : startMenu(true)
 	window = new sf::RenderWindow(sf::VideoMode(750, 750), "Bomberman");
 	window->setFramerateLimit(144);
 
-	//Generate the level
-	level.generate(levelNumber);
-
 	view.setSize(sf::Vector2f(window->getSize()));
 
 	player.getSprite().setPosition(48 * 31 / 2, 48 * 13 / 2);
 
 	tempBomb.x = -1;
 	tempBomb.y = -1;
+
+	//Generate the level
+	levelNumber = 0;
+	level.generate(levelNumber);
 }
 
 
@@ -80,7 +81,7 @@ void Game::processEvents()
 				//Tell the player when a key is down
 			case sf::Event::KeyPressed:
 				tempBomb = player.keyPressed(evnt.key.code);
-				if (!(tempBomb.x < 0))
+				if (tempBomb.x >= 0)
 					level.setMap(tempBomb, 4);
 				break;
 				//Tell the player when a key is released
@@ -123,7 +124,7 @@ void Game::update(const sf::Time& dt)
 		}
 
 		//update data map for all exploding tiles
-		level.setMap(player.getExplotionPosition(), 0); // constantly called for 0,0 bug
+		//level.setMap(player.getExplotionPosition(), 0); // constantly called for 0,0 bug
 
 		level.update(dt.asSeconds(), player.getFlameRange());
 	}

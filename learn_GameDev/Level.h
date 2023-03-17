@@ -37,13 +37,11 @@ public:
   Tile* getTilemap();
 	sf::Vector2i getClosestTile(const sf::Vector2f&);
 private:
-	const int MAP_LENGTH = 31;
-	const int MAP_HEIGHT = 13;
-	const int BORDER_COUNT = 92;
+	const int MAP_LENGTH = 33;
+	const int MAP_HEIGHT = 15;
 
-	int datamap[31][13];
-	Tile* tilemap[31][13];
-	Tile* border[92];
+	int datamap[33][15];
+	Tile* tilemap[33][15];
 
 	std::vector<Enemy*> enemies;
 };

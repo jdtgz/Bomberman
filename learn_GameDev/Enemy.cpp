@@ -3,7 +3,7 @@
 
 Enemy::Enemy()
 {
-	curAnim = animIndex::WALKING_LEFT;
+	curAnim = animIndex::RIGHT;
 	moveSpeed = 0.f;
 	alive = true;
 	tilePos = sf::Vector2i(0, 0);

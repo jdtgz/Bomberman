@@ -26,8 +26,9 @@ class Player : public Collidable
 		void setVelocity(const int&, const int&);
 		sf::Vector2f getVelocity() const;
 		float getSpeed() const;
+
 		void detonate(); 
-		sf::Vector2i getExplotionPosition();
+		sf::Vector2i getExplosionPosition();
 
 		//Collision
 		void move(const float&, const float&);
@@ -37,28 +38,29 @@ class Player : public Collidable
 		sf::Sprite getSprite() const;
 
 		// powerup/player attributes 
-		int getBombCount(); 
-		void plusBombCount(); 
+		int getBombCount() const; 
+		void plusBomb(); 
 
-		int getFlameRange(); 
-		void plusFlameRange(); 
+		int getFlameRange() const; 
+		void plusFlame(); 
 
-		bool wallPass_status();
+		float getSpeed() const;
+		void plusSpeed(); 
+
+		bool wallPass_status() const;
 		void activate_wallPass(); 
-
-		bool detonator_status();
+		 
+		bool detonator_status() const;
 		void activate_detonator();
 
-		bool bombPass_status(); 
+		bool bombPass_status() const; 
 		void activate_bombPass(); 
 
-		bool flamePass_status(); 
+		bool flamePass_status() const; 
 		void activate_flamePass(); 
 
-		bool invincible_status(); 
-		void activate_invincible(); 
-		void stop_invincible(); 
-		
+		bool invincible_status() const; 
+		void activate_invincible(); 		
 
 	private:
 		// Visual attributes
@@ -78,14 +80,14 @@ class Player : public Collidable
 
 
 		// Movement attributes 
-		int xVel = 0, yVel = 0;
+		int xVel, yVel;
 		// Direction that the player is moving 
 		bool movement[directions::COUNT];
 		// Directions where player 'can possibly' move
 		bool canMove[directions::COUNT];
 
 		//bomb manager
-		bool bombManager[10] = {false};
+		bool bombManager[10] = { false };
 		std::vector<Bomb*> bombs;
 
 		// player attirbutes 
@@ -96,6 +98,5 @@ class Player : public Collidable
 		bool detonator; 
 		bool bombPass;
 		bool flamePass; 
-		bool invincible; 
-
+		bool invincible;
 };

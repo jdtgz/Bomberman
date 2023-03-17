@@ -43,7 +43,7 @@ class Game
 		sf::Vector2i tempBomb;
 
 		// Level Number
-		int levelNumber = 0;
+		int levelNumber;
 
 		//Start Menu
 		StartMenu startMenu;

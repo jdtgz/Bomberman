@@ -2,18 +2,15 @@
 
 
 // place a tile of type t at (xCoord, yCoord)
-Tile::Tile(const int& x, const int& y, const tileType::ID& t)
+Tile::Tile(const int& x, const int& y, const tileType::ID& typ)
 {
-	// set the tileID, if it is a block and not a PowerUp
-	if(t != tileType::POWERUP)
-		type = t;
-
 	// load the texture and set the sprite for tile
 	mSprite.setTexture(TextureHolder::get(textures::ITEMS));
-	setTile(t);
+	setTile(typ);
 
 	// blow up animation ONLY for tileType::BRICK
 	blowUp.setUp(TextureHolder::get(textures::ITEMS), 0, 16 * 2, 16, 16, 6); 
+	blowUp.showOnce(); 
 
 	// place the tile 
 	mSprite.setPosition(x, y);
@@ -26,9 +23,14 @@ Tile::~Tile()
 }
 
 
-//Tile interactions
+//Tile interactions when colliding with a bomb/explosion
 void Tile::interact()
 {
+	if (type == tileType::BRICK)
+	{
+		// destory the brick 
+		destroyed = true; 
+	}
 }
 
 
@@ -40,6 +42,28 @@ void Tile::draw(sf::RenderWindow& window)
 }
 
 
+// updates the block's display 
+void Tile::update(const float& dt)
+{
+	std::cout << "Update";
+	// initiate the blowUp animation IF the tile has been destoryed 
+	if (destroyed == true && type == tileType::BRICK)
+	{
+		std::cout << "Animate";
+		// display one cycle of the blowUp animation
+		blowUp.applyToSprite(mSprite);
+		blowUp.update(dt); 
+	
+		if (blowUp.getCurrentFrame() == 5)
+		{
+			// set the tile to air 
+			setTile(tileType::AIR);
+		}
+		
+	}
+}
+
+
 //Returns the tileID of tile
 tileType::ID Tile::getType() const
 {
@@ -48,10 +72,6 @@ tileType::ID Tile::getType() const
 
 
 //Given an tileID, set the proper textureRect & scale it 
-
-//
-// 
-//REMOVE AND TYPECAST
 void Tile::setTile(const tileType::ID& t)
 {
 	type = t;
@@ -68,7 +88,10 @@ void Tile::setTile(const tileType::ID& t)
 			mSprite.setTextureRect({ 16 * 0, 16, 16, 16 });
 			break;
 		case tileType::DOOR:
-			mSprite.setTextureRect({ 16 * 2, 16 * 1, 16, 16 });
+			mSprite.setTextureRect({ 16 * 1, 16 * 1, 16, 16 });
+			break; 
+		case tileType::POWERUP:
+			mSprite.setTextureRect({ 16 * 1,16 * 1,16,16 });
 	}
 	mSprite.setScale(3, 3);
 }

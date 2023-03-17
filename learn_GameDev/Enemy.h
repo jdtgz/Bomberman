@@ -10,7 +10,7 @@ public:
 	Enemy();
 
 	virtual void update(const float&) = 0;
-	virtual void move(Tile*[31][13], const sf::Vector2i&) = 0;
+	virtual void move(Tile*[33][15], const sf::Vector2i&) = 0;
 
 	void draw(sf::RenderWindow&) const;
 	void die();
@@ -23,10 +23,10 @@ public:
 protected:
 	enum class animIndex
 	{
-		WALKING_LEFT = 0,
-		WALKING_RIGHT,
-		WALKING_DOWN,
-		WALKING_UP,
+		LEFT = 0,
+		RIGHT,
+		UP,
+		DOWN,
 		DEATH,
 		COUNT
 	};
