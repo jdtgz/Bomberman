@@ -34,8 +34,6 @@ public:
 
 	void update(const float&, int);
   
-  Tile* getTilemap();
-	sf::Vector2i getClosestTile(const sf::Vector2f&);
 private:
 	const int MAP_LENGTH = 33;
 	const int MAP_HEIGHT = 15;
