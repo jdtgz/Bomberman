@@ -17,6 +17,7 @@ Animation::Animation()
 	nFrames = 0; 
 	iFrame = 0;
 	time = 0.0f; 
+	looping = true; 
 }
 
 
@@ -55,10 +56,17 @@ void Animation::update(const float& dt)
 }
 
 
+void Animation::showOnce()
+{
+	looping = false; 
+}
+
+
 void Animation::advance()
 {
 	if (++iFrame >= nFrames)
 	{
-		iFrame = 0; 
+		if(looping)
+			iFrame = 0; 
 	}
 }

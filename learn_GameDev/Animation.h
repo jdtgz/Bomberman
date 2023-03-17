@@ -22,6 +22,9 @@ class Animation
 		// cycle animation based on time in-game
 		void update(const float&); 
 
+		// shows animation once by stopping the looping
+		void showOnce(); 
+
 	private:
 		// cycles to the next frame in frames
 		void advance(); 
@@ -38,4 +41,6 @@ class Animation
 		int iFrame;
 		// counter to track how long a single frame has been on screen
 		float time; 
+		// looping var
+		bool looping; 
 };

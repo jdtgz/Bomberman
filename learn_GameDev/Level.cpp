@@ -3,7 +3,6 @@
 #include "Valcom.h"
 #include "ONeal.h"
 
-
 Level::Level()
 {
 	//Set positions and sizes of the tiles
@@ -157,8 +156,6 @@ void Level::setMap(sf::Vector2i pos, int type)
 //Detect collisions between player and tile
 void Level::collisions(Player& plr)
 {
-	getClosestTile(plr.getSprite().getPosition());
-
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 			tilemap[x][y]->detectCollision(plr,
@@ -211,7 +208,9 @@ void Level::update(const float& dt, int flameRange)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
 			if (datamap[x][y] != tilemap[x][y]->getType())
-				tilemap[x][y]->setTile((tileType::ID)datamap[x][y]);
+			  tilemap[x][y]->setTile((tileType::ID)datamap[x][y]);
+        
+			  tilemap[x][y]->update(dt);
 		}
 	}
 }

@@ -221,13 +221,6 @@ sf::Vector2f Player::getVelocity() const
 }
 
 
-//Get player move speed
-float Player::getSpeed() const
-{
-	return speed;
-}
-
-
 // detonate the oldest bomb
 void Player::detonate()
 {
@@ -269,6 +262,7 @@ sf::Vector2f Player::getPosition()
 	return sf::Vector2f(x + 1, y - 1);
 }
 
+
 //Get the hitbox for the player sprite
 sf::FloatRect Player::getBoundingBox() const
 {
@@ -284,35 +278,51 @@ sf::Sprite Player::getSprite() const
 
 
 // return number of bombs player can place at a time 
-int Player::getBombCount()
+int Player::getBombCount() const
 {
 	return bombCount; 
 }
 
 
 // +1 number of bombs player can place at a time 
-void Player::plusBombCount()
+void Player::plusBomb()
 {
-	bombCount++; 
+	if(bombCount != 10)
+		bombCount++; 
 }
 
 
 // return range of the bomb explosions
-int Player::getFlameRange()
+int Player::getFlameRange() const
 {
 	return flameRange; 
 }
 
 
 // +1 range of bomb explosion
-void Player::plusFlameRange()
+void Player::plusFlame()
 {
-	flameRange++; 
+	if (flameRange != 10)
+		flameRange++; 
+}
+
+
+//Get player move speed
+float Player::getSpeed() const
+{
+	return speed;
+}
+
+
+// increment the movement speed of the player by 10%
+void Player::plusSpeed()
+{
+	speed += (speed * 0.10);
 }
 
 
 // return if player can move through walls 
-bool Player::wallPass_status()
+bool Player::wallPass_status() const
 {
 	return wallPass;
 }
@@ -327,7 +337,7 @@ void Player::activate_wallPass()
 
 
 // return if player can detonate bombs 
-bool Player::detonator_status()
+bool Player::detonator_status() const
 {
 	return detonator; 
 }
@@ -342,14 +352,14 @@ void Player::activate_detonator()
 
 
 // return if player can walk through bombs 
-bool Player::bombPass_status()
+bool Player::bombPass_status() const
 {
 	return bombPass; 
 }
 
 
 // activate the active bombPass powerUp
-void Player::activate_bombPass()
+void Player::activate_bombPass() 
 {
 	if (!bombPass)
 		bombPass = true; 
@@ -357,7 +367,7 @@ void Player::activate_bombPass()
 
 
 // return if player can move through flames 
-bool Player::flamePass_status()
+bool Player::flamePass_status() const
 {
 	return flamePass;
 }
@@ -372,7 +382,7 @@ void Player::activate_flamePass()
 
 
 // return if player is invincible
-bool Player::invincible_status()
+bool Player::invincible_status() const
 {
 	return invincible; 
 }
@@ -381,13 +391,5 @@ bool Player::invincible_status()
 // activate the invincibility powerUp
 void Player::activate_invincible()
 {
-	if (!invincible)
-		invincible = true; 
-}
-
-
-// deactivate the invincibility powerUp
-void Player::stop_invincible()
-{
-	invincible = false; 
+	
 }
