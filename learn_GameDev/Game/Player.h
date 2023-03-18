@@ -15,7 +15,7 @@ class Player : public Collidable
 		~Player();
 
 		// Given a key, do something
-		sf::Vector2i keyPressed(const sf::Keyboard::Key&);
+		void keyPressed(const sf::Keyboard::Key&);
 		void keyReleased(const sf::Keyboard::Key&);
 
 		// Draws player onto the screen
@@ -81,10 +81,6 @@ class Player : public Collidable
 		bool movement[directions::COUNT];
 		// Directions where player 'can possibly' move
 		bool canMove[directions::COUNT];
-
-		//bomb manager
-		bool bombManager[10] = { false };
-		std::vector<Bomb*> bombs;
 
 		// player attirbutes 
 		int bombCount; 

@@ -133,6 +133,37 @@ int Level::getHeight() const
 	return MAP_HEIGHT;
 }
 
+// detects whether a key has been pressed and acts accordingly
+void Level::keyPressed(const sf::Keyboard::Key& key)
+{
+	// change the direction of the player based on input
+	switch (key)
+	{
+	case sf::Keyboard::A:
+		for (int i = 0; i < bombCount; i++)
+		{
+			if (bombManager[i] == false)
+			{
+				bombManager[i] = true;
+
+				// initialize the bomb
+				if (detonator == false)
+					bombs.push_back(new Bomb(playerX, playerY, flameRange, true));
+				else
+					bombs.push_back(new Bomb(playerX, playerY, flameRange, false));
+				break;
+			}
+		}
+		break;
+	case sf::Keyboard::B:
+		for (int i = 0; i < bombs.size(); i++)
+		{
+			if (bombManager[i] = true)
+				bombs[i]->explode();
+		}
+		break;
+	}
+}
 
 // draw all the objects and emeies onto the screen 
 void Level::draw(sf::RenderWindow& window) const
@@ -145,6 +176,8 @@ void Level::draw(sf::RenderWindow& window) const
 	for(int i = 0; i < enemies.size(); i++)
 		enemies[i]->draw(window);
 
+	for (int i = 0; i < bombs.size(); i++)
+		bombs[i]->draw(window);
 }
 
 
@@ -164,8 +197,8 @@ void Level::collisions(Player& plr)
 			if (tilemap[x][y]->getType() != tileType::AIR)
 			{
 				sf::Vector2f center_tile = {
-									tilemap[x][y]->getBounds().left + (tilemap[x][y]->getBounds().width / 2),
-									tilemap[x][y]->getBounds().top + (tilemap[x][y]->getBounds().height / 2)
+					tilemap[x][y]->getBounds().left + (tilemap[x][y]->getBounds().width / 2),
+					tilemap[x][y]->getBounds().top + (tilemap[x][y]->getBounds().height / 2)
 				};
 				sf::Vector2f center_other =
 				{
@@ -187,7 +220,7 @@ void Level::collisions(Player& plr)
 }
 
 
-void Level::update(const float& dt, int flameRange)
+void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRange, bool detonate)
 {
 	int offset = 1;
 	bool collided = false;
@@ -208,4 +241,30 @@ void Level::update(const float& dt, int flameRange)
 				tilemap[x][y]->setTile((tileType::ID)datamap[x][y]);
 		}
 	}
+
+	//Clear bombs
+	for (int i = 0; i < bombs.size(); i++)
+	{
+		// if the bomb exploded and the bomb is active
+		if (bombs[i]->getExploded() && bombManager[i] == true)
+		{
+			// de-activate the bomb and delete it 
+			bombManager[i] = false;
+			delete bombs[i];
+			bombs.erase(bombs.begin() + i);
+		}
+	}
+
+	//Update bombs
+	for (int i = 0; i < bombs.size(); i++)
+	{
+		bombs[i]->update(dt);
+	}
+
+	//Set all data recived from player
+	playerX = playerPos.x;
+	playerY = playerPos.y;
+	flameRange = fRange;
+	bombCount = bCount;
+	detonator = detonate;
 }
