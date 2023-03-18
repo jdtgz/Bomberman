@@ -124,7 +124,7 @@ void Game::update(const sf::Time& dt)
 
 		//give level all neded info from player
 		level.update(dt.asSeconds(), player.getPosition(), player.getBombCount(),
-			player.getFlameRange(), player.detonator_status());
+			player.getFlameRange(), player.detonator_status(), player.getSprite());
 	}
 	else
 	{

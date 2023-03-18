@@ -144,6 +144,14 @@ void Level::keyPressed(const sf::Keyboard::Key& key)
 		{
 			if (bombManager[i] == false)
 			{
+				for (int i = 0; i < bombs.size(); i++)
+				{
+					if (bombs[i]->isColliding(playerSprite))
+					{
+						std::cout << "COLLIDE!\n";
+						return;
+					}
+				}
 				bombManager[i] = true;
 
 				// initialize the bomb
@@ -220,7 +228,7 @@ void Level::collisions(Player& plr)
 }
 
 
-void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRange, bool detonate)
+void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRange, bool detonate, sf::Sprite pSprite)
 {
 	int offset = 1;
 	bool collided = false;
@@ -267,4 +275,5 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 	flameRange = fRange;
 	bombCount = bCount;
 	detonator = detonate;
+	playerSprite = pSprite;
 }
