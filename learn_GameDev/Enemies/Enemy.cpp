@@ -27,6 +27,7 @@ void Enemy::draw(sf::RenderWindow& w) const
 void Enemy::die()
 {
 	alive = false;
+	curAnim = animIndex::DEATH;
 }
 
 
