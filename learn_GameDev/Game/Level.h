@@ -34,7 +34,7 @@ public:
 	// track enemy collisions 
 	//void collisions(Enemy&);
 
-	void update(const float&,sf::Vector2f, int, int, bool, sf::Sprite);
+	void update(const float&, sf::Vector2f, int, int, bool, sf::Sprite);
   
 private:
 	const int MAP_LENGTH = 33;
