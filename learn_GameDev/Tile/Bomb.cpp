@@ -258,7 +258,7 @@ bool Bomb::isExplosionColliding(sf::Sprite& sprite)
 	return false;
 }
 
-bool Bomb::datamapExplosionCollision(int datamap[31][13])
+bool Bomb::datamapExplosionCollision(int datamap[31][15])
 {
 	bool result = false;
 
@@ -303,7 +303,7 @@ bool Bomb::datamapExplosionCollision(int datamap[31][13])
 	//Check down
 	for (int i = 1; i < m_range; i++)
 	{
-		if (m_position.y + i < 13)
+		if (m_position.y + i < 15)
 		{
 			if (datamap[m_position.x][m_position.y + i] != 0)
 			{

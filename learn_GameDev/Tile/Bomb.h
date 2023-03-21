@@ -23,7 +23,7 @@ public:
 	bool isBombColliding(sf::Sprite& sprite);
 	//Returns true if the explosion is colliding with sprite
 	bool isExplosionColliding(sf::Sprite& sprite);
-	bool datamapExplosionCollision(int datamap[31][13]);
+	bool datamapExplosionCollision(int datamap[31][15]);
 	//returns true only if explosion is active
 	bool isEntityColliding(sf::Sprite& sprite);
 

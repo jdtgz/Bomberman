@@ -13,9 +13,6 @@ Game::Game() : startMenu(true)
 
 	player.getSprite().setPosition(48 * 31 / 2, 48 * 13 / 2);
 
-	tempBomb.x = -1;
-	tempBomb.y = -1;
-
 	//Generate the level
 	levelNumber = 0;
 	level.generate(levelNumber, &player);
@@ -80,9 +77,8 @@ void Game::processEvents()
 			{
 				//Tell the player when a key is down
 			case sf::Event::KeyPressed:
-				tempBomb = player.keyPressed(evnt.key.code);
-				if (tempBomb.x >= 0)
-					level.setMap(tempBomb, 0);
+				player.keyPressed(evnt.key.code);
+				level.keyPressed(evnt.key.code);
 				break;
 				//Tell the player when a key is released
 			case sf::Event::KeyReleased:
@@ -126,7 +122,9 @@ void Game::update(const sf::Time& dt)
 		//update data map for all exploding tiles
 		//level.setMap(player.getExplotionPosition(), 0); // constantly called for 0,0 bug
 
-		level.update(dt.asSeconds(), player.getFlameRange());
+		//give level all neded info from player
+		level.update(dt.asSeconds(), player.getPosition(), player.getBombCount(),
+			player.getFlameRange(), player.detonator_status(), player.getSprite());
 	}
 	else
 	{

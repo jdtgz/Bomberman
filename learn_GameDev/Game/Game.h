@@ -39,9 +39,6 @@ class Game
 		// Player 
 		Player player;
 
-		// New Bomb Location
-		sf::Vector2i tempBomb;
-
 		// Level Number
 		int levelNumber;
 

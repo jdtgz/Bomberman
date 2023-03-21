@@ -47,7 +47,7 @@ Player::~Player()
 
 
 // detects whether a key has been pressed and acts accordingly
-sf::Vector2i Player::keyPressed(const sf::Keyboard::Key &key)
+void Player::keyPressed(const sf::Keyboard::Key &key)
 {
 	// change the direction of the player based on input
 	switch (key)
@@ -84,45 +84,7 @@ sf::Vector2i Player::keyPressed(const sf::Keyboard::Key &key)
 			canMove[directions::SOUTH] = true;
 			canMove[directions::WEST] = true;
 			break;
-		case sf::Keyboard::A:
-			for (int i = 0; i < bombCount; i++)
-			{
-				if (bombManager[i] == false)
-				{
-					for (int i = 0; i < bombs.size(); i++)
-					{
-						if (bombs[i]->isColliding(sprite))
-						{
-							std::cout << "COLLIDE!\n";
-							return sf::Vector2i(-1, -1);
-						}
-					}
-					bombManager[i] = true;
-
-					// initialize the bomb
-					if (detonator == false)
-					{
-						bombs.push_back(new Bomb(getPosition().x, getPosition().y, flameRange, true));
-						return sf::Vector2i(getPosition().x, getPosition().y);
-					}
-					else
-					{
-						bombs.push_back(new Bomb(getPosition().x, getPosition().y, flameRange, false));
-						return sf::Vector2i(getPosition().x, getPosition().y);
-					}
-					break;
-				}
-			}
-			break;
-		case sf::Keyboard::B:
-			for (int i = 0; i < bombs.size(); i++)
-			{
-				if (bombManager[i] = true)
-					bombs[i]->explode(); 
-			}
-			break;
 	}
-	return sf::Vector2i(-1, -1);
 }
 
 
@@ -152,10 +114,6 @@ void Player::keyReleased(const sf::Keyboard::Key &key)
 void Player::draw(sf::RenderWindow& window) const
 {
 	window.draw(sprite);
-	for (int i = 0; i < bombs.size(); i++)
-	{
-		bombs[i]->draw(window);
-	}
 }
 
 
@@ -182,29 +140,13 @@ void Player::update(const float& dt)
 
 	//Move sprite by velocity
 	move(xVel, yVel);
-	
-	
-	//Clear bombs
-	for (int i = 0; i < bombs.size(); i++)
-	{
-		// if the bomb exploded and the bomb is active
-		if (bombs[i]->getExploded() && bombManager[i] == true)
-		{
-			// de-activate the bomb and delete it 
-			bombManager[i] = false;
-			delete bombs[i];
-			bombs.erase(bombs.begin() + i);
-			std::cout << bombManager[0] << bombManager[1] << bombManager[2] << '\n';
-		}
-	}
 
-	//Update bombs
-	for (int i = 0; i < bombs.size(); i++)
-	{
-		bombs[i]->update(dt);
-	}
+	
+	//Fix for the player being glitched out when between a tile on top and below
+	sf::FloatRect playerBounds = sprite.getGlobalBounds();
+	playerBounds.height /= 1.1;
 
-	Collidable::updateRect(sprite.getGlobalBounds());
+	Collidable::updateRect(playerBounds);
 }
 
 

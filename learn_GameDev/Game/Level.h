@@ -21,6 +21,9 @@ public:
 	int getLength() const;
 	int getHeight() const;
 
+	//manage bombs
+	void keyPressed(const sf::Keyboard::Key&);
+
 	// draw level onto sfml screen 
 	void draw(sf::RenderWindow&) const;
 
@@ -31,7 +34,7 @@ public:
 	// track enemy collisions 
 	//void collisions(Enemy&);
 
-	void update(const float&, int);
+	void update(const float&,sf::Vector2f, int, int, bool, sf::Sprite);
   
 private:
 	const int MAP_LENGTH = 33;
@@ -41,4 +44,16 @@ private:
 	Tile* tilemap[33][15];
 
 	std::vector<Enemy*> enemies;
+
+	//bomb manager
+	bool bombManager[10] = { false };
+	std::vector<Bomb*> bombs;
+
+	// player attirbutes 
+	int bombCount;
+	int flameRange;
+	bool detonator;
+	int playerX;
+	int playerY;
+	sf::Sprite playerSprite;
 };
