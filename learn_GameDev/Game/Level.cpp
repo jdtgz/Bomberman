@@ -27,9 +27,6 @@ Level::Level()
 		xPos += 48;
 		yPos = 52;
 	}
-
-	enemies.push_back(new Valcom(sf::Vector2i(0, 0)));
-	enemies.push_back(new ONeal(sf::Vector2i(0, 0)));
 }
 
 
@@ -45,7 +42,7 @@ Level::~Level()
 }
 
 
-void Level::generate(const int& levelNum)
+void Level::generate(const int& levelNum, const Player* plrPtr)
 {
 	int totalBrickCount = 0, targetBrick = 0, i = 0;
 	//int enemies = 0;
@@ -113,6 +110,9 @@ void Level::generate(const int& levelNum)
 			}
 		}
 	}
+
+	enemies.push_back(new Valcom);
+	enemies.push_back(new ONeal(plrPtr));
 }
 
 

@@ -222,6 +222,7 @@ sf::Vector2f Player::getVelocity() const
 	return sf::Vector2f(xVel, yVel);
 }
 
+
 //Move player sprite by x, y
 void Player::move(const float& x, const float& y)
 {
@@ -237,12 +238,11 @@ void Player::setCanMove(const int& dir, const bool& v)
 	return;
 }
 
-sf::Vector2f Player::getPosition()
+
+sf::Vector2f Player::getPosition() const
 {
-	int x = (sprite.getPosition().x + 24) / 48;
-	int y = (sprite.getPosition().y + 24) / 48;
-	//std::cout << x + 1 << "," << y - 1 << '\n';
-	return sf::Vector2f(x + 1, y - 1);
+	return sf::Vector2f((sprite.getPosition().x + 24) / 48 + 1,
+		(sprite.getPosition().y + 24) / 48 - 1);
 }
 
 
@@ -305,74 +305,70 @@ void Player::plusSpeed()
 
 
 // return if player can move through walls 
-bool Player::wallPass_status() const
+bool Player::hasWallPass() const
 {
 	return wallPass;
 }
 
 
 // activate the wallPass powerUp
-void Player::activate_wallPass()
+void Player::enableWallPass()
 {
-	if(!wallPass)
-		wallPass = true; 
+	wallPass = true; 
 }
 
 
 // return if player can detonate bombs 
-bool Player::detonator_status() const
+bool Player::hasDetonator() const
 {
 	return detonator; 
 }
 
 
 // activate the detonator powerUp
-void Player::activate_detonator()
+void Player::enableDetonator()
 {
-	if(!detonator)
-		detonator = true; 
+	detonator = true; 
 }
 
 
 // return if player can walk through bombs 
-bool Player::bombPass_status() const
+bool Player::hasBombPass() const
 {
 	return bombPass; 
 }
 
 
 // activate the active bombPass powerUp
-void Player::activate_bombPass() 
+void Player::enableBombPass() 
 {
-	if (!bombPass)
-		bombPass = true; 
+	bombPass = true; 
 }
 
 
 // return if player can move through flames 
-bool Player::flamePass_status() const
+bool Player::hasFlamePass() const
 {
 	return flamePass;
 }
 
 
 // activate the flamePass powerUp
-void Player::activate_flamePass()
+void Player::enableFlamePass()
 {
-	if (!flamePass)
-		flamePass = true; 
+	flamePass = true; 
 }
 
 
 // return if player is invincible
-bool Player::invincible_status() const
+bool Player::isInvincible() const
 {
 	return invincible; 
 }
 
 
 // activate the invincibility powerUp
-void Player::activate_invincible()
+void Player::enableInvincible()
 {
 	
 }

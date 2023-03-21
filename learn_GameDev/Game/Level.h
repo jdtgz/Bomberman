@@ -3,7 +3,6 @@
 #include <vector>
 #include "../Tile/Tile.h"
 #include "../Enemies/Enemy.h"
-#include "../Enemies/Valcom.h"
 #include "../Tile/Tile.h"
 
 class Level
@@ -14,7 +13,7 @@ public:
 	~Level();
 
 	// load the stage
-	void generate(const int&);
+	void generate(const int&, const Player*);
 	// end the level 
 	void end();
 

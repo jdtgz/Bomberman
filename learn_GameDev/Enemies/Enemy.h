@@ -11,7 +11,7 @@ class Enemy : public Collidable
 public:
 	Enemy();
 
-	virtual void update(const float&) = 0;
+	virtual void update(const float&);
 	virtual void move(Tile*[33][15], const sf::Vector2i&) = 0;
 
 	void draw(sf::RenderWindow&) const;
@@ -23,6 +23,11 @@ public:
 
 	~Enemy();
 protected:
+	virtual double getClippingMargin() const;
+	virtual int getMovementChance() const;
+	void standardMovement(Tile* [33][15], const sf::Vector2i&);
+	void chasePlayerMovement(Tile* [33][15], const sf::Vector2i&, const Player*);
+
 	enum class animIndex
 	{
 		LEFT = 0,
@@ -39,4 +44,7 @@ protected:
 	bool alive;
 	float moveSpeed;
 	sf::Vector2i tilePos;
+private:
+	int debounce = 0;
+	const int DEBOUNCE_MAX = 10;
 };
