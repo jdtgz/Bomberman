@@ -111,7 +111,7 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 		}
 	}
 
-	enemies.push_back(new Valcom);
+	enemies.push_back(new Valcom(plrPtr));
 	enemies.push_back(new ONeal(plrPtr));
 }
 
@@ -236,7 +236,7 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 	for (int i = 0; i < enemies.size(); i++)
 	{
 		enemies[i]->update(dt);
-		enemies[i]->move(tilemap, sf::Vector2i(MAP_LENGTH, MAP_HEIGHT));
+		enemies[i]->move(tilemap);
 	}
 
 	//visually set all the tiles to the data map

@@ -1,32 +1,32 @@
 #include "ONeal.h"
+#include <math.h>
 
 
-ONeal::ONeal(const Player* plrPtr)
+ONeal::ONeal(const Player* plrPtr) : Enemy(plrPtr)
 {
-	init(plrPtr, sf::Vector2i(0, 0), directions::NORTH);
-}
-
-
-ONeal::ONeal(const Player* plrPtr, const sf::Vector2i& tile)
-{
-	init(plrPtr, tile, directions::NORTH);
+	init(sf::Vector2i(0, 0), directions::NORTH);
 }
 
 
 ONeal::ONeal(const Player* plrPtr,
-	const sf::Vector2i& tile, const directions& face)
+	const sf::Vector2i& tile) : Enemy(plrPtr)
 {
-	init(plrPtr, tile, face);
+	init(tile, directions::NORTH);
 }
 
 
-void ONeal::init(const Player* plrPtr,
-	const sf::Vector2i& tile, const directions& face)
+ONeal::ONeal(const Player* plrPtr,
+	const sf::Vector2i& tile, const directions& face) : Enemy(plrPtr)
 {
-	playerPointer = plrPtr;
+	init(tile, face);
+}
+
+
+void ONeal::init(const sf::Vector2i& tile, const directions& face)
+{
 	heading = face;
 	moveSpeed = 1.5f;
-	chasePlayer = false;
+	dirDebounce = 0;
 
 	sf::Texture* t = &TextureHolder::get(textures::ENEMIES);
 	anims[int(animIndex::RIGHT)].setUp(*t, 0, 16 * 3, 16, 16, 3);
@@ -38,60 +38,31 @@ void ONeal::init(const Player* plrPtr,
 	else
 		curAnim = animIndex::RIGHT;
 
-	curAnim = animIndex::RIGHT;
 	anims[int(curAnim)].applyToSprite(sprite);
 
 	sprite.setPosition(48 * tile.x, 100 + 48 * tile.y);
 }
 
 
-void ONeal::update(const float& dt)
+void ONeal::move(Tile* tilemap[33][15])
 {
-	Enemy::update(dt);
-}
+	moveForwardAndBounce(tilemap);
 
-
-void ONeal::move(Tile* tilemap[33][15],
-	const sf::Vector2i& mapSize)
-{
-	chaseDebounce++;
-
-	if (chasePlayer)
+	if (isAtTile(tilemap) && ++dirDebounce >= 5)
 	{
-		chasePlayerMovement(tilemap, mapSize, playerPointer);
-	}
-	else
-	{
-		standardMovement(tilemap, mapSize);
-	}
-
-	//Occassionally Chase the Player
-	if (rand() % 100 < getChaseChance() && chaseDebounce >= CHASE_DEBOUNCE_MAX)
-	{
-		chaseDebounce = 0;
-		chasePlayer = !chasePlayer;
+		dirDebounce = 0;
+		changeHeadingRandomly(tilemap);
 	}
 }
 
 
-double ONeal::getClippingMargin() const
+double ONeal::clippingMargin() const
 {
-	return 1.5;
-}
-
-
-int ONeal::getMovementChance() const
-{
-	return 80;
-}
-
-
-int ONeal::getChaseChance() const
-{
-	return 2;
+	return 1.25;
 }
 
 
 ONeal::~ONeal()
 {
+
 }

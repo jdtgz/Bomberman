@@ -9,10 +9,10 @@
 class Enemy : public Collidable
 {
 public:
-	Enemy();
+	Enemy(const Player*);
 
-	virtual void update(const float&);
-	virtual void move(Tile*[33][15], const sf::Vector2i&) = 0;
+	void update(const float&);
+	virtual void move(Tile*[33][15]) = 0;
 
 	void draw(sf::RenderWindow&) const;
 	void die();
@@ -20,15 +20,11 @@ public:
 	bool isAlive() const;
 
 	sf::Vector2f getPosition() const;
+	sf::Vector2i getTilePosition() const;
 
 	~Enemy();
 protected:
-	virtual double getClippingMargin() const;
-	virtual int getMovementChance() const;
-	void standardMovement(Tile* [33][15], const sf::Vector2i&);
-	void chasePlayerMovement(Tile* [33][15], const sf::Vector2i&, const Player*);
-
-	enum class animIndex
+	enum animIndex
 	{
 		LEFT = 0,
 		RIGHT,
@@ -39,12 +35,18 @@ protected:
 	Animation anims[int(animIndex::COUNT)];
 	animIndex curAnim;
 
-	directions heading;
-
 	bool alive;
+
+	//Movement
+	directions heading;
 	float moveSpeed;
-	sf::Vector2i tilePos;
-private:
-	int debounce = 0;
-	const int DEBOUNCE_MAX = 10;
+	bool atTile;
+	sf::Vector2i targetTile;
+	const Player* playerPointer;
+	void moveForward(Tile*[33][15]);
+	void moveForwardAndBounce(Tile*[33][15]);
+	void changeHeadingRandomly(Tile* [33][15]);
+	bool isAtTile(Tile*[33][15]);
+	bool atTargetTile(Tile*[33][15]);
+	virtual double clippingMargin() const;
 };
