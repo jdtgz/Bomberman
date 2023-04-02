@@ -7,6 +7,12 @@ Level::Level()
 {
 	//Set positions and sizes of the tiles
 	int xPos = -48, yPos = 52;
+
+	//set size of the datamap
+	datamap.resize(MAP_LENGTH);
+	for (auto& x : datamap)
+		x.resize(MAP_HEIGHT);
+
 	for (int x = 0; x < MAP_LENGTH; x++)
 	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
@@ -244,9 +250,9 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			tilemap[x][y]->update(dt);
 			if (datamap[x][y] != tilemap[x][y]->getType())
 				tilemap[x][y]->setTile((tileType::ID)datamap[x][y]);
+			tilemap[x][y]->update(dt);
 		}
 	}
 
@@ -258,6 +264,7 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 		{
 			// de-activate the bomb and delete it 
 			bombManager[i] = false;
+			datamap = bombs[i]->datamapExplosionCollision(datamap);
 			delete bombs[i];
 			bombs.erase(bombs.begin() + i);
 		}
