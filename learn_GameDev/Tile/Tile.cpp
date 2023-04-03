@@ -59,7 +59,6 @@ void Tile::update(const float& dt)
 			// set the tile to air 
 			setTile(tileType::AIR);
 		}
-		
 	}
 }
 
