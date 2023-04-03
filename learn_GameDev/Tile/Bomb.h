@@ -58,9 +58,7 @@ private:
 	int m_current_frame;
 	bool m_exploded;
 	int m_range;
-
 	bool m_explosion_finished;
-
 	float scaled_size = 16 * 3;
 
 

@@ -61,17 +61,19 @@ void Level::generate(const int& levelNum)
 		for (int y = 0; y < MAP_HEIGHT - 1; y++)
 		{
 			if ((datamap[x][y] == tileType::AIR || datamap[x][y] == tileType::BRICK ||
-				datamap[x][y] == tileType::DOOR) &&
+				datamap[x][y] == tileType::DOOR_CLOSED || datamap[x][y] == tileType::DOOR_OPEN) &&
 				(x + y - 2 > 1) &&
 				x >= 1 && y >= 1)
 			{
 				//Reset on regeneration
 				datamap[x][y] = tileType::AIR;
+				tilemap[x][y]->setTile(tileType::AIR); 
 
 				if (rand() % 4 == 1)
 				{
 					totalBrickCount++;
 					datamap[x][y] = tileType::BRICK;
+					tilemap[x][y]->setTile(tileType::BRICK); 
 				}
 			}
 		}
@@ -115,7 +117,8 @@ void Level::generate(const int& levelNum)
 			{
 				i++;
 				std::cout << "DOOR: " << x << ", " << y << '\n';
-				datamap[x][y] = tileType::DOOR;
+				datamap[x][y] = tileType::DOOR_CLOSED;
+				tilemap[x][y]->setTile(tileType::DOOR_CLOSED);
 			}
 		}
 	}
@@ -251,7 +254,7 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
 			if (datamap[x][y] != tilemap[x][y]->getType())
-				tilemap[x][y]->setTile((tileType::ID)datamap[x][y]);
+				tilemap[x][y]->interact(); 
 
 			tilemap[x][y]->update(dt);
 		}
