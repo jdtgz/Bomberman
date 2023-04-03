@@ -72,6 +72,7 @@ void Level::generate(const int& levelNum)
 				{
 					totalBrickCount++;
 					datamap[x][y] = tileType::BRICK;
+					tilemap[x][y]->setTile(tileType::BRICK); 
 				}
 			}
 		}
@@ -251,7 +252,7 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
 			if (datamap[x][y] != tilemap[x][y]->getType())
-				tilemap[x][y]->setTile((tileType::ID)datamap[x][y]);
+				tilemap[x][y]->interact(); 
 
 			tilemap[x][y]->update(dt);
 		}

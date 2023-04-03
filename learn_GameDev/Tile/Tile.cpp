@@ -49,7 +49,6 @@ void Tile::update(const float& dt)
 	// initiate the blowUp animation IF the tile has been destoryed 
 	if (destroyed == true && type == tileType::BRICK)
 	{
-		std::cout << "Animate";
 		// display one cycle of the blowUp animation
 		blowUp.applyToSprite(mSprite);
 		blowUp.update(dt); 
