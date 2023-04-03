@@ -25,12 +25,11 @@ Tile::~Tile()
 
 //Tile interactions when colliding with a bomb/explosion
 void Tile::interact()
-{
-	if (type == tileType::BRICK)
-	{
-		// destory the brick 
+{	
+	// destory the brick 
+	if (type == tileType::BRICK || type == tileType::DOOR_CLOSED)
 		destroyed = true; 
-	}
+
 }
 
 
@@ -47,19 +46,20 @@ void Tile::update(const float& dt)
 {
 	//std::cout << "Update";
 	// initiate the blowUp animation IF the tile has been destoryed 
-	if (destroyed == true && type == tileType::BRICK)
+	if (destroyed == true && (type == tileType::BRICK || type == tileType::DOOR_CLOSED))
 	{
-		std::cout << "Animate";
 		// display one cycle of the blowUp animation
 		blowUp.applyToSprite(mSprite);
 		blowUp.update(dt); 
 	
+		// set the tile to air 
 		if (blowUp.getCurrentFrame() == 5)
 		{
-			// set the tile to air 
-			setTile(tileType::AIR);
+			if (type == tileType::BRICK)
+				setTile(tileType::AIR);
+			else
+				setTile(tileType::DOOR_OPEN);
 		}
-		
 	}
 }
 
@@ -83,8 +83,11 @@ void Tile::setTile(const tileType::ID& t)
 			break;
 		case tileType::BRICK:
 		case tileType::POWERUP:
-		case tileType::DOOR:
+		case tileType::DOOR_CLOSED:
 			mSprite.setTextureRect({ 16 * 1, 16 * 1, 16, 16 });
+			break;
+		case tileType::DOOR_OPEN:
+			mSprite.setTextureRect({ 16 * 2, 16, 16, 16 });
 			break;
 		case tileType::TILE:
 			mSprite.setTextureRect({ 16 * 0, 16, 16, 16 });

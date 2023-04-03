@@ -7,6 +7,12 @@ Level::Level()
 {
 	//Set positions and sizes of the tiles
 	int xPos = -48, yPos = 52;
+
+	//set size of the datamap
+	datamap.resize(MAP_LENGTH);
+	for (auto& x : datamap)
+		x.resize(MAP_HEIGHT);
+
 	for (int x = 0; x < MAP_LENGTH; x++)
 	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
@@ -52,17 +58,19 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 		for (int y = 0; y < MAP_HEIGHT - 1; y++)
 		{
 			if ((datamap[x][y] == tileType::AIR || datamap[x][y] == tileType::BRICK ||
-				datamap[x][y] == tileType::DOOR) &&
+				datamap[x][y] == tileType::DOOR_CLOSED || datamap[x][y] == tileType::DOOR_OPEN) &&
 				(x + y - 2 > 1) &&
 				x >= 1 && y >= 1)
 			{
 				//Reset on regeneration
 				datamap[x][y] = tileType::AIR;
+				tilemap[x][y]->setTile(tileType::AIR); 
 
 				if (rand() % 4 == 1)
 				{
 					totalBrickCount++;
 					datamap[x][y] = tileType::BRICK;
+					tilemap[x][y]->setTile(tileType::BRICK); 
 				}
 			}
 		}
@@ -106,7 +114,8 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 			{
 				i++;
 				std::cout << "DOOR: " << x << ", " << y << '\n';
-				datamap[x][y] = tileType::DOOR;
+				datamap[x][y] = tileType::DOOR_CLOSED;
+				tilemap[x][y]->setTile(tileType::DOOR_CLOSED);
 			}
 		}
 	}
@@ -244,22 +253,31 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			tilemap[x][y]->update(dt);
 			if (datamap[x][y] != tilemap[x][y]->getType())
-				tilemap[x][y]->setTile((tileType::ID)datamap[x][y]);
+				tilemap[x][y]->interact(); 
+
+			tilemap[x][y]->update(dt);
 		}
 	}
 
 	//Clear bombs
-	for (int i = 0; i < bombs.size(); i++)
+	for (int i = 0; i < 10; i++)
 	{
-		// if the bomb exploded and the bomb is active
-		if (bombs[i]->getExploded() && bombManager[i] == true)
+		if (bombManager[i])
 		{
-			// de-activate the bomb and delete it 
-			bombManager[i] = false;
-			delete bombs[i];
-			bombs.erase(bombs.begin() + i);
+			if (bombs.size() > 0)
+			{
+				if (bombs[0]->getExploded())
+				{
+					// de-activate the bomb and delete it
+					bombManager[i] = false;
+					datamap = bombs[0]->datamapExplosionCollision(datamap);
+					delete bombs[0];
+					bombs.erase(bombs.begin());
+				}
+			}
+			else
+				bombManager[i] = false;
 		}
 	}
 

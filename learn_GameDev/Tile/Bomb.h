@@ -23,7 +23,7 @@ public:
 	bool isBombColliding(sf::Sprite& sprite);
 	//Returns true if the explosion is colliding with sprite
 	bool isExplosionColliding(sf::Sprite& sprite);
-	bool datamapExplosionCollision(int datamap[31][15]);
+	std::vector<std::vector<int>> datamapExplosionCollision(std::vector<std::vector<int>>);
 	//returns true only if explosion is active
 	bool isEntityColliding(sf::Sprite& sprite);
 
@@ -58,9 +58,7 @@ private:
 	int m_current_frame;
 	bool m_exploded;
 	int m_range;
-
 	bool m_explosion_finished;
-
 	float scaled_size = 16 * 3;
 
 

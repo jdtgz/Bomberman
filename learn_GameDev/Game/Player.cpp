@@ -27,7 +27,7 @@ Player::Player()
 
 	// initialize the player/powerUp attributes 
 	bombCount = 3; 
-	flameRange = 1; 
+	flameRange = 2; 
 	speed = 3.f;
 	wallPass = false; 
 	detonator = false;

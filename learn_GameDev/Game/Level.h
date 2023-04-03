@@ -40,7 +40,7 @@ private:
 	const int MAP_LENGTH = 33;
 	const int MAP_HEIGHT = 15;
 
-	int datamap[33][15];
+	std::vector<std::vector<int>> datamap;
 	Tile* tilemap[33][15];
 
 	std::vector<Enemy*> enemies;

@@ -1,6 +1,6 @@
 #include "Bomb.h"
 //Uncomment this to use the new drawing method
-//#define NEW_DRAWING
+#define NEW_DRAWING
 
 Bomb::Bomb(int x, int y, int range, bool has_timer)
 {
@@ -54,38 +54,50 @@ void Bomb::draw(sf::RenderWindow& target)
 
 		/*		Go to start of this file for an explanation for this		*/
 #ifdef NEW_DRAWING
-		//Draw up
-		for (int i = 1; i < m_exploding_range[0]; i++)
+		//North drawing
+		for (int i = 0; i < m_exploding_range[0]; i++)
 		{
-			if (i < m_exploding_range[0] - 1)
-				drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::VERTICAL);
+			int k = i + 1;
+			if (k < m_exploding_range[0])
+			{
+				drawSprite(sf::Vector2f(centerPos.x, centerPos.y - (48 * k)), animationIndex::VERTICAL);
+			}
 			else
-				drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::UP);
+				drawSprite(sf::Vector2f(centerPos.x, centerPos.y - (48 * k)), animationIndex::UP);
 		}
-		//Draw right
-		for (int i = 1; i < m_exploding_range[1]; i++)
-		{
-			if (i < m_exploding_range[1] - 1)
-				drawSprite(sf::Vector2f(centerPos.x, centerPos.y + (48 * i)), animationIndex::HORIZONTAL);
-			else
-				drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::RIGHT);
-		}
-		//Draw down
-		for (int i = 1; i < m_exploding_range[2]; i++)
-		{
-			if (i < m_exploding_range[2] - 1)
-				drawSprite(sf::Vector2f(centerPos.x + (48 * i), centerPos.y), animationIndex::VERTICAL);
-			else
-				drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::DOWN);
-		}
-		//Draw left
-		for (int i = 1; i < m_exploding_range[3]; i++)
-		{
-			if (i < m_exploding_range[3] - 1)
-				drawSprite(sf::Vector2f(centerPos.x, centerPos.y - (48 * i)), animationIndex::HORIZONTAL);
-			else
-				drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::LEFT);
-		}
+
+		////Draw up
+		//for (int i = 1; i <= m_exploding_range[0]; i++)
+		//{
+		//	if (i < m_exploding_range[0] - 1)
+		//		drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::VERTICAL);
+		//	else
+		//		drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::UP);
+		//}
+		////Draw right
+		//for (int i = 1; i <= m_exploding_range[1]; i++)
+		//{
+		//	if (i < m_exploding_range[1] - 1)
+		//		drawSprite(sf::Vector2f(centerPos.x, centerPos.y + (48 * i)), animationIndex::HORIZONTAL);
+		//	else
+		//		drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::RIGHT);
+		//}
+		////Draw down
+		//for (int i = 1; i <= m_exploding_range[2]; i++)
+		//{
+		//	if (i < m_exploding_range[2] - 1)
+		//		drawSprite(sf::Vector2f(centerPos.x + (48 * i), centerPos.y), animationIndex::VERTICAL);
+		//	else
+		//		drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::DOWN);
+		//}
+		////Draw left
+		//for (int i = 1; i <= m_exploding_range[3]; i++)
+		//{
+		//	if (i < m_exploding_range[3] - 1)
+		//		drawSprite(sf::Vector2f(centerPos.x, centerPos.y - (48 * i)), animationIndex::HORIZONTAL);
+		//	else
+		//		drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::LEFT);
+		//}
 #else
 		for (int i = 0; i < m_range; i++)
 		{
@@ -208,12 +220,14 @@ bool Bomb::isColliding(sf::Sprite& sprite)
 	return false;
 }
 
+
 bool Bomb::isBombColliding(sf::Sprite& sprite)
 {
 	if (sprite.getGlobalBounds().intersects(sprite.getGlobalBounds()))
 		return true;
 	return false;
 }
+
 
 bool Bomb::isExplosionColliding(sf::Sprite& sprite)
 {
@@ -258,19 +272,22 @@ bool Bomb::isExplosionColliding(sf::Sprite& sprite)
 	return false;
 }
 
-bool Bomb::datamapExplosionCollision(int datamap[31][15])
+
+std::vector<std::vector<int>> Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 {
 	bool result = false;
 
 	//Check up
-	for (int i = 1; i < m_range; i++)
+	for (int i = 1; i <= m_range; i++)
 	{
 		if (m_position.y - i > 0)
 		{
+			std::cout << "can check up\n";
 			if (datamap[m_position.x][m_position.y - i] != 0)
 			{
 				m_exploding_range[0] = i;
-				result = true;
+
+				std::cout << "Up explotion range " << m_exploding_range[0] << '\n';
 
 				if (datamap[m_position.x][m_position.y - i] != 2)
 				{
@@ -282,14 +299,16 @@ bool Bomb::datamapExplosionCollision(int datamap[31][15])
 			m_exploding_range[0] = i;
 	}
 	//Check right
-	for (int i = 1; i < m_range; i++)
+	for (int i = 1; i <= m_range; i++)
 	{
 		if (m_position.x + i < 31)
 		{
+			std::cout << "can check right\n";
 			if (datamap[m_position.x+i][m_position.y] != 0)
 			{
 				m_exploding_range[1] = i;
-				result = true;
+
+				std::cout << "Right explotion range " << m_exploding_range[1] << '\n';
 
 				if (datamap[m_position.x+1][m_position.y] != 2)
 				{
@@ -301,14 +320,16 @@ bool Bomb::datamapExplosionCollision(int datamap[31][15])
 			m_exploding_range[1] = i;
 	}
 	//Check down
-	for (int i = 1; i < m_range; i++)
+	for (int i = 1; i <= m_range; i++)
 	{
 		if (m_position.y + i < 15)
 		{
+			std::cout << "can check down\n";
 			if (datamap[m_position.x][m_position.y + i] != 0)
 			{
 				m_exploding_range[2] = i;
-				result = true;
+
+				std::cout << "Down explotion range " << m_exploding_range[2] << '\n';
 
 				if (datamap[m_position.x][m_position.y + i] != 2)
 				{
@@ -320,14 +341,16 @@ bool Bomb::datamapExplosionCollision(int datamap[31][15])
 			m_exploding_range[2] = i;
 	}
 	//Check left
-	for (int i = 1; i < m_range; i++)
+	for (int i = 1; i <= m_range; i++)
 	{
 		if (m_position.x - i > 0)
 		{
-			if (datamap[m_position.x-1][m_position.y] != 0)
+			std::cout << "can check left\n";
+			if (datamap[m_position.x-i][m_position.y] != 0)
 			{
 				m_exploding_range[3] = i;
-				result = true;
+
+				std::cout << "Left explotion range " << m_exploding_range[3] << '\n';
 
 				if (datamap[m_position.x-1][m_position.y] != 2)
 				{
@@ -339,13 +362,15 @@ bool Bomb::datamapExplosionCollision(int datamap[31][15])
 			m_exploding_range[3] = i;
 	}
 
-	return result;
+	return datamap;
 }
+
 
 bool Bomb::isEntityColliding(sf::Sprite& sprite)
 {
 	return false;
 }
+
 
 void Bomb::showCollisions(sf::RenderWindow& target)
 {
