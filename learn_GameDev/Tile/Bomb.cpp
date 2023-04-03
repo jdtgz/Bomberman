@@ -1,6 +1,6 @@
 #include "Bomb.h"
 //Uncomment this to use the new drawing method
-//#define NEW_DRAWING
+#define NEW_DRAWING
 
 Bomb::Bomb(int x, int y, int range, bool has_timer)
 {
@@ -54,38 +54,50 @@ void Bomb::draw(sf::RenderWindow& target)
 
 		/*		Go to start of this file for an explanation for this		*/
 #ifdef NEW_DRAWING
-		//Draw up
-		for (int i = 1; i < m_exploding_range[0]; i++)
+		//North drawing
+		for (int i = 0; i < m_exploding_range[0]; i++)
 		{
-			if (i < m_exploding_range[0] - 1)
-				drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::VERTICAL);
+			int k = i + 1;
+			if (k < m_exploding_range[0])
+			{
+				drawSprite(sf::Vector2f(centerPos.x, centerPos.y - (48 * k)), animationIndex::VERTICAL);
+			}
 			else
-				drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::UP);
+				drawSprite(sf::Vector2f(centerPos.x, centerPos.y - (48 * k)), animationIndex::UP);
 		}
-		//Draw right
-		for (int i = 1; i < m_exploding_range[1]; i++)
-		{
-			if (i < m_exploding_range[1] - 1)
-				drawSprite(sf::Vector2f(centerPos.x, centerPos.y + (48 * i)), animationIndex::HORIZONTAL);
-			else
-				drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::RIGHT);
-		}
-		//Draw down
-		for (int i = 1; i < m_exploding_range[2]; i++)
-		{
-			if (i < m_exploding_range[2] - 1)
-				drawSprite(sf::Vector2f(centerPos.x + (48 * i), centerPos.y), animationIndex::VERTICAL);
-			else
-				drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::DOWN);
-		}
-		//Draw left
-		for (int i = 1; i < m_exploding_range[3]; i++)
-		{
-			if (i < m_exploding_range[3] - 1)
-				drawSprite(sf::Vector2f(centerPos.x, centerPos.y - (48 * i)), animationIndex::HORIZONTAL);
-			else
-				drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::LEFT);
-		}
+
+		////Draw up
+		//for (int i = 1; i <= m_exploding_range[0]; i++)
+		//{
+		//	if (i < m_exploding_range[0] - 1)
+		//		drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::VERTICAL);
+		//	else
+		//		drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::UP);
+		//}
+		////Draw right
+		//for (int i = 1; i <= m_exploding_range[1]; i++)
+		//{
+		//	if (i < m_exploding_range[1] - 1)
+		//		drawSprite(sf::Vector2f(centerPos.x, centerPos.y + (48 * i)), animationIndex::HORIZONTAL);
+		//	else
+		//		drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::RIGHT);
+		//}
+		////Draw down
+		//for (int i = 1; i <= m_exploding_range[2]; i++)
+		//{
+		//	if (i < m_exploding_range[2] - 1)
+		//		drawSprite(sf::Vector2f(centerPos.x + (48 * i), centerPos.y), animationIndex::VERTICAL);
+		//	else
+		//		drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::DOWN);
+		//}
+		////Draw left
+		//for (int i = 1; i <= m_exploding_range[3]; i++)
+		//{
+		//	if (i < m_exploding_range[3] - 1)
+		//		drawSprite(sf::Vector2f(centerPos.x, centerPos.y - (48 * i)), animationIndex::HORIZONTAL);
+		//	else
+		//		drawSprite(sf::Vector2f(centerPos.x - (48 * i), centerPos.y), animationIndex::LEFT);
+		//}
 #else
 		for (int i = 0; i < m_range; i++)
 		{
@@ -263,7 +275,7 @@ std::vector<std::vector<int>> Bomb::datamapExplosionCollision(std::vector<std::v
 	bool result = false;
 
 	//Check up
-	for (int i = 1; i < m_range + 1; i++)
+	for (int i = 1; i <= m_range; i++)
 	{
 		if (m_position.y - i > 0)
 		{
@@ -272,7 +284,7 @@ std::vector<std::vector<int>> Bomb::datamapExplosionCollision(std::vector<std::v
 			{
 				m_exploding_range[0] = i;
 
-				std::cout << "Up explotion range " << m_exploding_range[3] << '\n';
+				std::cout << "Up explotion range " << m_exploding_range[0] << '\n';
 
 				if (datamap[m_position.x][m_position.y - i] != 2)
 				{
@@ -284,7 +296,7 @@ std::vector<std::vector<int>> Bomb::datamapExplosionCollision(std::vector<std::v
 			m_exploding_range[0] = i;
 	}
 	//Check right
-	for (int i = 1; i < m_range + 1; i++)
+	for (int i = 1; i <= m_range; i++)
 	{
 		if (m_position.x + i < 31)
 		{
@@ -293,7 +305,7 @@ std::vector<std::vector<int>> Bomb::datamapExplosionCollision(std::vector<std::v
 			{
 				m_exploding_range[1] = i;
 
-				std::cout << "Right explotion range " << m_exploding_range[3] << '\n';
+				std::cout << "Right explotion range " << m_exploding_range[1] << '\n';
 
 				if (datamap[m_position.x+1][m_position.y] != 2)
 				{
@@ -305,7 +317,7 @@ std::vector<std::vector<int>> Bomb::datamapExplosionCollision(std::vector<std::v
 			m_exploding_range[1] = i;
 	}
 	//Check down
-	for (int i = 1; i < m_range + 1; i++)
+	for (int i = 1; i <= m_range; i++)
 	{
 		if (m_position.y + i < 15)
 		{
@@ -314,7 +326,7 @@ std::vector<std::vector<int>> Bomb::datamapExplosionCollision(std::vector<std::v
 			{
 				m_exploding_range[2] = i;
 
-				std::cout << "Down explotion range " << m_exploding_range[3] << '\n';
+				std::cout << "Down explotion range " << m_exploding_range[2] << '\n';
 
 				if (datamap[m_position.x][m_position.y + i] != 2)
 				{
@@ -326,7 +338,7 @@ std::vector<std::vector<int>> Bomb::datamapExplosionCollision(std::vector<std::v
 			m_exploding_range[2] = i;
 	}
 	//Check left
-	for (int i = 1; i < m_range + 1; i++)
+	for (int i = 1; i <= m_range; i++)
 	{
 		if (m_position.x - i > 0)
 		{
