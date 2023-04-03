@@ -36,9 +36,6 @@ void Game::run()
 
 	while (window->isOpen())
 	{
-		//Detect all collisions and adjust player accordingly
-		level.collisions(player);
-
 		//Poll events
 		processEvents();
 
@@ -56,6 +53,9 @@ void Game::run()
 
 			//Tick
 			update(timePerFrame); 
+
+			//Detect all collisions and adjust player accordingly
+			level.collisions(player);
 		}
 
 		//Display updated gamestate
