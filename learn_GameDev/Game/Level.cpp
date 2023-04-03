@@ -257,16 +257,18 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 	}
 
 	//Clear bombs
-	for (int i = 0; i < bombs.size(); i++)
+	for (int i = 0; i < 10; i++)
 	{
-		// if the bomb exploded and the bomb is active
-		if (bombs[i]->getExploded() && bombManager[i] == true)
+		if (bombManager[i])
 		{
-			// de-activate the bomb and delete it 
-			bombManager[i] = false;
-			datamap = bombs[i]->datamapExplosionCollision(datamap);
-			delete bombs[i];
-			bombs.erase(bombs.begin() + i);
+			if (bombs[0]->getExploded())
+			{
+				// de-activate the bomb and delete it
+				bombManager[i] = false;
+				datamap = bombs[0]->datamapExplosionCollision(datamap);
+				delete bombs[0];
+				bombs.erase(bombs.begin());
+			}
 		}
 	}
 
