@@ -252,6 +252,7 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 		{
 			if (datamap[x][y] != tilemap[x][y]->getType())
 				tilemap[x][y]->setTile((tileType::ID)datamap[x][y]);
+
 			tilemap[x][y]->update(dt);
 		}
 	}
