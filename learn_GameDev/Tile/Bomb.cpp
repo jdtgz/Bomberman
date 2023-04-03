@@ -208,12 +208,14 @@ bool Bomb::isColliding(sf::Sprite& sprite)
 	return false;
 }
 
+
 bool Bomb::isBombColliding(sf::Sprite& sprite)
 {
 	if (sprite.getGlobalBounds().intersects(sprite.getGlobalBounds()))
 		return true;
 	return false;
 }
+
 
 bool Bomb::isExplosionColliding(sf::Sprite& sprite)
 {
@@ -257,6 +259,7 @@ bool Bomb::isExplosionColliding(sf::Sprite& sprite)
 
 	return false;
 }
+
 
 std::vector<std::vector<int>> Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 {
@@ -350,10 +353,12 @@ std::vector<std::vector<int>> Bomb::datamapExplosionCollision(std::vector<std::v
 	return datamap;
 }
 
+
 bool Bomb::isEntityColliding(sf::Sprite& sprite)
 {
 	return false;
 }
+
 
 void Bomb::showCollisions(sf::RenderWindow& target)
 {
