@@ -29,7 +29,7 @@ class Player : public Collidable
 		//Collision
 		void move(const float&, const float&);
 		void setCanMove(const int&, const bool&);
-		sf::Vector2f getPosition();
+		sf::Vector2f getPosition() const;
 		sf::FloatRect getBoundingBox() const;
 		sf::Sprite getSprite() const;
 
@@ -43,20 +43,20 @@ class Player : public Collidable
 		float getSpeed() const;
 		void plusSpeed(); 
 
-		bool wallPass_status() const;
-		void activate_wallPass(); 
+		bool hasWallPass() const;
+		void enableWallPass();
 		 
-		bool detonator_status() const;
-		void activate_detonator();
+		bool hasDetonator() const;
+		void enableDetonator();
 
-		bool bombPass_status() const; 
-		void activate_bombPass(); 
+		bool hasBombPass() const; 
+		void enableBombPass(); 
 
-		bool flamePass_status() const; 
-		void activate_flamePass(); 
+		bool hasFlamePass() const; 
+		void enableFlamePass(); 
 
-		bool invincible_status() const; 
-		void activate_invincible(); 		
+		bool isInvincible() const; 
+		void enableInvincible(); 		
 
 	private:
 		// Visual attributes

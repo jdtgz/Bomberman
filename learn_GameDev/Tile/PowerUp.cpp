@@ -108,23 +108,23 @@ void PowerUp::applyPowerUp(Player& player)
 			break; 
 		case powerups::WALL_PASS:
 			std::cout << "WALL PASS\n";
-			player.activate_wallPass(); 
+			player.enableWallPass(); 
 			break;
 		case powerups::DETONATOR:
 			std::cout << "DETONATOR\n";
-			player.activate_detonator();
+			player.enableDetonator();
 			break;
 		case powerups::BOMB_PASS:
 			std::cout << "BOMB PASS\n";
-			player.activate_bombPass(); 
+			player.enableBombPass(); 
 			break;
 		case powerups::FLAME_PASS:
 			std::cout << "FLAME PASS\n";
-			player.activate_flamePass(); 
+			player.enableFlamePass(); 
 			break;
 		case powerups::INVINCIBILITY:
 			std::cout << "INVINCIBLE\n";
-			player.activate_invincible(); 
+			player.enableInvincible();
 			break;
 	}	
 

@@ -4,18 +4,16 @@
 class Valcom : public Enemy
 {
 public:
-	Valcom(const sf::Vector2i&);
-	Valcom(const sf::Vector2i&, const directions&);
+	Valcom(const Player*);
+	Valcom(const Player*, const sf::Vector2i&);
+	Valcom(const Player*, const sf::Vector2i&, const directions&);
 
-	virtual void update(const float&) override;
-	virtual void move(Tile*[33][15], const sf::Vector2i&) override;
+	virtual void move(Tile*[33][15]) override;
 
 	~Valcom();
-private:
-	int debounce = 0;
-	const int DEBOUNCE_MAX = 10;
-
 protected:
-	virtual void init(const sf::Vector2i&, const directions&);
-	virtual double getClippingMargin() const;
+	virtual double clippingMargin() const override;
+private:
+	void init(const sf::Vector2i&, const directions&);
+	int dirDebounce;
 };

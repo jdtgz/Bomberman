@@ -3,7 +3,6 @@
 #include <vector>
 #include "../Tile/Tile.h"
 #include "../Enemies/Enemy.h"
-#include "../Enemies/Valcom.h"
 #include "../Tile/Tile.h"
 
 class Level
@@ -14,7 +13,7 @@ public:
 	~Level();
 
 	// load the stage
-	void generate(const int&);
+	void generate(const int&, const Player*);
 	// end the level 
 	void end();
 
@@ -35,7 +34,7 @@ public:
 	// track enemy collisions 
 	//void collisions(Enemy&);
 
-	void update(const float&,sf::Vector2f, int, int, bool, sf::Sprite);
+	void update(const float&, sf::Vector2f, int, int, bool, sf::Sprite);
   
 private:
 	const int MAP_LENGTH = 33;
