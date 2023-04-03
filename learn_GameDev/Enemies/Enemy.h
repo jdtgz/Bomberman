@@ -45,7 +45,7 @@ protected:
 	const Player* playerPointer;
 	void moveForward(Tile*[33][15]);
 	void moveForwardAndBounce(Tile*[33][15]);
-	void changeHeadingRandomly(Tile* [33][15]);
+	void changeHeadingRandomly(Tile*[33][15]);
 	bool isAtTile(Tile*[33][15]);
 	bool atTargetTile(Tile*[33][15]);
 	virtual double clippingMargin() const;
