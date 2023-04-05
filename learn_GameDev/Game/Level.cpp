@@ -238,27 +238,31 @@ void Level::collisions(Player& plr)
 
 bool Level::deathCheck(std::vector<int> range, sf::Vector2i bombPos)
 {
-	for (int i = 0; i < range[0]; i++)
+	// Check if player is in spots above
+	for (int i = 0; i <= range[0]; i++)
 	{
 		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x, bombPos.y - i))
 			return true;
 	}
-	for (int i = 0; i < range[0]; i++)
+	// to the right
+	for (int i = 0; i <= range[1]; i++)
 	{
 		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x + i, bombPos.y))
 			return true;
 	}
-	for (int i = 0; i < range[0]; i++)
+	// below
+	for (int i = 0; i <= range[2]; i++)
 	{
 		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x, bombPos.y + i))
 			return true;
 	}
-	for (int i = 0; i < range[0]; i++)
+	// and to the left of the bomb
+	for (int i = 0; i <= range[3]; i++)
 	{
 		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x - i, bombPos.y))
-			return true;
+			return true; //If the positions match player dies
 	}
-	return false;
+	return false; // If no matches found player lives
 }
 
 
