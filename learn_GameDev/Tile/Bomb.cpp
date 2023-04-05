@@ -186,7 +186,7 @@ std::vector<int> Bomb::getExplodingRange()
 }
 
 
-// *Needs explanation*
+// returns true if a sprite is colliding with the explosion
 bool Bomb::isColliding(sf::Sprite& sprite)
 {
 	if (m_exploded && !m_explosion_finished)
@@ -306,20 +306,20 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 			{
 				//std::cout << "Up explotion range " << m_exploding_range[0] << '\n';
 				std::cout << "Up: " << i << '\n';
-					m_exploding_range[0] = i;
 
 
 				if (datamap[m_position.x][m_position.y - i] != 2 && !stop)
 				{
+					m_exploding_range[0] = i;
 					datamap[m_position.x][m_position.y - i] = 0;
 					stop = true;
 				}
 				else
 					stop = true;
 			}
+			else if (datamap[m_position.x][m_position.y - i] == 0 && !stop)
+				m_exploding_range[0] = i;
 		}
-		else
-			m_exploding_range[0] = i;
 	}
 
 	stop = false;
@@ -335,19 +335,19 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 				//std::cout << "Right explotion range " << m_exploding_range[1] << '\n';
 
 				std::cout << "Right: " << i << '\n';
-					m_exploding_range[1] = i;
 
 				if (datamap[m_position.x+i][m_position.y] != 2 && !stop)
 				{
+					m_exploding_range[1] = i;
 					datamap[m_position.x+i][m_position.y] = 0;
 					stop = true;
 				}
 				else
 					stop = true;
 			}
+			else if (datamap[m_position.x + i][m_position.y] == 0 && !stop)
+				m_exploding_range[1] = i;
 		}
-		else
-			m_exploding_range[1] = i;
 	}
 
 	stop = false;
@@ -363,19 +363,19 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 				//std::cout << "Down explotion range " << m_exploding_range[2] << '\n';
 
 				std::cout << "Down: " << i << '\n';
-					m_exploding_range[2] = i;
 
 				if (datamap[m_position.x][m_position.y + i] != 2 && !stop)
 				{
+					m_exploding_range[2] = i;
 					datamap[m_position.x][m_position.y + i] = 0;
 					stop = true;
 				}
 				else
 					stop = true;
 			}
+			else if (datamap[m_position.x][m_position.y + i] == 0 && !stop)
+				m_exploding_range[2] = i;
 		}
-		else
-			m_exploding_range[2] = i;
 	}
 
 	stop = false;
@@ -391,19 +391,19 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 				//std::cout << "Left explotion range " << m_exploding_range[3] << '\n';
 
 				std::cout << "Left: " << i << '\n';
-					m_exploding_range[3] = i;
 
 				if (datamap[m_position.x - i][m_position.y] != 2 && !stop)
 				{
+					m_exploding_range[3] = i;
 					datamap[m_position.x - i][m_position.y] = 0;
 					stop = true;
 				}
 				else
 					stop = true;
 			}
+			else if (datamap[m_position.x - i][m_position.y] == 0 && !stop)
+				m_exploding_range[3] = i;
 		}
-		else
-			m_exploding_range[3] = i;
 	}
 
 	stop = false;
