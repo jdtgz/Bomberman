@@ -236,12 +236,37 @@ void Level::collisions(Player& plr)
 	plr.move(offset.x, offset.y);
 }
 
+bool Level::deathCheck(std::vector<int> range, sf::Vector2i bombPos)
+{
+	for (int i = 0; i < range[0]; i++)
+	{
+		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x, bombPos.y - i))
+			return true;
+	}
+	for (int i = 0; i < range[0]; i++)
+	{
+		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x + i, bombPos.y))
+			return true;
+	}
+	for (int i = 0; i < range[0]; i++)
+	{
+		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x, bombPos.y + i))
+			return true;
+	}
+	for (int i = 0; i < range[0]; i++)
+	{
+		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x - i, bombPos.y))
+			return true;
+	}
+	return false;
+}
+
 
 void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRange, bool detonate, sf::Sprite pSprite)
 {
 	int offset = 1;
 	bool collided = false;
-	
+
 	for (int i = 0; i < enemies.size(); i++)
 	{
 		enemies[i]->update(dt);
@@ -269,9 +294,17 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 			{
 				if (bombs[0]->getExploded())
 				{
-					// de-activate the bomb and delete it
+					// de-activate the bomb
 					bombManager[i] = false;
+
+					//Destroy the Bricks
 					datamap = bombs[0]->datamapExplosionCollision(datamap);
+
+					//Check if player dies
+					if(deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition()))
+						std::cout << "PLAYER DEAD\n";
+
+					//Remove Bomb
 					delete bombs[0];
 					bombs.erase(bombs.begin());
 				}

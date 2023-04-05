@@ -31,6 +31,8 @@ public:
 
 	// track player collisions 
 	void collisions(Player&);
+	bool deathCheck(std::vector<int>, sf::Vector2i);
+
 	// track enemy collisions 
 	//void collisions(Enemy&);
 
@@ -56,4 +58,5 @@ private:
 	int playerX;
 	int playerY;
 	sf::Sprite playerSprite;
+	bool playerDead = false;
 };
