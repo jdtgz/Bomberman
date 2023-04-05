@@ -1,14 +1,24 @@
 #include "PowerUp.h"
 
 
-PowerUp::PowerUp(const int& x, const int& y, const int& typ)
+// Create a PowerUp at (x,y) and set its powerUpType 
+PowerUp::PowerUp(const int& x, const int& y)
 	: Tile(x, y, tileType::POWERUP)
 {
-	powerUpType = typ;
+	// set the tile type 
+	type = tileType::POWERUP;
+
+	// set the power up type randomly
+	srand(time(NULL)); 
+	powerUpType = (int)(rand() % 8);
+
+	// set the initial state of powerUp
+	destroyed = false; 
 	revealed = false;
 }
 
 
+// destructor
 PowerUp::~PowerUp()
 {
 }
@@ -18,76 +28,105 @@ PowerUp::~PowerUp()
 // then destroy old mSprite & reveal actual mSprite
 void PowerUp::revealPowerUp()
 {
-	revealed = true;
-	std::cout << "Revealed: ";
-	switch (type)
+	// if the powerUp has been revealed, set the sprite
+	if (revealed == true)
 	{
-		case powerups::BOMB_UP:
-			mSprite.setTextureRect({ 0, 48, 16, 16 });
-			std::cout << "BOMB UP\n";
-			break;
-		case powerups::FLAME_UP:
-			mSprite.setTextureRect({ 16, 48, 16, 16 });
-			std::cout << "FLAME UP\n";
-			break;
-		case powerups::SPEED_UP:
-			mSprite.setTextureRect({ 32, 48, 16, 16 });
-			std::cout << "SPEED UP\n";
-			break;
-		case powerups::WALL_PASS:
-			mSprite.setTextureRect({ 48, 48, 16, 16 });
-			std::cout << "WALL PASS\n";
-			break;
-		case powerups::DETONATOR:
-			mSprite.setTextureRect({ 64, 48, 16, 16 });
-			std::cout << "DETONATOR\n";
-			break;
-		case powerups::BOMB_PASS:
-			mSprite.setTextureRect({ 80, 48, 16, 16 });
-			std::cout << "BOMB PASS\n";
-			break;
-		case powerups::FLAME_PASS:
-			mSprite.setTextureRect({ 96, 48, 16, 16 });
-			std::cout << "FLAME PASS\n";
-			break;
-		case powerups::INVINCIBILITY:
-			mSprite.setTextureRect({ 112, 48, 16, 16 });
-			std::cout << "INVINCIBLE\n";
-			break;
+		// Based on type, set the sprite
+		switch (type)
+		{
+			case powerups::BOMB_UP:
+				mSprite.setTextureRect({ 0, 48, 16, 16 });
+				std::cout << "BOMB UP\n";
+				break;
+			case powerups::FLAME_UP:
+				mSprite.setTextureRect({ 16, 48, 16, 16 });
+				std::cout << "FLAME UP\n";
+				break;
+			case powerups::SPEED_UP:
+				mSprite.setTextureRect({ 32, 48, 16, 16 });
+				std::cout << "SPEED UP\n";
+				break;
+			case powerups::WALL_PASS:
+				mSprite.setTextureRect({ 48, 48, 16, 16 });
+				std::cout << "WALL PASS\n";
+				break;
+			case powerups::DETONATOR:
+				mSprite.setTextureRect({ 64, 48, 16, 16 });
+				std::cout << "DETONATOR\n";
+				break;
+			case powerups::BOMB_PASS:
+				mSprite.setTextureRect({ 80, 48, 16, 16 });
+				std::cout << "BOMB PASS\n";
+				break;
+			case powerups::FLAME_PASS:
+				mSprite.setTextureRect({ 96, 48, 16, 16 });
+				std::cout << "FLAME PASS\n";
+				break;
+			case powerups::INVINCIBILITY:
+				mSprite.setTextureRect({ 112, 48, 16, 16 });
+				std::cout << "INVINCIBLE\n";
+				break;
+		}
+
+		// scale the sprite properly
+		mSprite.setScale(3, 3); 
 	}
-		
 }
 
 
-// reveals the sprite of the powerup or spawns enemies based on currernt status 
+// Dictates a tile's behavior when colliding with bomb explosions 
 void PowerUp::interact()
 {
-	if (revealed == true)
-		spawnEnemies();
+	// if tile is destoryed and is a powerUp
+	if (destroyed == true && type == tileType::POWERUP)
+	{
+		// If the powerUp is not revealed 
+		if (revealed == false)
+		{
+			// reveal the powerUp
+			revealed = true; 
+		}
+		// If the power up is not revealed 
+		else if (revealed == true)
+		{
+			// spawn enemies on the screen
+			spawnEnemies(); 
+
+			// set the block to air AND make the powerUp unaccessable 
+			setTile(tileType::AIR); 
+		}
+	}
+	// If it is no longer a PowerUp tile, 
+	// call the original interact
 	else
-		revealed = true; 
+	{
+		Tile::interact(); 
+	}
 }
 
 
+// Update the sprite state of the tile
 void PowerUp::update(const float& dt)
 {
 	// initiate the blowUp animation IF the tile has been destoryed 
 	if (destroyed == true && type == tileType::POWERUP)
 	{
 		// display one cycle of the blowUp animation
-		while (blowUp.getCurrentFrame() <= 6)
+		blowUp.applyToSprite(mSprite);
+		blowUp.update(dt);
+		
+		// if lsat the last frame of the animation
+		if (blowUp.getCurrentFrame() == 5)
 		{
-			blowUp.applyToSprite(mSprite);
-			blowUp.update(dt);
+			// reveal the powerUp
+			revealPowerUp(); 
 		}
-
-		// reveal the true sprite of the powerUp
-		revealPowerUp(); 
 	}
 }
 
 
-// aceess the player once & adjust its powerUp attirbutes
+// Based on the power up type,
+// adjust player attributes and become Air
 void PowerUp::applyPowerUp(Player& player)
 {
 	//determine what type of power up it is & update player

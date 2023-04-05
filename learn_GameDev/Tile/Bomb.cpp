@@ -2,6 +2,9 @@
 //Uncomment this to use the new drawing method
 #define NEW_DRAWING
 
+// Creates a bomb at (x,y)
+// @param range -> number of tiles explosion reaches in all directions 
+// @param has_timer -> determines if explosion will explode on a timer
 Bomb::Bomb(int x, int y, int range, bool has_timer)
 {
 	m_range = range;
@@ -24,11 +27,13 @@ Bomb::Bomb(int x, int y, int range, bool has_timer)
 }
 
 
+// destructor
 Bomb::~Bomb()
 {
 }
 
 
+// draws the bomb onto the game window
 void Bomb::draw(sf::RenderWindow& target)
 {
 	//Bomb
@@ -141,12 +146,7 @@ void Bomb::draw(sf::RenderWindow& target)
 }
 
 
-void Bomb::explode()
-{
-	m_exploded = true;
-}
-
-
+// updates the bomb's state
 void Bomb::update(float dt)
 {
 	if (m_explode_clock.getElapsedTime() > m_timer && !m_exploded && m_timer.asSeconds() != -1)
@@ -177,6 +177,43 @@ void Bomb::update(float dt)
 	m_animations[0].update(dt);
 }
 
+
+// Initiates the explosion sequence for the bomb
+void Bomb::explode()
+{
+	m_exploded = true;
+}
+
+
+// return range of explosion
+int Bomb::getRange() const 
+{ 
+	return m_range; 
+}
+
+
+// return position of bomb (center of explosion)
+sf::Vector2i Bomb::getPosition() const
+{ 
+	return m_position; 
+}
+
+
+// returns if bomb has initialized its explosions sequence 
+bool Bomb::getExploded()
+{ 
+	return m_explosion_finished; 
+}
+
+
+// returns if the explosion sequence is still active
+bool Bomb::getExploding()
+{
+	return m_exploded;
+}
+
+
+// *Needs explanation*
 bool Bomb::isColliding(sf::Sprite& sprite)
 {
 	if (m_exploded && !m_explosion_finished)
@@ -220,7 +257,7 @@ bool Bomb::isColliding(sf::Sprite& sprite)
 	return false;
 }
 
-
+// Bomb collisions with other objects 
 bool Bomb::isBombColliding(sf::Sprite& sprite)
 {
 	if (sprite.getGlobalBounds().intersects(sprite.getGlobalBounds()))
@@ -229,6 +266,7 @@ bool Bomb::isBombColliding(sf::Sprite& sprite)
 }
 
 
+// Explosion collisions with other objects 
 bool Bomb::isExplosionColliding(sf::Sprite& sprite)
 {
 	if (m_exploded && !m_explosion_finished)
@@ -273,7 +311,9 @@ bool Bomb::isExplosionColliding(sf::Sprite& sprite)
 }
 
 
-std::vector<std::vector<int>> Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
+// updates datamap after explosion takes affect on environment
+std::vector<std::vector<int>> 
+Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 {
 	bool result = false;
 
@@ -366,12 +406,14 @@ std::vector<std::vector<int>> Bomb::datamapExplosionCollision(std::vector<std::v
 }
 
 
+// *Needs explanation*
 bool Bomb::isEntityColliding(sf::Sprite& sprite)
 {
 	return false;
 }
 
 
+// *Needs explanation*
 void Bomb::showCollisions(sf::RenderWindow& target)
 {
 	sf::Vector2f centerPos(((m_position.x - 1) * 48), ((m_position.y + 1) * 48));
@@ -402,6 +444,8 @@ void Bomb::showCollisions(sf::RenderWindow& target)
 	}
 }
 
+
+// initialize all spriteRects for animation
 void Bomb::initAnimation()
 {
 	//Loading frames from small explosion to large explosion
