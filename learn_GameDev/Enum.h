@@ -1,6 +1,6 @@
 #pragma once
 
-enum directions { NORTH = 0, EAST, SOUTH, WEST, COUNT };
+enum direction { NORTH = 0, EAST, SOUTH, WEST, COUNT };
 
 namespace tileType
 {

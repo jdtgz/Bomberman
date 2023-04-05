@@ -211,7 +211,8 @@ void Level::collisions(Player& plr)
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			if (tilemap[x][y]->getType() != tileType::AIR)
+			if (tilemap[x][y]->getType() != tileType::AIR &&
+				tilemap[x][y]->getType() != tileType::DOOR_OPEN)
 			{
 				sf::Vector2f center_tile = {
 					tilemap[x][y]->getBounds().left + (tilemap[x][y]->getBounds().width / 2),

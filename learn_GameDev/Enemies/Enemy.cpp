@@ -3,12 +3,12 @@
 
 Enemy::Enemy(const Player* plrPtr)
 {
-	heading = directions::NORTH;
+	heading = direction::NORTH;
 	curAnim = animIndex::RIGHT;
-	moveSpeed = 0.f;
-	atTile = true;
+	moveSpeed = 1.f;
+	clippingMargin = 1.f;
 	alive = true;
-	playerPointer = plrPtr;
+	playerRef = plrPtr;
 }
 
 
@@ -19,87 +19,80 @@ void Enemy::update(const float& dt)
 }
 
 
-void Enemy::moveForward(Tile* tilemap[33][15])
-{
-	sf::Vector2i tilePos = getTilePosition();
-	switch (heading)
-	{
-	case directions::NORTH:
-		if (tilePos.y >= 0 && sprite.getPosition().y >= 100 &&
-			tilemap[tilePos.x][tilePos.y]->getType() == tileType::AIR)
-			sprite.move(0, -moveSpeed);
-		break;
-	case directions::SOUTH:
-		if (tilePos.y < 14 && sprite.getPosition().y < 48 * 12 + 100 &&
-			tilemap[tilePos.x][tilePos.y + 1]->getType() == tileType::AIR)
-			sprite.move(0, moveSpeed);
-		break;
-	case directions::EAST:
-		if (tilePos.x >= 0 && sprite.getPosition().x < 48 * 30 &&
-			tilemap[tilePos.x + 1][tilePos.y]->getType() == tileType::AIR)
-			sprite.move(moveSpeed, 0);
-		break;
-	case directions::WEST:
-		if (tilePos.x < 32 && sprite.getPosition().x >= 0 &&
-			tilemap[tilePos.x][tilePos.y]->getType() == tileType::AIR)
-			sprite.move(-moveSpeed, 0);
-	}
-}
-
-
-void Enemy::moveForwardAndBounce(Tile* tilemap[33][15])
-{
-	sf::Vector2i tilePos = getTilePosition();
-	switch (heading)
-	{
-	case directions::NORTH:
-		if (tilePos.y >= 0 && sprite.getPosition().y >= 100 &&
-			tilemap[tilePos.x][tilePos.y]->getType() == tileType::AIR)
-			sprite.move(0, -moveSpeed);
-		else
-			heading = directions::SOUTH;
-		break;
-	case directions::SOUTH:
-		if (tilePos.y < 14 && sprite.getPosition().y < 48 * 12 + 100 &&
-			tilemap[tilePos.x][tilePos.y + 1]->getType() == tileType::AIR)
-			sprite.move(0, moveSpeed);
-		else
-			heading = directions::NORTH;
-		break;
-	case directions::EAST:
-		if (tilePos.x >= 0 && sprite.getPosition().x < 48 * 30 &&
-			tilemap[tilePos.x + 1][tilePos.y]->getType() == tileType::AIR)
-			sprite.move(moveSpeed, 0);
-		else
-		{
-			heading = directions::WEST;
-			curAnim = animIndex::LEFT;
-		}
-		break;
-	case directions::WEST:
-		if (tilePos.x < 32 && sprite.getPosition().x >= 0 &&
-			tilemap[tilePos.x][tilePos.y]->getType() == tileType::AIR)
-			sprite.move(-moveSpeed, 0);
-		else
-		{
-			heading = directions::EAST;
-			curAnim = animIndex::RIGHT;
-		}
-	}
-}
-
-
-void Enemy::changeHeadingRandomly(Tile* tilemap[33][15])
+bool Enemy::moveForward(Tile* tilemap[33][15])
 {
 	sf::Vector2i t = getTilePosition();
-	if (heading == directions::NORTH || heading == directions::SOUTH)
+	bool moved = false;
+	switch (heading)
+	{
+	case direction::NORTH:
+		if (t.y >= 0 && sprite.getPosition().y >= 100 &&
+			tilemap[t.x][t.y]->getType() == tileType::AIR)
+		{
+			sprite.move(0, -moveSpeed);
+			moved = true;
+		}
+		break;
+	case direction::SOUTH:
+		if (t.y < 14 && sprite.getPosition().y < 48 * 12 + 100 &&
+			tilemap[t.x][t.y + 1]->getType() == tileType::AIR)
+		{
+			sprite.move(0, moveSpeed);
+			moved = true;
+		}
+		break;
+	case direction::EAST:
+		if (t.x >= 0 && sprite.getPosition().x < 48 * 30 &&
+			tilemap[t.x + 1][t.y]->getType() == tileType::AIR)
+		{
+			sprite.move(moveSpeed, 0);
+			moved = true;
+		}
+		break;
+	case direction::WEST:
+		if (t.x < 32 && sprite.getPosition().x >= 0 &&
+			tilemap[t.x][t.y]->getType() == tileType::AIR)
+		{
+			sprite.move(-moveSpeed, 0);
+			moved = true;
+		}
+	}
+	return moved;
+}
+
+
+void Enemy::bounce()
+{
+	switch (heading)
+	{
+	case direction::NORTH:
+		heading = direction::SOUTH;
+		break;
+	case direction::SOUTH:
+		heading = direction::NORTH;
+		break;
+	case direction::EAST:
+		heading = direction::WEST;
+		curAnim = animIndex::LEFT;
+		break;
+	case direction::WEST:
+		heading = direction::EAST;
+		curAnim = animIndex::RIGHT;
+	}
+}
+
+
+void Enemy::randomHeading(Tile* tilemap[33][15])
+{
+	sf::Vector2i t = getTilePosition();
+	if (heading == direction::NORTH || heading == direction::SOUTH)
 	{
 		if (rand() % 2 == 0)
 		{
 			if (t.x > 1 &&
 				tilemap[t.x - 1][t.y]->getType() == tileType::AIR)
 			{
-				heading = directions::WEST;
+				heading = direction::WEST;
 				curAnim = animIndex::LEFT;
 			}
 		}
@@ -108,11 +101,10 @@ void Enemy::changeHeadingRandomly(Tile* tilemap[33][15])
 			if (t.x < 31 &&
 				tilemap[t.x + 1][t.y]->getType() == tileType::AIR)
 			{
-				heading = directions::EAST;
+				heading = direction::EAST;
 				curAnim = animIndex::RIGHT;
 			}
 		}
-		
 	}
 	else
 	{
@@ -120,54 +112,33 @@ void Enemy::changeHeadingRandomly(Tile* tilemap[33][15])
 		{
 			if (t.y > 1 &&
 				tilemap[t.x][t.y - 1]->getType() == tileType::AIR)
-				heading = directions::NORTH;
+				heading = direction::NORTH;
 		}
 		else
 		{
 			if (t.y < 13 &&
 				tilemap[t.x][t.y + 1]->getType() == tileType::AIR)
-				heading = directions::SOUTH;
+				heading = direction::SOUTH;
 		}
 	}
 }
 
 
-//Updates the atTile data member and returns its new value
-bool Enemy::isAtTile(Tile* tilemap[33][15])
+bool Enemy::atTile(Tile* tilemap[33][15])
 {
-	sf::Vector2i tilePos = getTilePosition();
-	atTile = false;
-	if (((heading == directions::NORTH || heading == directions::SOUTH) &&
-		abs(sprite.getPosition().y -
-			tilemap[tilePos.x][tilePos.y]->getPosition().y) <
-		clippingMargin() && sprite.getPosition().y >=
-		tilemap[tilePos.x][tilePos.y]->getPosition().y) ||
-		((heading == directions::EAST || heading == directions::WEST) &&
-			abs(sprite.getPosition().x -
-				tilemap[tilePos.x][tilePos.y]->getPosition().x) <
-			clippingMargin() && sprite.getPosition().x >=
-			tilemap[tilePos.x][tilePos.y]->getPosition().x))
-		atTile = true;
-	return atTile;
-}
-
-
-//Returns true if isAtTile returns true and
-//the current tile position is the target tile
-bool Enemy::atTargetTile(Tile* tilemap[33][15])
-{
+	sf::Vector2i t = getTilePosition();
 	bool at = false;
-	if (isAtTile(tilemap) && getTilePosition() == targetTile)
+
+	if (((heading == direction::NORTH || heading == direction::SOUTH) &&
+		abs(sprite.getPosition().y -
+			tilemap[t.x][t.y]->getPosition().y) < clippingMargin &&
+		sprite.getPosition().y >= tilemap[t.x][t.y]->getPosition().y) ||
+		((heading == direction::EAST || heading == direction::WEST) &&
+			abs(sprite.getPosition().x -
+				tilemap[t.x][t.y]->getPosition().x) < clippingMargin &&
+			sprite.getPosition().x >= tilemap[t.x][t.y]->getPosition().x))
 		at = true;
 	return at;
-}
-
-
-//Amount the enemy can clip into walls
-//Larger margins result in more leniency within moveent system
-double Enemy::clippingMargin() const
-{
-	return 1.;
 }
 
 

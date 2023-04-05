@@ -8,7 +8,7 @@ Tile::Tile(const int& x, const int& y, const tileType::ID& typ)
 	mSprite.setTexture(TextureHolder::get(textures::ITEMS));
 	setTile(typ);
 
-	// blow up animation ONLY for tileType::BRICK
+	// blow up animation
 	blowUp.setUp(TextureHolder::get(textures::ITEMS), 0, 16 * 2, 16, 16, 6); 
 	blowUp.showOnce(); 
 
@@ -28,7 +28,7 @@ void Tile::interact()
 {	
 	// destory the brick 
 	if (type == tileType::BRICK || type == tileType::DOOR_CLOSED)
-		destroyed = true; 
+		destroyed = true;
 
 }
 
@@ -58,7 +58,10 @@ void Tile::update(const float& dt)
 			if (type == tileType::BRICK)
 				setTile(tileType::AIR);
 			else
+			{
 				setTile(tileType::DOOR_OPEN);
+				//spawn enemies
+			}
 		}
 	}
 }

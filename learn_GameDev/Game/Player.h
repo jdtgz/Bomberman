@@ -78,9 +78,9 @@ class Player : public Collidable
 		// Movement attributes 
 		int xVel, yVel;
 		// Direction that the player is moving 
-		bool movement[directions::COUNT];
+		bool movement[direction::COUNT];
 		// Directions where player 'can possibly' move
-		bool canMove[directions::COUNT];
+		bool canMove[direction::COUNT];
 
 		// player attirbutes 
 		int bombCount; 

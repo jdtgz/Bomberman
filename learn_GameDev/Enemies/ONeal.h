@@ -6,14 +6,12 @@ class ONeal : public Enemy
 public:
 	ONeal(const Player*);
 	ONeal(const Player*, const sf::Vector2i&);
-	ONeal(const Player*, const sf::Vector2i&, const directions&);
+	ONeal(const Player*, const sf::Vector2i&, const direction&);
 
 	virtual void move(Tile* [33][15]) override;
 
 	~ONeal();
-protected:
-	virtual double clippingMargin() const override;
 private:
-	void init(const sf::Vector2i&, const directions&);
+	void init(const sf::Vector2i&, const direction&);
 	int dirDebounce;
 };

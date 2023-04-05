@@ -12,7 +12,7 @@ public:
 	Enemy(const Player*);
 
 	void update(const float&);
-	virtual void move(Tile*[33][15]) = 0;
+	virtual void move(Tile* [33][15]) = 0;
 
 	void draw(sf::RenderWindow&) const;
 	void die();
@@ -38,15 +38,12 @@ protected:
 	bool alive;
 
 	//Movement
-	directions heading;
+	direction heading;
 	float moveSpeed;
-	bool atTile;
-	sf::Vector2i targetTile;
-	const Player* playerPointer;
-	void moveForward(Tile*[33][15]);
-	void moveForwardAndBounce(Tile*[33][15]);
-	void changeHeadingRandomly(Tile*[33][15]);
-	bool isAtTile(Tile*[33][15]);
-	bool atTargetTile(Tile*[33][15]);
-	virtual double clippingMargin() const;
+	float clippingMargin;
+	const Player* playerRef;
+	bool moveForward(Tile* [33][15]);
+	void bounce();
+	void randomHeading(Tile* [33][15]);
+	bool atTile(Tile* [33][15]);
 };
