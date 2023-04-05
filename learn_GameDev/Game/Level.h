@@ -4,6 +4,8 @@
 #include "../Tile/Tile.h"
 #include "../Enemies/Enemy.h"
 #include "../Tile/Tile.h"
+#include "../Tile/PowerUp.h"
+
 
 class Level
 {
@@ -44,6 +46,7 @@ private:
 
 	std::vector<std::vector<int>> datamap;
 	Tile* tilemap[33][15];
+	std::vector<sf::Vector2i> powerups;
 
 	std::vector<Enemy*> enemies;
 

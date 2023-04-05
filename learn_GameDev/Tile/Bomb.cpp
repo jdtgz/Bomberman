@@ -1,5 +1,6 @@
 #include "Bomb.h"
 
+
 // Creates a bomb at (x,y)
 // @param range -> number of tiles explosion reaches in all directions 
 // @param has_timer -> determines if explosion will explode on a timer
@@ -330,6 +331,7 @@ bool Bomb::isColliding(sf::Sprite& sprite)
 
 	return false;
 }
+
 
 // Bomb collisions with other objects 
 bool Bomb::isBombColliding(sf::Sprite& sprite)

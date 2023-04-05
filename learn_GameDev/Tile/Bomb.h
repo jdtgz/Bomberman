@@ -15,8 +15,8 @@ class Bomb
 		void explode();
 
 		// Accessors 
-		int getRange()  const;
-		sf::Vector2i getPosition()  const;
+		int getRange() const;
+		sf::Vector2i getPosition() const;
 		bool getExploded();
 		bool getExploding();
 		std::vector<int> getExplodingRange();

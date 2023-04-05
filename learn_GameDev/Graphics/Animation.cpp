@@ -1,14 +1,6 @@
 #include "Animation.h"
 
 
-// destructor
-// testing notifications on webhook // testing again
-Animation::~Animation()
-{
-	delete[] frames;
-}
-
-
 // default constructor
 Animation::Animation()
 {  
@@ -21,6 +13,14 @@ Animation::Animation()
 }
 
 
+// destructor
+Animation::~Animation()
+{
+	delete[] frames;
+}
+
+
+// Initializes the TextureRects of the animation
 void Animation::setUp(sf::Texture& t, const int& x, const int& y,
 	const int& width, const int& height, const int& tFrames)
 {
@@ -37,6 +37,7 @@ void Animation::setUp(sf::Texture& t, const int& x, const int& y,
 }
 
 
+// applyies the right textureRect to the animation and scales it
 void Animation::applyToSprite(sf::Sprite& s) const
 {
 	s.setTexture(*texture);
@@ -45,6 +46,7 @@ void Animation::applyToSprite(sf::Sprite& s) const
 }
 
 
+// cycle animation based on dt
 void Animation::update(const float& dt)
 {
 	time += dt; 
@@ -56,12 +58,21 @@ void Animation::update(const float& dt)
 }
 
 
+// makes a animation cycle once  
 void Animation::showOnce()
 {
 	looping = false; 
 }
 
 
+// return the currently frame being displayed
+int Animation::getCurrentFrame() const
+{
+	return iFrame; 
+}
+
+
+// advances the frame of the animation
 void Animation::advance()
 {
 	if (++iFrame >= nFrames)

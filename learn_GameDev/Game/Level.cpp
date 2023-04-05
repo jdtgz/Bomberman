@@ -120,6 +120,12 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 		}
 	}
 
+	// place a powerUp
+	std::cout << "POWERUP: 10, 1\n"; 
+	datamap[10][1] = tileType::POWERUP; 
+	delete tilemap[10][1];
+	tilemap[10][1] = new PowerUp(480 -48, 100); 
+
 	enemies.push_back(new Valcom(plrPtr));
 	enemies.push_back(new ONeal(plrPtr));
 }
@@ -141,6 +147,7 @@ int Level::getHeight() const
 {
 	return MAP_HEIGHT;
 }
+
 
 // detects whether a key has been pressed and acts accordingly
 void Level::keyPressed(const sf::Keyboard::Key& key)
@@ -181,6 +188,7 @@ void Level::keyPressed(const sf::Keyboard::Key& key)
 		break;
 	}
 }
+
 
 // draw all the objects and emeies onto the screen 
 void Level::draw(sf::RenderWindow& window) const
@@ -283,7 +291,11 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
 			if (datamap[x][y] != tilemap[x][y]->getType())
+			{
+				if (tilemap[x][y]->getType() == tileType::POWERUP) //get revealed
+					datamap[x][y] = tileType::POWERUP;
 				tilemap[x][y]->interact(); 
+			}
 
 			tilemap[x][y]->update(dt);
 		}

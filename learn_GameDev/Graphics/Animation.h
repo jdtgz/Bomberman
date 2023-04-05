@@ -9,21 +9,12 @@ class Animation
 		Animation(); 
 		~Animation(); 
 
-		int getCurrentFrame() const { return iFrame; }
-
-		// Given a texture, initial cords, box size, & number of frames,
-		// set all the frames in the animaiton
-		void setUp(sf::Texture&, const int&, const int&,
-			const int&, const int&, const int&);
-
-		// apply the current frame to a sprite
+		void setUp(sf::Texture& t, const int& x, const int& y,
+			const int& width, const int& height, const int& tFrames);
 		void applyToSprite(sf::Sprite&) const; 
-
-		// cycle animation based on time in-game
-		void update(const float&); 
-
-		// shows animation once by stopping the looping
+		void update(const float& dt); 
 		void showOnce(); 
+		int getCurrentFrame() const;
 
 	private:
 		// cycles to the next frame in frames
