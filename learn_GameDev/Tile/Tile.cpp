@@ -82,6 +82,7 @@ void Tile::setTile(const tileType::ID& t)
 	{
 		//put anything related to tile type changes here
 		case tileType::AIR:
+		case tileType::SOLID_AIR:
 			mSprite.setTextureRect({ 16 * 6, 16 * 2, 16, 16 });
 			break;
 		case tileType::BRICK:
