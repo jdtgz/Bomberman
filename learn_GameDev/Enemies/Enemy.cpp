@@ -3,6 +3,7 @@
 
 Enemy::Enemy(const Player* plrPtr)
 {
+	//Default values
 	heading = direction::NORTH;
 	curAnim = animIndex::RIGHT;
 	moveSpeed = 1.f;
@@ -22,10 +23,12 @@ void Enemy::update(const float& dt)
 bool Enemy::moveForward(Tile* tilemap[33][15])
 {
 	sf::Vector2i t = getTilePosition();
-	bool moved = false;
+	bool moved = false; //Whether or not any movement occured this call
 	switch (heading)
 	{
 	case direction::NORTH:
+		//If the tile position is on the map and the sprite is
+		//below the top bound and the northern tile is air, move
 		if (t.y >= 0 && sprite.getPosition().y >= 100 &&
 			tilemap[t.x][t.y]->getType() == tileType::AIR)
 		{
@@ -34,6 +37,8 @@ bool Enemy::moveForward(Tile* tilemap[33][15])
 		}
 		break;
 	case direction::SOUTH:
+		//If the tile position is on the map and the sprite is
+		//above the bottom bound and the southern tile is air, move
 		if (t.y < 14 && sprite.getPosition().y < 48 * 12 + 100 &&
 			tilemap[t.x][t.y + 1]->getType() == tileType::AIR)
 		{
@@ -42,6 +47,8 @@ bool Enemy::moveForward(Tile* tilemap[33][15])
 		}
 		break;
 	case direction::EAST:
+		//If the tile position is on the map and the sprite is
+		//left of the right bound and the eastern tile is air, move
 		if (t.x >= 0 && sprite.getPosition().x < 48 * 30 &&
 			tilemap[t.x + 1][t.y]->getType() == tileType::AIR)
 		{
@@ -50,6 +57,8 @@ bool Enemy::moveForward(Tile* tilemap[33][15])
 		}
 		break;
 	case direction::WEST:
+		//If the tile position is on the map and the sprite is
+		//right of the left bound and the western tile is air, move
 		if (t.x < 32 && sprite.getPosition().x >= 0 &&
 			tilemap[t.x][t.y]->getType() == tileType::AIR)
 		{
@@ -65,6 +74,7 @@ void Enemy::bounce()
 {
 	switch (heading)
 	{
+	//Maintain animation direction when changing to north/south
 	case direction::NORTH:
 		heading = direction::SOUTH;
 		break;
@@ -73,11 +83,11 @@ void Enemy::bounce()
 		break;
 	case direction::EAST:
 		heading = direction::WEST;
-		curAnim = animIndex::LEFT;
+		curAnim = animIndex::LEFT; //Adjust animation to face left
 		break;
 	case direction::WEST:
 		heading = direction::EAST;
-		curAnim = animIndex::RIGHT;
+		curAnim = animIndex::RIGHT; //Adjust animation to face right
 	}
 }
 
@@ -89,6 +99,7 @@ void Enemy::randomHeading(Tile* tilemap[33][15])
 	{
 		if (rand() % 2 == 0)
 		{
+			//If not on the west wall and the western tile is air
 			if (t.x > 1 &&
 				tilemap[t.x - 1][t.y]->getType() == tileType::AIR)
 			{
@@ -98,6 +109,7 @@ void Enemy::randomHeading(Tile* tilemap[33][15])
 		}
 		else
 		{
+			//If not on the east wall and the eastern tile is air
 			if (t.x < 31 &&
 				tilemap[t.x + 1][t.y]->getType() == tileType::AIR)
 			{
@@ -110,12 +122,14 @@ void Enemy::randomHeading(Tile* tilemap[33][15])
 	{
 		if (rand() % 2 == 0)
 		{
+			//If not on the north wall and the northern tile is air
 			if (t.y > 1 &&
 				tilemap[t.x][t.y - 1]->getType() == tileType::AIR)
 				heading = direction::NORTH;
 		}
 		else
 		{
+			//If not on the south wall and the southern tile is air
 			if (t.y < 13 &&
 				tilemap[t.x][t.y + 1]->getType() == tileType::AIR)
 				heading = direction::SOUTH;
@@ -129,6 +143,14 @@ bool Enemy::atTile(Tile* tilemap[33][15])
 	sf::Vector2i t = getTilePosition();
 	bool at = false;
 
+	/*
+	FOR VERTICAL HEADINGS
+		Vertical distance from sprite to tile must be less than clipping margin
+		Vertical position must be greater than tile position
+	FOR HORIZONTAL HEADINGS
+		Horizontal distance from sprite to tile must be less than clipping margin
+		Horziontal position must be greater than tile positon
+	*/
 	if (((heading == direction::NORTH || heading == direction::SOUTH) &&
 		abs(sprite.getPosition().y -
 			tilemap[t.x][t.y]->getPosition().y) < clippingMargin &&
@@ -138,6 +160,7 @@ bool Enemy::atTile(Tile* tilemap[33][15])
 				tilemap[t.x][t.y]->getPosition().x) < clippingMargin &&
 			sprite.getPosition().x >= tilemap[t.x][t.y]->getPosition().x))
 		at = true;
+
 	return at;
 }
 
