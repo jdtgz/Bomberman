@@ -4,67 +4,79 @@
 
 class Bomb
 {
-public:
-	Bomb(int x, int y, int range, bool timer);
-	~Bomb();
+	public:
+		// constructor/destructor
+		Bomb(int x, int y, int range, bool timer);
+		~Bomb();
 
-	void draw(sf::RenderWindow& target);
-	void explode();
+		// Game functions 
+		void draw(sf::RenderWindow& target);
+		void update(float dt);
+		void explode();
 
-	void update(float dt);
+		// Accessors 
+		int getRange()  const;
+		sf::Vector2i getPosition()  const;
+		bool getExploded();
+		bool getExploding();
 
-	int getRange() const { return m_range; }
-	sf::Vector2i getPosition() const { return m_position; }
-	bool getExploded() { return m_explosion_finished; };
-	bool getExploding() { return m_exploded; };
-	bool isColliding(sf::Sprite& sprite);
-
-	//If the bomb itself is colliding
-	bool isBombColliding(sf::Sprite& sprite);
-	//Returns true if the explosion is colliding with sprite
-	bool isExplosionColliding(sf::Sprite& sprite);
-	std::vector<std::vector<int>> datamapExplosionCollision(std::vector<std::vector<int>>);
-	//returns true only if explosion is active
-	bool isEntityColliding(sf::Sprite& sprite);
-
-	void showCollisions(sf::RenderWindow& window);
-
-
-private:
-	/* Main bomb info */
-	enum class animationIndex
-	{
-		BOMB,
-		CENTER,
-		RIGHT,
-		LEFT,
-		UP,
-		DOWN,
-		HORIZONTAL,
-		VERTICAL,
-		COUNT
-	};
-
-	void initAnimation();
-
-	sf::Time m_timer;
-	sf::Clock m_explode_clock;
-	sf::Sprite m_sprite;
-	//This is for tile map coordinates, separate from the sprite coordinates
-	sf::Vector2i m_position;
-
-	Animation m_animations[(int)animationIndex::COUNT];
-
-	int m_current_frame;
-	bool m_exploded;
-	int m_range;
-	bool m_explosion_finished;
-	float scaled_size = 16 * 3;
+		// Collision methods 
+		bool isBombColliding(sf::Sprite& sprite);
+		bool isExplosionColliding(sf::Sprite& sprite);
+		bool isColliding(sf::Sprite& sprite);
+		std::vector<std::vector<int>> 
+			datamapExplosionCollision(std::vector<std::vector<int>>);
+		bool isEntityColliding(sf::Sprite& sprite);
+		void showCollisions(sf::RenderWindow& window);
 
 
-	//How far the explosion can go.
-	// [0] N -> [1] E -> [2] S -> [3] W
-	//Default will be m_range
-	int m_exploding_range[4];
+	private:
+		// Total Bomb animations
+		enum class animationIndex
+		{
+			BOMB,
+			CENTER,
+			RIGHT,
+			LEFT,
+			UP,
+			DOWN,
+			HORIZONTAL,
+			VERTICAL,
+			COUNT
+		};
+
+		// initialize all spriteRects for animation
+		void initAnimation();
+
+		// Bomb/explosion sprite
+		sf::Sprite m_sprite;
+		
+		// animations of the Bomb object
+		Animation m_animations[(int)animationIndex::COUNT];
+
+		// range of the bomb's explosion
+		int m_range;
+	
+		// Tilemap coordinates, NOT sprite window coordinates
+		sf::Vector2i m_position;
+
+		// Before Explosion Sequence: 
+		// Timer to explode bombs after being placed
+		sf::Time m_timer;
+		
+		// Status of bomb's initiation of its explosion sequence
+		bool m_exploded;
+
+		// During Explosion Sequence:
+		// Timer to for the animation of the explosion
+		sf::Clock m_explode_clock;
+		
+		// tracks when the explosion animation is done
+		bool m_explosion_finished;
+
+		//How far the explosion can go.
+		// [0] N -> [1] E -> [2] S -> [3] W
+		//Default will be m_range
+		int m_exploding_range[4];
 };
 

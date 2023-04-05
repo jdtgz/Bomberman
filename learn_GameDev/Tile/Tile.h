@@ -9,31 +9,35 @@
 
 class Tile : public Collidable
 {
-public:
-	Tile() = default; 
-	Tile(const int&, const int&, const tileType::ID&);
-	~Tile();
+	public:
+		// constuctors/destructors 
+		Tile() = default; 
+		Tile(const int& x, const int& y, const tileType::ID& typ);
+		~Tile();
 
-	// tile identification functions
-	tileType::ID getType() const;
-	void setTile(const tileType::ID&);
+		// tile ID functions
+		tileType::ID getType() const;
+		void setTile(const tileType::ID& typ);
 	
-	// based on a collision, take the appropriate action(s) 
-	virtual void interact();
+		// Collision response function 
+		virtual void interact();
 
-	// game funcitons 
-	void draw(sf::RenderWindow&);
-	virtual void update(const float&); 
+		// Game funcitons 
+		void draw(sf::RenderWindow& window);
+		virtual void update(const float& dt); 
 
-	sf::Vector2f getPosition() const;
+		// Accessors
+		sf::Vector2f getPosition() const;
 
-protected: 
-	// visual attributes 
-	sf::Sprite mSprite; 
-	Animation blowUp; 
+	protected: 
+		// visual attributes 
+		sf::Sprite mSprite; 
+		Animation blowUp; 
 
-	// functionality attributes  
-	tileType::ID type;
-	bool destroyed; 
+		// Type of the tile 
+		tileType::ID type;
+
+		// Tracks "health" state of tile
+		bool destroyed; 
 
 };
