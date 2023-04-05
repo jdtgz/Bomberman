@@ -19,6 +19,7 @@ class Bomb
 		sf::Vector2i getPosition()  const;
 		bool getExploded();
 		bool getExploding();
+		std::vector<int> getExplodingRange();
 
 		// Collision methods 
 		bool isBombColliding(sf::Sprite& sprite);
