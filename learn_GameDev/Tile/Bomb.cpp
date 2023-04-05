@@ -11,6 +11,7 @@ Bomb::Bomb(int x, int y, int range, bool has_timer)
 		m_exploding_range[i] = m_range;
 
 	m_exploded = false;
+	m_exploded_update = false;
 	m_explosion_finished = false;
 
 	if (has_timer)
@@ -32,17 +33,114 @@ Bomb::~Bomb()
 
 
 // draws the bomb onto the game window
-void Bomb::draw(sf::RenderWindow& target)
+void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 {
 	//Bomb
 	if (!m_exploded)
 	{
 		m_animations[(int)animationIndex::BOMB].applyToSprite(m_sprite);
 		target.draw(m_sprite);
+
+
 	}
 
 	else if (!m_explosion_finished)
 	{
+		if (!m_exploded_update)
+		{
+			bool stop = false;
+
+			//Check up
+			for (int i = 1; i <= m_range; i++)
+			{
+				if (m_position.y - i > 0)
+				{
+					std::cout << "can check up\n";
+					if (datamap[m_position.x][m_position.y - i] != 0 && !stop)
+					{
+						if (datamap[m_position.x][m_position.y - i] != 2 && !stop)
+						{
+							m_exploding_range[0] = i;
+							stop = true;
+						}
+						else
+							stop = true;
+					}
+					else if (datamap[m_position.x][m_position.y - i] == 0 && !stop)
+						m_exploding_range[0] = i;
+				}
+			}
+
+			stop = false;
+
+			//Check right
+			for (int i = 1; i <= m_range; i++)
+			{
+				if (m_position.x + i < 31)
+				{
+					if (datamap[m_position.x + i][m_position.y] != 0 && !stop)
+					{
+
+						if (datamap[m_position.x + i][m_position.y] != 2 && !stop)
+						{
+							m_exploding_range[1] = i;
+							stop = true;
+						}
+						else
+							stop = true;
+					}
+					else if (datamap[m_position.x + i][m_position.y] == 0 && !stop)
+						m_exploding_range[1] = i;
+				}
+			}
+
+			stop = false;
+
+			//Check down
+			for (int i = 1; i <= m_range; i++)
+			{
+				if (m_position.y + i < 15)
+				{
+					if (datamap[m_position.x][m_position.y + i] != 0 && !stop)
+					{
+						if (datamap[m_position.x][m_position.y + i] != 2 && !stop)
+						{
+							m_exploding_range[2] = i;
+							stop = true;
+						}
+						else
+							stop = true;
+					}
+					else if (datamap[m_position.x][m_position.y + i] == 0 && !stop)
+						m_exploding_range[2] = i;
+				}
+			}
+
+			stop = false;
+
+			//Check left
+			for (int i = 1; i <= m_range; i++)
+			{
+				if (m_position.x - i > 0)
+				{
+					if (datamap[m_position.x - i][m_position.y] != 0 && !stop)
+					{
+						if (datamap[m_position.x - i][m_position.y] != 2 && !stop)
+						{
+							m_exploding_range[3] = i;
+							stop = true;
+						}
+						else
+							stop = true;
+					}
+					else if (datamap[m_position.x - i][m_position.y] == 0 && !stop)
+						m_exploding_range[3] = i;
+				}
+			}
+
+			m_exploded_update = true;
+		}
+
 		//Decrease line count with lambda function to draw sprites
 		auto drawSprite = [&](const sf::Vector2f position, animationIndex type)
 		{
@@ -54,7 +152,6 @@ void Bomb::draw(sf::RenderWindow& target)
 		//Center explosion
 		sf::Vector2f centerPos(((m_position.x - 1) * 48), ((m_position.y + 1) * 48));
 		drawSprite(centerPos, animationIndex::CENTER);
-
 
 
 		//North drawing
@@ -105,6 +202,10 @@ void Bomb::draw(sf::RenderWindow& target)
 			else
 				drawSprite(sf::Vector2f(centerPos.x - (48 * k), centerPos.y), animationIndex::LEFT);
 		}
+
+		for (int i = 0; i < 4; i++)
+			std::cout << m_exploding_range[i] << ", ";
+		std::cout << "\n";
 	}
 }
 
@@ -290,12 +391,6 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 {
 	bool stop = false;
 
-	for (int i = 0; i < 4; i++)
-		m_exploding_range[i] = 0;
-	for (int i = 0; i < 4; i++)
-		std::cout << m_exploding_range[i] << " - ";
-	std::cout << '\n';
-
 	//Check up
 	for (int i = 1; i <= m_range; i++)
 	{
@@ -407,10 +502,6 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 	}
 
 	stop = false;
-
-	for (int i = 0; i < 4; i++)
-		std::cout << m_exploding_range[i] << " - ";
-	std::cout << '\n';
 
 	return datamap;
 }

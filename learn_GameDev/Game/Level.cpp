@@ -194,7 +194,7 @@ void Level::draw(sf::RenderWindow& window) const
 		enemies[i]->draw(window);
 
 	for (int i = 0; i < bombs.size(); i++)
-		bombs[i]->draw(window);
+		bombs[i]->draw(window, datamap);
 }
 
 
@@ -299,7 +299,7 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 
 					//Destroy the Bricks
 					datamap = bombs[0]->datamapExplosionCollision(datamap);
-
+					
 					//Check if player dies
 					if(deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition()))
 						std::cout << "PLAYER DEAD\n";

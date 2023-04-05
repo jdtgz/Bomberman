@@ -10,7 +10,7 @@ class Bomb
 		~Bomb();
 
 		// Game functions 
-		void draw(sf::RenderWindow& target);
+		void draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap);
 		void update(float dt);
 		void explode();
 
@@ -79,5 +79,8 @@ class Bomb
 		// [0] N -> [1] E -> [2] S -> [3] W
 		//Default will be m_range
 		int m_exploding_range[4];
+
+
+		bool m_exploded_update;
 };
 
