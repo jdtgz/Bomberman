@@ -127,6 +127,12 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 			}
 		}
 	}
+  
+	// place a powerUp
+	std::cout << "POWERUP: 10, 1\n"; 
+	datamap[10][1] = tileType::POWERUP; 
+	delete tilemap[10][1];
+	tilemap[10][1] = new PowerUp(480 -48, 100); 
 
 	//TEMPORARY
 	enemies.push_back(new Valcom(plrPtr));
@@ -206,7 +212,7 @@ void Level::draw(sf::RenderWindow& window) const
 		enemies[i]->draw(window);
 
 	for (int i = 0; i < bombs.size(); i++)
-		bombs[i]->draw(window);
+		bombs[i]->draw(window, datamap);
 }
 
 
@@ -249,12 +255,41 @@ void Level::collisions(Player& plr)
 	plr.move(offset.x, offset.y);
 }
 
+bool Level::deathCheck(std::vector<int> range, sf::Vector2i bombPos)
+{
+	// Check if player is in spots above
+	for (int i = 0; i <= range[0]; i++)
+	{
+		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x, bombPos.y - i))
+			return true;
+	}
+	// to the right
+	for (int i = 0; i <= range[1]; i++)
+	{
+		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x + i, bombPos.y))
+			return true;
+	}
+	// below
+	for (int i = 0; i <= range[2]; i++)
+	{
+		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x, bombPos.y + i))
+			return true;
+	}
+	// and to the left of the bomb
+	for (int i = 0; i <= range[3]; i++)
+	{
+		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x - i, bombPos.y))
+			return true; //If the positions match player dies
+	}
+	return false; // If no matches found player lives
+}
+
 
 void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRange, bool detonate, sf::Sprite pSprite)
 {
 	int offset = 1;
 	bool collided = false;
-	
+
 	for (int i = 0; i < enemies.size(); i++)
 	{
 		enemies[i]->update(dt);
@@ -267,7 +302,11 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 		{
 			//Interact with tiles that are not the same on the tilemap and datamap
 			if (datamap[x][y] != tilemap[x][y]->getType())
+			{
+				if (tilemap[x][y]->getType() == tileType::POWERUP) //get revealed
+					datamap[x][y] = tileType::POWERUP;
 				tilemap[x][y]->interact(); 
+			}
 
 			//Animation update for brick destroy animation
 			tilemap[x][y]->update(dt);
@@ -283,9 +322,17 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 			{
 				if (bombs[0]->getExploded())
 				{
-					// de-activate the bomb and delete it
+					// de-activate the bomb
 					bombManager[i] = false;
+
+					//Destroy the Bricks
 					datamap = bombs[0]->datamapExplosionCollision(datamap);
+					
+					//Check if player dies
+					if(deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition()))
+						std::cout << "PLAYER DEAD\n";
+
+					//Remove Bomb
 					delete bombs[0];
 					bombs.erase(bombs.begin());
 				}

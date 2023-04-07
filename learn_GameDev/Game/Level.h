@@ -4,6 +4,8 @@
 #include "../Tile/Tile.h"
 #include "../Enemies/Enemy.h"
 #include "../Tile/Tile.h"
+#include "../Tile/PowerUp.h"
+
 
 class Level
 {
@@ -31,6 +33,8 @@ public:
 
 	// track player collisions 
 	void collisions(Player&);
+	bool deathCheck(std::vector<int>, sf::Vector2i);
+
 	// track enemy collisions 
 	//void collisions(Enemy&);
 
@@ -42,6 +46,7 @@ private:
 
 	std::vector<std::vector<int>> datamap;
 	Tile* tilemap[33][15];
+	std::vector<sf::Vector2i> powerups;
 
 	std::vector<Enemy*> enemies;
 
@@ -56,4 +61,5 @@ private:
 	int playerX;
 	int playerY;
 	sf::Sprite playerSprite;
+	bool playerDead = false;
 };
