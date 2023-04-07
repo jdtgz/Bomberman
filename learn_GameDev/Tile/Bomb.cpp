@@ -57,22 +57,25 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 				if (m_position.y - i > 0)
 				{
 					std::cout << "can check up\n";
-					if (datamap[m_position.x][m_position.y - i] != 0 && !stop)
+					if (datamap[m_position.x][m_position.y - i] != 0 && !stop) //See if tile in way
 					{
-						if (datamap[m_position.x][m_position.y - i] != 2 && !stop)
-						{
-							m_exploding_range[0] = i;
-							stop = true;
-						}
-						else
-							stop = true;
+						m_exploding_range[0] = i;
+						stop = true;
+						if (datamap[m_position.x][m_position.y - i] == 2) // Dont animate on solid tile
+							m_exploding_range[0]--;
 					}
-					else if (datamap[m_position.x][m_position.y - i] == 0 && !stop)
+					else if (datamap[m_position.x][m_position.y - i] == 0 && !stop) // constantly set range on open tile
 						m_exploding_range[0] = i;
 				}
+				else
+				{
+					m_exploding_range[0] = i-1;
+					i = m_range;
+				}
+					
 			}
 
-			stop = false;
+			stop = false; // reset if explotion finished
 
 			//Check right
 			for (int i = 1; i <= m_range; i++)
@@ -81,17 +84,18 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 				{
 					if (datamap[m_position.x + i][m_position.y] != 0 && !stop)
 					{
-
-						if (datamap[m_position.x + i][m_position.y] != 2 && !stop)
-						{
-							m_exploding_range[1] = i;
-							stop = true;
-						}
-						else
-							stop = true;
+						m_exploding_range[1] = i;
+						stop = true;
+						if (datamap[m_position.x + i][m_position.y] == 2)
+							m_exploding_range[1]--;
 					}
 					else if (datamap[m_position.x + i][m_position.y] == 0 && !stop)
 						m_exploding_range[1] = i;
+				}
+				else
+				{
+					m_exploding_range[1] = i-1;
+					i = m_range;
 				}
 			}
 
@@ -104,16 +108,18 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 				{
 					if (datamap[m_position.x][m_position.y + i] != 0 && !stop)
 					{
-						if (datamap[m_position.x][m_position.y + i] != 2 && !stop)
-						{
-							m_exploding_range[2] = i;
-							stop = true;
-						}
-						else
-							stop = true;
+						m_exploding_range[2] = i;
+						stop = true;
+						if (datamap[m_position.x][m_position.y + i] == 2)
+							m_exploding_range[2]--;
 					}
 					else if (datamap[m_position.x][m_position.y + i] == 0 && !stop)
 						m_exploding_range[2] = i;
+				}
+				else
+				{
+					m_exploding_range[2] = i-1;
+					i = m_range;
 				}
 			}
 
@@ -126,16 +132,18 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 				{
 					if (datamap[m_position.x - i][m_position.y] != 0 && !stop)
 					{
-						if (datamap[m_position.x - i][m_position.y] != 2 && !stop)
-						{
-							m_exploding_range[3] = i;
-							stop = true;
-						}
-						else
-							stop = true;
+						m_exploding_range[3] = i;
+						stop = true;
+						if (datamap[m_position.x - i][m_position.y] == 2)
+							m_exploding_range[3]--;
 					}
 					else if (datamap[m_position.x - i][m_position.y] == 0 && !stop)
 						m_exploding_range[3] = i;
+				}
+				else
+				{
+					m_exploding_range[3] = i-1;
+					i = m_range;
 				}
 			}
 
