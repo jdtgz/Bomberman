@@ -200,9 +200,9 @@ void PowerUp::detectCollision(Player& plr, const tileType::ID& u, const tileType
 			{
 				//Prevent player from moving into tile
 				if (plr.getVelocity().x > 0)
-					plr.setCanMove(directions::EAST, false);
+					plr.setCanMove(direction::EAST, false);
 				else
-					plr.setCanMove(directions::WEST, false);
+					plr.setCanMove(direction::WEST, false);
 			}
 		}
 		//Moving vertically
@@ -223,9 +223,9 @@ void PowerUp::detectCollision(Player& plr, const tileType::ID& u, const tileType
 			{
 				//Prevent player from moving into tile
 				if (plr.getVelocity().y > 0)
-					plr.setCanMove(directions::SOUTH, false);
+					plr.setCanMove(direction::SOUTH, false);
 				else
-					plr.setCanMove(directions::NORTH, false);
+					plr.setCanMove(direction::NORTH, false);
 			}
 		}
 	}

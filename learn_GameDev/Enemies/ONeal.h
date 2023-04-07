@@ -4,16 +4,20 @@
 class ONeal : public Enemy
 {
 public:
+	//Constructors
 	ONeal(const Player*);
 	ONeal(const Player*, const sf::Vector2i&);
-	ONeal(const Player*, const sf::Vector2i&, const directions&);
+	ONeal(const Player*, const sf::Vector2i&, const direction&);
 
+	//O'Neal movement AI
 	virtual void move(Tile* [33][15]) override;
 
+	//Destructor
 	~ONeal();
-protected:
-	virtual double clippingMargin() const override;
 private:
-	void init(const sf::Vector2i&, const directions&);
+	//Initialization method, called by constructor
+	void init(const sf::Vector2i&, const direction&);
+
+	//Debounce counter to delay random heading changes
 	int dirDebounce;
 };

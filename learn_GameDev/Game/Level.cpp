@@ -53,19 +53,22 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 	int totalBrickCount = 0, targetBrick = 0, i = 0;
 	//int enemies = 0;
 
+	//For every tile position
 	for (int x = 0; x < MAP_LENGTH - 1; x++)
 	{
 		for (int y = 0; y < MAP_HEIGHT - 1; y++)
 		{
-			if ((datamap[x][y] == tileType::AIR || datamap[x][y] == tileType::BRICK ||
-				datamap[x][y] == tileType::DOOR_CLOSED || datamap[x][y] == tileType::DOOR_OPEN) &&
-				(x + y - 2 > 1) &&
+			//If it is not a Tile tile and it
+			//is not in the top left corner
+			if (datamap[x][y] != tileType::TILE &&
+				x + y - 2 > 1 &&
 				x >= 1 && y >= 1)
 			{
-				//Reset on regeneration
+				//Reset to Air
 				datamap[x][y] = tileType::AIR;
 				tilemap[x][y]->setTile(tileType::AIR); 
 
+				//Randomly assign tiles to Brick
 				if (rand() % 4 == 1)
 				{
 					totalBrickCount++;
@@ -101,33 +104,40 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 	}
 	*/
 
-	targetBrick = rand() % totalBrickCount + 1; //pick random brick block
-	i = 0;
+	targetBrick = rand() % totalBrickCount + 1; //Pick random brick tile
+	i = 0; //Reset counter
 
 	for (int x = 0; x < MAP_LENGTH; x++)
 	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
+			//Count the number of bricks
 			if (datamap[x][y] == tileType::BRICK)
 				i++;
-			if (targetBrick == i)
+			if (targetBrick == i) //At randomly picked brick tile
 			{
-				i++;
+				i++; //Increment counter to prevent spawning multiple doors
+
+				//DEBUG TESTING
 				std::cout << "DOOR: " << x << ", " << y << '\n';
+
+				//Set the tile to be a closed door
 				datamap[x][y] = tileType::DOOR_CLOSED;
 				tilemap[x][y]->setTile(tileType::DOOR_CLOSED);
 			}
 		}
 	}
-
+  
 	// place a powerUp
 	std::cout << "POWERUP: 10, 1\n"; 
 	datamap[10][1] = tileType::POWERUP; 
 	delete tilemap[10][1];
 	tilemap[10][1] = new PowerUp(480 -48, 100); 
 
+	//TEMPORARY
 	enemies.push_back(new Valcom(plrPtr));
 	enemies.push_back(new ONeal(plrPtr));
+	//^^^^^^^^^
 }
 
 
@@ -219,7 +229,8 @@ void Level::collisions(Player& plr)
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			if (tilemap[x][y]->getType() != tileType::AIR)
+			if (tilemap[x][y]->getType() != tileType::AIR &&
+				tilemap[x][y]->getType() != tileType::DOOR_OPEN)
 			{
 				sf::Vector2f center_tile = {
 					tilemap[x][y]->getBounds().left + (tilemap[x][y]->getBounds().width / 2),
@@ -285,11 +296,11 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 		enemies[i]->move(tilemap);
 	}
 
-	//visually set all the tiles to the data map
 	for (int x = 0; x < MAP_LENGTH; x++)
 	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
+			//Interact with tiles that are not the same on the tilemap and datamap
 			if (datamap[x][y] != tilemap[x][y]->getType())
 			{
 				if (tilemap[x][y]->getType() == tileType::POWERUP) //get revealed
@@ -297,6 +308,7 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 				tilemap[x][y]->interact(); 
 			}
 
+			//Animation update for brick destroy animation
 			tilemap[x][y]->update(dt);
 		}
 	}

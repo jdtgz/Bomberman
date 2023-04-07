@@ -9,21 +9,34 @@
 class Enemy : public Collidable
 {
 public:
+	//Constructor, requires player for chasing
 	Enemy(const Player*);
 
+	//Update for animation
 	void update(const float&);
+
+	//Abstract virtual function for movement ai
 	virtual void move(Tile*[33][15]) = 0;
 
+	//Draw to the screen
 	void draw(sf::RenderWindow&) const;
+
+	//Tell the enemy it is dead
 	void die();
 
+	//Returns whether the enemy is alive or not
 	bool isAlive() const;
 
+	//Returns the position of the enemy sprite
 	sf::Vector2f getPosition() const;
+
+	//Returns the tile coordinates of the enemy
 	sf::Vector2i getTilePosition() const;
 
+	//Destructor
 	~Enemy();
 protected:
+	//Animation & Visuals
 	enum animIndex
 	{
 		LEFT = 0,
@@ -37,16 +50,24 @@ protected:
 
 	bool alive;
 
-	//Movement
-	directions heading;
+	direction heading;
 	float moveSpeed;
-	bool atTile;
-	sf::Vector2i targetTile;
-	const Player* playerPointer;
-	void moveForward(Tile*[33][15]);
-	void moveForwardAndBounce(Tile*[33][15]);
-	void changeHeadingRandomly(Tile*[33][15]);
-	bool isAtTile(Tile*[33][15]);
-	bool atTargetTile(Tile*[33][15]);
-	virtual double clippingMargin() const;
+
+	//The distance the enemy sprite can clip into walls
+	//Higher numbers result in more random ai, but more visual clipping
+	float clippingMargin;
+
+	const Player* playerRef; //Reference to the player for chasing
+
+	//Move forward based on the current heading
+	bool moveForward(Tile* [33][15]);
+
+	//Change heading so the enemy moves 'backwards'
+	void bounce();
+
+	//Randomly assign a heading if certain conditions are met
+	void randomHeading(Tile* [33][15]);
+
+	//Returns whether the enemy is close enough to a tile to be considered 'at' it
+	bool atTile(Tile* [33][15]);
 };

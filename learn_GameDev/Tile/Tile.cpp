@@ -9,7 +9,7 @@ Tile::Tile(const int& x, const int& y, const tileType::ID& typ)
 	mSprite.setTexture(TextureHolder::get(textures::ITEMS));
 	setTile(typ);
 
-	// blow up animation ONLY for tileType::BRICK
+	// blow up animation
 	blowUp.setUp(TextureHolder::get(textures::ITEMS), 0, 16 * 2, 16, 16, 6); 
 	blowUp.showOnce(); 
 
@@ -27,23 +27,22 @@ Tile::~Tile()
 }
 
 
-// Returns the tileID of tile
+//Returns the tileID of tile
 tileType::ID Tile::getType() const
 {
 	return type;
 }
 
 
-// Given an tileID, set the proper textureRect & scale it 
+//Given an tileID, set the proper textureRect & scale it 
 void Tile::setTile(const tileType::ID& t)
 {
-	// set the type
 	type = t;
-
-	// update the sprite of tile 
 	switch (t)
 	{
+		//put anything related to tile type changes here
 		case tileType::AIR:
+		case tileType::SOLID_AIR:
 			mSprite.setTextureRect({ 16 * 6, 16 * 2, 16, 16 });
 			break;
 		case tileType::BRICK:
@@ -57,8 +56,6 @@ void Tile::setTile(const tileType::ID& t)
 		case tileType::TILE:
 			mSprite.setTextureRect({ 16 * 0, 16, 16, 16 });
 	}
-
-	// scale the sprite properly
 	mSprite.setScale(3, 3);
 }
 
@@ -99,7 +96,10 @@ void Tile::update(const float& dt)
 				setTile(tileType::AIR);
 			// Else, set the type to door_open
 			else
+			{
 				setTile(tileType::DOOR_OPEN);
+				//spawn enemies
+			}
 		}
 	}
 }
