@@ -17,6 +17,10 @@ void Enemy::update(const float& dt)
 {
 	anims[int(curAnim)].update(dt);
 	anims[int(curAnim)].applyToSprite(sprite);
+
+	sf::FloatRect enemyBounds = sprite.getGlobalBounds();
+	enemyBounds.height /= 1.1;
+	Collidable::updateRect(enemyBounds);
 }
 
 

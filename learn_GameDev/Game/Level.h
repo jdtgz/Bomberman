@@ -5,6 +5,7 @@
 #include "../Enemies/Enemy.h"
 #include "../Tile/Tile.h"
 #include "../Tile/PowerUp.h"
+#include "../Enum.h"
 
 
 class Level
