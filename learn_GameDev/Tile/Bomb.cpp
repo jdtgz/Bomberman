@@ -61,7 +61,7 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 					{
 						m_exploding_range[0] = i;
 						stop = true;
-						if (datamap[m_position.x][m_position.y - i] == 2) // Dont animate on solid tile
+						if (datamap[m_position.x][m_position.y - i] == 3) // Dont animate on solid tile
 							m_exploding_range[0]--;
 					}
 					else if (datamap[m_position.x][m_position.y - i] == 0 && !stop) // constantly set range on open tile
@@ -86,7 +86,7 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 					{
 						m_exploding_range[1] = i;
 						stop = true;
-						if (datamap[m_position.x + i][m_position.y] == 2)
+						if (datamap[m_position.x + i][m_position.y] == 3)
 							m_exploding_range[1]--;
 					}
 					else if (datamap[m_position.x + i][m_position.y] == 0 && !stop)
@@ -110,7 +110,7 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 					{
 						m_exploding_range[2] = i;
 						stop = true;
-						if (datamap[m_position.x][m_position.y + i] == 2)
+						if (datamap[m_position.x][m_position.y + i] == 3)
 							m_exploding_range[2]--;
 					}
 					else if (datamap[m_position.x][m_position.y + i] == 0 && !stop)
@@ -134,7 +134,7 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 					{
 						m_exploding_range[3] = i;
 						stop = true;
-						if (datamap[m_position.x - i][m_position.y] == 2)
+						if (datamap[m_position.x - i][m_position.y] == 3)
 							m_exploding_range[3]--;
 					}
 					else if (datamap[m_position.x - i][m_position.y] == 0 && !stop)
@@ -412,8 +412,7 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 				//std::cout << "Up explotion range " << m_exploding_range[0] << '\n';
 				std::cout << "Up: " << i << '\n';
 
-
-				if (datamap[m_position.x][m_position.y - i] != 2 && !stop)
+				if (datamap[m_position.x][m_position.y - i] != 3 && !stop)
 				{
 					m_exploding_range[0] = i;
 					datamap[m_position.x][m_position.y - i] = 0;
@@ -441,7 +440,7 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 
 				std::cout << "Right: " << i << '\n';
 
-				if (datamap[m_position.x+i][m_position.y] != 2 && !stop)
+				if (datamap[m_position.x+i][m_position.y] != 3 && !stop)
 				{
 					m_exploding_range[1] = i;
 					datamap[m_position.x+i][m_position.y] = 0;
@@ -469,7 +468,7 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 
 				std::cout << "Down: " << i << '\n';
 
-				if (datamap[m_position.x][m_position.y + i] != 2 && !stop)
+				if (datamap[m_position.x][m_position.y + i] != 3 && !stop)
 				{
 					m_exploding_range[2] = i;
 					datamap[m_position.x][m_position.y + i] = 0;
@@ -497,7 +496,7 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 
 				std::cout << "Left: " << i << '\n';
 
-				if (datamap[m_position.x - i][m_position.y] != 2 && !stop)
+				if (datamap[m_position.x - i][m_position.y] != 3 && !stop)
 				{
 					m_exploding_range[3] = i;
 					datamap[m_position.x - i][m_position.y] = 0;
