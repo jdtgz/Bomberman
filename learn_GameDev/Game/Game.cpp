@@ -84,11 +84,12 @@ void Game::processEvents()
 			case sf::Event::KeyReleased:
 				player.keyReleased(evnt.key.code);
 				break;
-				//Close the window
-			case sf::Event::Closed:
-				window->close();
 			}
 		}
+
+		//Closes the window
+		if (evnt.type == sf::Event::Closed)
+			window->close();
 	}
 }
 
