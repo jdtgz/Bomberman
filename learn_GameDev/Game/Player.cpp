@@ -181,6 +181,7 @@ void Player::setCanMove(const int& dir, const bool& v)
 }
 
 
+// Sends Player's gamebaord coordinates 
 sf::Vector2f Player::getPosition() const
 {
 	return sf::Vector2f((sprite.getPosition().x + 24) / 48 + 1,
@@ -196,7 +197,7 @@ sf::FloatRect Player::getBoundingBox() const
 
 
 // return sprite of player 
-sf::Sprite Player::getSprite() const 
+sf::Sprite Player::getSprite() 
 {
 	return sprite;
 }

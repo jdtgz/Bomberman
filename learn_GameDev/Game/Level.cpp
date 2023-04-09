@@ -186,48 +186,56 @@ int Level::getHeight() const
 
 
 // detects whether a key has been pressed and acts accordingly
-void Level::keyPressed(const sf::Keyboard::Key& key)
+void Level::keyPressed(const sf::Keyboard::Key& key, Player& plr)
 {
 	// change the direction of the player based on input
 	switch (key)
 	{
-	case sf::Keyboard::A:
-		for (int i = 0; i < bombCount; i++)
-		{
-			if (bombManager[i] == false)
+		case sf::Keyboard::A:
+			for (int i = 0; i < plr.getBombCount(); i++)
 			{
-				for (int i = 0; i < bombs.size(); i++)
+				if (bombManager[i] == false)
 				{
-					if (bombs[i]->isColliding(playerSprite))
+					for (int i = 0; i < bombs.size(); i++)
 					{
-						std::cout << "COLLIDE!\n";
-						return;
+						sf::Sprite* tmp = new sf::Sprite(plr.getSprite());
+						if (bombs[i]->isColliding(*tmp))
+						{
+							std::cout << "COLLIDE!\n";
+							return;
+						}
+						delete tmp; 
 					}
-				}
-				bombManager[i] = true;
+					// set the bomb to be active
+					bombManager[i] = true;
 
-				// initialize the bomb
-				if (detonator == false)
-				{
-					tilemap[playerX][playerY]->setTile(tileType::SOLID_AIR);
-					bombs.push_back(new Bomb(playerX, playerY, flameRange, true));
+					// reserve a space for the bomb
+					tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
+				
+				
+					// If player has the detonator power up, create a bomb with no timer
+					if (plr.hasDetonator())
+					{
+						bombs.push_back(new Bomb(plr.getPosition().x, plr.getPosition().y, 
+							plr.getFlameRange(), false));
+					}
+					// if no detonator power up, create a bomb with a timer
+					else
+					{
+						bombs.push_back(new Bomb(plr.getPosition().x, plr.getPosition().y,
+							plr.getFlameRange(), true));
+					}
+					break;
 				}
-				else
-				{
-					tilemap[playerX][playerY]->setTile(tileType::SOLID_AIR);
-					bombs.push_back(new Bomb(playerX, playerY, flameRange, false));
-				}
-				break;
 			}
-		}
-		break;
-	case sf::Keyboard::B:
-		for (int i = 0; i < bombs.size(); i++)
-		{
-			if (bombManager[i] = true)
-				bombs[i]->explode();
-		}
-		break;
+			break;
+		case sf::Keyboard::B:
+			for (int i = 0; i < bombs.size(); i++)
+			{
+				if (bombManager[i] == true  && plr.hasDetonator() == true)
+					bombs[i]->explode();
+			}
+			break;
 	}
 }
 
@@ -254,11 +262,12 @@ void Level::setMap(sf::Vector2i pos, int type)
 }
 
 
-//Detect collisions between player and tile
+// Detect collisions between player and tile
 void Level::collisions(Player& plr)
 {
 	sf::Vector2f offset;
 
+	// check to see the player's collisions with enemies 
 	for (int i = 0; i < enemies.size(); i++)
 	{
 		if (plr.check(*enemies[i]))
@@ -272,9 +281,10 @@ void Level::collisions(Player& plr)
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			if (tilemap[x][y]->getType() != tileType::AIR &&
-				tilemap[x][y]->getType() != tileType::DOOR_OPEN &&
-				!(tilemap[x][y]->getType() == tileType::SOLID_AIR && x == playerX && y == playerY))
+			// If the tile is
+			if (tilemap[x][y]->getType() != tileType::AIR && tilemap[x][y]->getType() != tileType::DOOR_OPEN &&
+				!(tilemap[x][y]->getType() == tileType::SOLID_AIR 
+					&& x == plr.getPosition().x && y == plr.getPosition().y))
 			{
 				sf::Vector2f center_tile = {
 					tilemap[x][y]->getBounds().left + (tilemap[x][y]->getBounds().width / 2),
@@ -300,38 +310,37 @@ void Level::collisions(Player& plr)
 }
 
 
-bool Level::deathCheck(std::vector<int> range, sf::Vector2i bombPos)
+bool Level::deathCheck(std::vector<int> range, sf::Vector2i bombPos, Player& plr)
 {
 	// Check if player is in spots above
 	for (int i = 0; i <= range[0]; i++)
 	{
-		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x, bombPos.y - i))
+		if (sf::Vector2i(plr.getPosition()) == sf::Vector2i(bombPos.x, bombPos.y - i))
 			return true;
 	}
 	// to the right
 	for (int i = 0; i <= range[1]; i++)
 	{
-		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x + i, bombPos.y))
+		if (sf::Vector2i(plr.getPosition()) == sf::Vector2i(bombPos.x + i, bombPos.y))
 			return true;
 	}
 	// below
 	for (int i = 0; i <= range[2]; i++)
 	{
-		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x, bombPos.y + i))
+		if (sf::Vector2i(plr.getPosition()) == sf::Vector2i(bombPos.x, bombPos.y + i))
 			return true;
 	}
 	// and to the left of the bomb
 	for (int i = 0; i <= range[3]; i++)
 	{
-		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x - i, bombPos.y))
+		if (sf::Vector2i(plr.getPosition()) == sf::Vector2i(bombPos.x - i, bombPos.y))
 			return true; //If the positions match player dies
 	}
 	return false; // If no matches found player lives
 }
 
 
-void Level::update(const float& dt, sf::Vector2f playerPos, 
-	int bCount, int fRange, bool detonate, sf::Sprite pSprite)
+void Level::update(const float& dt, Player& plr)
 {
 	int offset = 1;
 	bool collided = false;
@@ -382,7 +391,7 @@ void Level::update(const float& dt, sf::Vector2f playerPos,
 					tilemap[bombs[0]->getPosition().x][bombs[0]->getPosition().y]->setTile(tileType::AIR);
 					
 					// Check if player dies
-					if(deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition()))
+					if(deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition(), plr))
 						std::cout << "PLAYER DEAD\n";
 
 					// Remove Bomb
@@ -400,12 +409,4 @@ void Level::update(const float& dt, sf::Vector2f playerPos,
 	{
 		bombs[i]->update(dt);
 	}
-
-	//Set all data recived from player
-	playerX = playerPos.x;
-	playerY = playerPos.y;
-	flameRange = fRange;
-	bombCount = bCount;
-	detonator = detonate;
-	playerSprite = pSprite;
 }

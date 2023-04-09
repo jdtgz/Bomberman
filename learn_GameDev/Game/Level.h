@@ -25,7 +25,7 @@ class Level
 		int getHeight() const;
 
 		// manage bombs
-		void keyPressed(const sf::Keyboard::Key& key);
+		void keyPressed(const sf::Keyboard::Key& key, Player& plr);
 
 		// draw level onto sfml screen 
 		void draw(sf::RenderWindow& window) const;
@@ -35,13 +35,12 @@ class Level
 
 		// track player collisions 
 		void collisions(Player& plr);
-		bool deathCheck(std::vector<int> range, sf::Vector2i bombPos);
+		bool deathCheck(std::vector<int> range, sf::Vector2i bombPos, Player& plr);
 
 		// track enemy collisions 
 		// void collisions(Enemy&);
 
-		void update(const float& dt, sf::Vector2f playerPos, 
-			int bCount, int fRange, bool detonate, sf::Sprite pSprite);
+		void update(const float& dt, Player& plr);
   
 	private:
 		const int MAP_LENGTH = 33;
@@ -57,12 +56,5 @@ class Level
 		bool bombManager[10] = { false };
 		std::vector<Bomb*> bombs;
 
-		// player attirbutes 
-		int bombCount;
-		int flameRange;
-		bool detonator;
-		int playerX;
-		int playerY;
-		sf::Sprite playerSprite;
 		bool playerDead = false;
 	};
