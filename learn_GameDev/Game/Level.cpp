@@ -51,8 +51,9 @@ Level::~Level()
 
 void Level::generate(const int& levelNum, const Player* plrPtr)
 {
-	int totalBrickCount = 0, targetBrick = 0, i = 0;
-	//int enemies = 0;
+	int i = 0;
+	int totalBrickCount = 0, targetBrick = 0; // Used for random positions for PowerUp and Door
+	int totalAirCount = 0, targetAir = 0, enemyCount = 0; // Used for random enemy Placement
 
 	//For every tile position
 	for (int x = 0; x < MAP_LENGTH - 1; x++)
@@ -68,6 +69,7 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 				//Reset to Air
 				datamap[x][y] = tileType::AIR;
 				tilemap[x][y]->setTile(tileType::AIR); 
+				totalAirCount++;
 
 				//Randomly assign tiles to Brick
 				if (rand() % 4 == 1)
@@ -80,16 +82,39 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 		}
 	}
 
-	/*
-	while(enemies < 6)
-	{
-	randX = (rand() % (mapLength - 2)) + 1
-	randY = (rand() % (mapHeight - 2)) + 1
 
-	if(tilemap[x][y]->getType() == 0 && x + y > 1)
-		//Create enemy at x,y
+	while (enemyCount < 6)
+	{
+		i = 0;
+		targetAir = rand() % totalAirCount + 1;
+		for (int x = 0; x < MAP_LENGTH-1; x++)
+		{
+			for (int y = 0; y < MAP_HEIGHT-1; y++)
+			{
+				if (datamap[x][y] == tileType::AIR)
+					i++;
+				if (targetAir == i) //At randomly picked air tile
+				{
+					i++; //Increment counter to prevent spawning enemies in one spot
+
+					//TEMPORARY RANDOM
+					if(rand() % 2 == 0)
+						enemies.push_back(new Valcom(plrPtr, sf::Vector2i(x,y)));
+					else
+						enemies.push_back(new ONeal(plrPtr, sf::Vector2i(x, y)));
+
+					//Increment nmber of enemies on screen
+					enemyCount++;
+
+					//DEBUG TESTING
+					std::cout << "ENEMY: " << x << ", " << y << '\n';
+				}
+			}
+		}
+
 	}
 
+	/*
 	//PowerUp Set
 	targetBrick = rand % totalBrickCount; //pick random brick block
 
@@ -136,8 +161,8 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 	tilemap[10][1] = new PowerUp(480 -48, 100); 
 
 	//TEMPORARY
-	enemies.push_back(new Valcom(plrPtr));
-	enemies.push_back(new ONeal(plrPtr));
+	//enemies.push_back(new Valcom(plrPtr));
+	//enemies.push_back(new ONeal(plrPtr));
 	//^^^^^^^^^
 }
 
