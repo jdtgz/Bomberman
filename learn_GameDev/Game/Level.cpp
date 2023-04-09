@@ -3,6 +3,7 @@
 #include "../Enemies/ONeal.h"
 #include <math.h>
 
+
 Level::Level()
 {
 	//Set positions and sizes of the tiles
@@ -273,6 +274,7 @@ void Level::collisions(Player& plr)
 	plr.move(offset.x, offset.y);
 }
 
+
 bool Level::deathCheck(std::vector<int> range, sf::Vector2i bombPos)
 {
 	// Check if player is in spots above
@@ -303,35 +305,40 @@ bool Level::deathCheck(std::vector<int> range, sf::Vector2i bombPos)
 }
 
 
-void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRange, bool detonate, sf::Sprite pSprite)
+void Level::update(const float& dt, sf::Vector2f playerPos, 
+	int bCount, int fRange, bool detonate, sf::Sprite pSprite)
 {
 	int offset = 1;
 	bool collided = false;
 
+	// update the enemies
 	for (int i = 0; i < enemies.size(); i++)
 	{
 		enemies[i]->update(dt);
 		enemies[i]->move(tilemap);
 	}
 
+
+	// Check for tileType conflicts for every tile in datamap and tileMap
 	for (int x = 0; x < MAP_LENGTH; x++)
 	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			//Interact with tiles that are not the same on the tilemap and datamap
+			// If tileTypes conflict, they have been destroyed
 			if (datamap[x][y] != tilemap[x][y]->getType())
 			{
-				if (tilemap[x][y]->getType() == tileType::POWERUP) //get revealed
+				if (tilemap[x][y]->getType() == tileType::POWERUP) 
 					datamap[x][y] = tileType::POWERUP;
+
 				tilemap[x][y]->interact(); 
 			}
 
-			//Animation update for brick destroy animation
+			// Animation update for brick destroy animation
 			tilemap[x][y]->update(dt);
 		}
 	}
 
-	//Clear bombs
+	// Clear bombs
 	for (int i = 0; i < 10; i++)
 	{
 		if (bombManager[i])
@@ -343,17 +350,17 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 					// de-activate the bomb
 					bombManager[i] = false;
 
-					//Destroy the Bricks
+					// Destroy the Bricks
 					datamap = bombs[0]->datamapExplosionCollision(datamap);
 
-					//Change TileType of the Bomb Location
+					// Change TileType of the Bomb Location
 					tilemap[bombs[0]->getPosition().x][bombs[0]->getPosition().y]->setTile(tileType::AIR);
 					
-					//Check if player dies
+					// Check if player dies
 					if(deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition()))
 						std::cout << "PLAYER DEAD\n";
 
-					//Remove Bomb
+					// Remove Bomb
 					delete bombs[0];
 					bombs.erase(bombs.begin());
 				}

@@ -41,8 +41,6 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 	{
 		m_animations[(int)animationIndex::BOMB].applyToSprite(m_sprite);
 		target.draw(m_sprite);
-
-
 	}
 
 	else if (!m_explosion_finished)

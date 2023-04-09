@@ -1,5 +1,6 @@
 #include "Game.h"
 
+
 Game::Game() : startMenu(true)
 {
 	//Randomize generator
@@ -119,9 +120,6 @@ void Game::update(const sf::Time& dt)
 			view.setCenter(sf::Vector2f((31 * 48) - (view.getSize().x / 3),
 				window->getSize().y / 2 + 48));
 		}
-
-		//update data map for all exploding tiles
-		//level.setMap(player.getExplotionPosition(), 0); // constantly called for 0,0 bug
 
 		//give level all neded info from player
 		level.update(dt.asSeconds(), player.getPosition(), player.getBombCount(),

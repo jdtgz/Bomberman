@@ -26,8 +26,8 @@ Player::Player()
 	}
 
 	// initialize the player/powerUp attributes 
-	bombCount = 3; 
-	flameRange = 2; 
+	bombCount = 1; 
+	flameRange = 1; 
 	speed = 3.f;
 	wallPass = false; 
 	detonator = false;
@@ -47,7 +47,7 @@ Player::~Player()
 
 
 // detects whether a key has been pressed and acts accordingly
-void Player::keyPressed(const sf::Keyboard::Key &key)
+void Player::keyPressed(const sf::Keyboard::Key& key)
 {
 	// change the direction of the player based on input
 	switch (key)
@@ -89,7 +89,7 @@ void Player::keyPressed(const sf::Keyboard::Key &key)
 
 
 // detects if a key is no longer being pressed and stops movement
-void Player::keyReleased(const sf::Keyboard::Key &key)
+void Player::keyReleased(const sf::Keyboard::Key& key)
 {
 	// change the direction of the player based on input
 	switch (key)
@@ -128,8 +128,8 @@ void Player::update(const float& dt)
 		animations[int(curAnimation)].applyToSprite(sprite);
 	}
 
-	//Update velocity based on user input, move speed, and
-	//the direction the player can currently move in
+	// Update velocity based on user input, move speed, and
+	// the direction the player can currently move in
 	int x = canMove[direction::WEST] * movement[direction::WEST] * -speed; 
 	x += canMove[direction::EAST] * movement[direction::EAST] * speed; 
 
@@ -142,7 +142,7 @@ void Player::update(const float& dt)
 	move(xVel, yVel);
 
 	
-	//Fix for the player being glitched out when between a tile on top and below
+	// Fix for the player being glitched out when between a tile on top and below
 	sf::FloatRect playerBounds = sprite.getGlobalBounds();
 	playerBounds.height /= 1.1;
 
