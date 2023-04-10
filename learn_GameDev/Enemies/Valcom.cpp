@@ -5,7 +5,7 @@
 Valcom::Valcom(const Player* plrPtr)
 	: Enemy(plrPtr)
 {
-	init(sf::Vector2i(0, 0), direction::NORTH);
+	init(sf::Vector2i(1, 1), direction::NORTH);
 }
 
 
@@ -44,7 +44,7 @@ void Valcom::init(const sf::Vector2i& tile, const direction& face)
 	anims[int(curAnim)].applyToSprite(sprite);
 
 	//Adjust tile position to world position
-	sprite.setPosition(48 * tile.x, 100 + 48 * tile.y);
+	sprite.setPosition(48 * (tile.x - 1), 100 + 48 * (tile.y - 1));
 }
 
 
