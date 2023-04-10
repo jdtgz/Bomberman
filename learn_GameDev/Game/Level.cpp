@@ -182,9 +182,15 @@ void Level::keyPressed(const sf::Keyboard::Key& key)
 
 				// initialize the bomb
 				if (detonator == false)
+				{
+					tilemap[playerX][playerY]->setTile(tileType::SOLID_AIR);
 					bombs.push_back(new Bomb(playerX, playerY, flameRange, true));
+				}
 				else
+				{
+					tilemap[playerX][playerY]->setTile(tileType::SOLID_AIR);
 					bombs.push_back(new Bomb(playerX, playerY, flameRange, false));
+				}
 				break;
 			}
 		}
@@ -226,11 +232,23 @@ void Level::setMap(sf::Vector2i pos, int type)
 void Level::collisions(Player& plr)
 {
 	sf::Vector2f offset;
+
+	for (int i = 0; i < enemies.size(); i++)
+	{
+		if (plr.check(*enemies[i]))
+		{
+			playerDead = true;
+			std::cout << "PLAYER DEAD\n";
+		}
+	}
+
+
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
 			if (tilemap[x][y]->getType() != tileType::AIR &&
-				tilemap[x][y]->getType() != tileType::DOOR_OPEN)
+				tilemap[x][y]->getType() != tileType::DOOR_OPEN &&
+				!(tilemap[x][y]->getType() == tileType::SOLID_AIR && x == playerX && y == playerY))
 			{
 				sf::Vector2f center_tile = {
 					tilemap[x][y]->getBounds().left + (tilemap[x][y]->getBounds().width / 2),
@@ -327,6 +345,9 @@ void Level::update(const float& dt, sf::Vector2f playerPos, int bCount, int fRan
 
 					//Destroy the Bricks
 					datamap = bombs[0]->datamapExplosionCollision(datamap);
+
+					//Change TileType of the Bomb Location
+					tilemap[bombs[0]->getPosition().x][bombs[0]->getPosition().y]->setTile(tileType::AIR);
 					
 					//Check if player dies
 					if(deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition()))
