@@ -15,6 +15,7 @@ class Animation
 		void update(const float& dt); 
 		void showOnce(); 
 		int getCurrentFrame() const;
+		int getFrameCount() const;
 
 	private:
 		// cycles to the next frame in frames

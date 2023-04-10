@@ -72,6 +72,12 @@ int Animation::getCurrentFrame() const
 }
 
 
+int Animation::getFrameCount() const
+{
+	return nFrames;
+}
+
+
 // advances the frame of the animation
 void Animation::advance()
 {
