@@ -17,7 +17,7 @@ Bomb::Bomb(int x, int y, int range, bool has_timer)
 
 	if (has_timer)
 		m_timer = sf::seconds(2.5);
-	else if (!has_timer)
+	else
 		m_timer = sf::seconds(-1);
 
 	m_sprite.setPosition(((x - 1) * 48), ((y + 1) * 48)); //Bomb position is left most explosion 
@@ -41,8 +41,6 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 	{
 		m_animations[(int)animationIndex::BOMB].applyToSprite(m_sprite);
 		target.draw(m_sprite);
-
-
 	}
 
 	else if (!m_explosion_finished)

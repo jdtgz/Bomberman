@@ -15,23 +15,23 @@ class Player : public Collidable
 		~Player();
 
 		// Given a key, do something
-		void keyPressed(const sf::Keyboard::Key&);
-		void keyReleased(const sf::Keyboard::Key&);
+		void keyPressed(const sf::Keyboard::Key& key);
+		void keyReleased(const sf::Keyboard::Key& key);
 
 		// Draws player onto the screen
-		void draw(sf::RenderWindow&) const;
+		void draw(sf::RenderWindow& window) const;
 
 		// updates attributes of player while in main
-		void update(const float&);
-		void setVelocity(const int&, const int&);
+		void update(const float& dt);
+		void setVelocity(const int& newX, const int& newY);
 		sf::Vector2f getVelocity() const;
 
 		//Collision
-		void move(const float&, const float&);
-		void setCanMove(const int&, const bool&);
+		void move(const float& x, const float& y);
+		void setCanMove(const int& dir, const bool& v);
 		sf::Vector2f getPosition() const;
 		sf::FloatRect getBoundingBox() const;
-		sf::Sprite getSprite() const;
+		sf::Sprite getSprite();
 
 		// powerup/player attributes 
 		int getBombCount() const; 

@@ -1,5 +1,6 @@
 #include "Game.h"
 
+
 Game::Game() : startMenu(true)
 {
 	//Randomize generator
@@ -26,8 +27,8 @@ Game::~Game()
 }
 
 
-//Runs the game
-//Keeps track of time for movement and animations
+// Runs the game
+// Keeps track of time for movement and animations
 void Game::run()
 {
 	//Initialize clock & delta time
@@ -50,12 +51,12 @@ void Game::run()
 
 			//Poll events again
 			processEvents();
+		
+			//Detect all collisions and adjust player accordingly
+			level.collisions(player);
 
 			//Tick
 			update(timePerFrame); 
-
-			//Detect all collisions and adjust player accordingly
-			level.collisions(player);
 		}
 
 		//Display updated gamestate
@@ -70,20 +71,24 @@ void Game::processEvents()
 	sf::Event evnt;
 	while (window->pollEvent(evnt))
 	{
-		//If start menu is active, dont go through game events
+		// If start menu is active, dont go through game events
 		if (!startMenu.isActive())
 		{
 			switch (evnt.type)
 			{
-				//Tell the player when a key is down
-			case sf::Event::KeyPressed:
-				player.keyPressed(evnt.key.code);
-				level.keyPressed(evnt.key.code);
-				break;
-				//Tell the player when a key is released
-			case sf::Event::KeyReleased:
-				player.keyReleased(evnt.key.code);
-				break;
+				// Tell the player when a key is down
+				case sf::Event::KeyPressed:
+					// manage the player's movement inputs
+					player.keyPressed(evnt.key.code);
+
+					// manage the player's bomb inputs
+					level.keyPressed(evnt.key.code, player);
+					break;
+					// Tell the player when a key is released
+				case sf::Event::KeyReleased:
+					// manage the player's movement inputs
+					player.keyReleased(evnt.key.code);
+					break;
 			}
 		}
 
@@ -94,12 +99,13 @@ void Game::processEvents()
 }
 
 
-//Tick
+// Tick
 void Game::update(const sf::Time& dt)
 {
 	//If start menu is active, dont update game
 	if (!startMenu.isActive())
 	{
+		// update the player's animations and position
 		player.update(dt.asSeconds());
 
 		//Prevent viewport from going off of the map
@@ -120,12 +126,8 @@ void Game::update(const sf::Time& dt)
 				window->getSize().y / 2 + 48));
 		}
 
-		//update data map for all exploding tiles
-		//level.setMap(player.getExplotionPosition(), 0); // constantly called for 0,0 bug
-
-		//give level all neded info from player
-		level.update(dt.asSeconds(), player.getPosition(), player.getBombCount(),
-			player.getFlameRange(), player.hasDetonator(), player.getSprite());
+		// update all in-game objects 
+		level.update(dt.asSeconds(), player);
 	}
 	else
 	{
@@ -134,7 +136,7 @@ void Game::update(const sf::Time& dt)
 }
 
 
-//Draw all objects to the window
+// Draw all objects to the window
 void Game::render()
 {
 	window->clear(); 
