@@ -35,7 +35,7 @@ class Level
 
 		// track player collisions 
 		void collisions(Player& plr);
-		bool deathCheck(std::vector<int> range, sf::Vector2i bombPos, const sf::Vector2f& checkPos);
+		bool deathCheck(std::vector<int> range, sf::Vector2i bombPos, const sf::FloatRect& bounds);
 
 		// track enemy collisions 
 		// void collisions(Enemy&);

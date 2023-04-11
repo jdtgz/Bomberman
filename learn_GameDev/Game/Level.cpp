@@ -83,7 +83,12 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 		}
 	}
 
+	//Remove any enemies that may exist
+	for (int i = 0; i < enemies.size(); i++)
+		delete enemies[i];
+	enemies = {}; //Empty pointer array after deallocating all memory
 
+	//Add enemies to the map
 	while (enemyCount < 6)
 	{
 		i = 0;
@@ -306,37 +311,33 @@ void Level::collisions(Player& plr)
 }
 
 
-bool Level::deathCheck(std::vector<int> range, sf::Vector2i bombPos, const sf::Vector2f& checkPos)
+//Returns true if the provided Vector2f is hit by the exploding bomb
+bool Level::deathCheck(std::vector<int> range, sf::Vector2i bombPos, const sf::FloatRect& bounds)
 {
 	// Check if player is in spots above
 	for (int i = 0; i <= range[0]; i++)
 	{
-		if (sf::Vector2i(checkPos.x / 48 + 1, (checkPos.y - 100) / 48 + 1 ) ==
-			sf::Vector2i(bombPos.x, bombPos.y - i))
+		if (bounds.contains(sf::Vector2f((bombPos.x - 1) * 48, (bombPos.y - i - 1) * 48 + 100)))
 			return true;
 	}
 	// to the right
 	for (int i = 0; i <= range[1]; i++)
 	{
-		if (sf::Vector2i(checkPos.x / 48 + 1, (checkPos.y - 100) / 48 + 1) ==
-			sf::Vector2i(bombPos.x + i, bombPos.y))
-			return true;
-	}
+		if (bounds.contains(sf::Vector2f((bombPos.x + i - 1) * 48, (bombPos.y - 1) * 48 + 100)))
+			return true;	}
 	// below
 	for (int i = 0; i <= range[2]; i++)
 	{
-		if (sf::Vector2i(checkPos.x / 48 + 1, (checkPos.y - 100) / 48 + 1) ==
-			sf::Vector2i(bombPos.x, bombPos.y + i))
+		if (bounds.contains(sf::Vector2f((bombPos.x - 1) * 48, (bombPos.y + i - 1) * 48 + 100)))
 			return true;
 	}
 	// and to the left of the bomb
 	for (int i = 0; i <= range[3]; i++)
 	{
-		if (sf::Vector2i(checkPos.x / 48 + 1, (checkPos.y - 100) / 48 + 1) ==
-			sf::Vector2i(bombPos.x - i, bombPos.y))
-			return true; //If the positions match player dies
+		if (bounds.contains(sf::Vector2f((bombPos.x - i - 1) * 48, (bombPos.y - 1) * 48 + 100)))
+			return true;
 	}
-	return false; // If no matches found player lives
+	return false; //Entity was not hit by bomb
 }
 
 
@@ -351,10 +352,22 @@ void Level::update(const float& dt, Player& plr)
 		if (!enemies.at(i)->completedDeathAnim())
 		{
 			enemies.at(i)->update(dt);
-			//enemies.at(i)->move(tilemap);
+			enemies.at(i)->move(tilemap);
 		}
 	}
 
+	//Delete all dead enemies
+	for (int i = 0; i < enemies.size(); i++)
+	{
+		if (enemies.at(i)->completedDeathAnim())
+		{
+			Enemy* temp = enemies.at(i);
+			enemies.at(i) = enemies.at(enemies.size() - 1);
+			enemies.at(enemies.size() - 1) = temp;
+			delete enemies.at(enemies.size() - 1);
+			enemies.pop_back();
+		}
+	}
 
 	// Check for tileType conflicts for every tile in datamap and tileMap
 	for (int x = 0; x < MAP_LENGTH; x++)
@@ -394,13 +407,13 @@ void Level::update(const float& dt, Player& plr)
 					tilemap[bombs[0]->getPosition().x][bombs[0]->getPosition().y]->setTile(tileType::AIR);
 					
 					// Check if player dies
-					if(deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition(), plr.getPosition()))
+					if(deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition(), plr.getBoundingBox()))
 						std::cout << "PLAYER DEAD\n";
 
 					// Check if enemies die
 					for (int e = 0; e < enemies.size(); e++)
 						if (deathCheck(bombs[0]->getExplodingRange(),
-							bombs[0]->getPosition(), enemies.at(e)->getPosition()))
+							bombs[0]->getPosition(), enemies.at(e)->getBoundingBox()))
 							enemies.at(e)->die();
 
 					// Remove Bomb

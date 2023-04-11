@@ -36,6 +36,9 @@ public:
 	//Returns the tile coordinates of the enemy
 	sf::Vector2i getTilePosition() const;
 
+	//Returns the global bounds of the enemy
+	sf::FloatRect getBoundingBox() const;
+
 	//Destructor
 	~Enemy();
 protected:

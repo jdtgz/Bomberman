@@ -220,6 +220,12 @@ sf::Vector2i Enemy::getTilePosition() const
 }
 
 
+sf::FloatRect Enemy::getBoundingBox() const
+{
+	return sprite.getGlobalBounds();
+}
+
+
 Enemy::~Enemy()
 {
 }
