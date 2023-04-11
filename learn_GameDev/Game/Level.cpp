@@ -249,8 +249,18 @@ void Level::draw(sf::RenderWindow& window) const
 		for (int y = 0; y < MAP_HEIGHT; y++)
 			tilemap[x][y]->draw(window);
 	
-	for(int i = 0; i < enemies.size(); i++)
+	for (int i = 0; i < enemies.size(); i++)
+	{
 		enemies[i]->draw(window);
+
+		/* Display enemy hitbox
+		sf::RectangleShape box;
+		box.setPosition(enemies[i]->getBoundingBox().left, enemies[i]->getBoundingBox().top);
+		box.setSize(sf::Vector2f(enemies[i]->getBoundingBox().width, enemies[i]->getBoundingBox().height));
+		box.setFillColor(sf::Color(255, 255, 255, 100));
+		window.draw(box);
+		//*/
+	}
 
 	for (int i = 0; i < bombs.size(); i++)
 		bombs[i]->draw(window, datamap);
@@ -311,30 +321,29 @@ void Level::collisions(Player& plr)
 }
 
 
-//Returns true if the provided Vector2f is hit by the exploding bomb
 bool Level::deathCheck(std::vector<int> range, sf::Vector2i bombPos, const sf::FloatRect& bounds)
 {
-	// Check if player is in spots above
+	// Check if entity is in spots above
 	for (int i = 0; i <= range[0]; i++)
 	{
-		if (bounds.contains(sf::Vector2f((bombPos.x - 1) * 48, (bombPos.y - i - 1) * 48 + 100)))
+		if (bounds.intersects(sf::FloatRect((bombPos.x - 1) * 48, (bombPos.y - i - 1) * 48 + 100, 48, 48)))
 			return true;
 	}
 	// to the right
 	for (int i = 0; i <= range[1]; i++)
 	{
-		if (bounds.contains(sf::Vector2f((bombPos.x + i - 1) * 48, (bombPos.y - 1) * 48 + 100)))
+		if (bounds.intersects(sf::FloatRect((bombPos.x + i - 1) * 48, (bombPos.y - 1) * 48 + 100, 48, 48)))
 			return true;	}
 	// below
 	for (int i = 0; i <= range[2]; i++)
 	{
-		if (bounds.contains(sf::Vector2f((bombPos.x - 1) * 48, (bombPos.y + i - 1) * 48 + 100)))
+		if (bounds.intersects(sf::FloatRect((bombPos.x - 1) * 48, (bombPos.y + i - 1) * 48 + 100, 48, 48)))
 			return true;
 	}
 	// and to the left of the bomb
 	for (int i = 0; i <= range[3]; i++)
 	{
-		if (bounds.contains(sf::Vector2f((bombPos.x - i - 1) * 48, (bombPos.y - 1) * 48 + 100)))
+		if (bounds.intersects(sf::FloatRect((bombPos.x - i - 1) * 48, (bombPos.y - 1) * 48 + 100, 48, 48)))
 			return true;
 	}
 	return false; //Entity was not hit by bomb
@@ -352,7 +361,8 @@ void Level::update(const float& dt, Player& plr)
 		if (!enemies.at(i)->completedDeathAnim())
 		{
 			enemies.at(i)->update(dt);
-			enemies.at(i)->move(tilemap);
+			if (enemies.at(i)->isAlive())
+				enemies.at(i)->move(tilemap);
 		}
 	}
 
