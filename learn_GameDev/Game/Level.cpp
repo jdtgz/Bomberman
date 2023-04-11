@@ -364,7 +364,7 @@ void Level::update(const float& dt, Player& plr)
 	}
 
 	//Delete all dead enemies
-	for (int i = 0; i < enemies.size(); i++)
+	for (int i = enemies.size() - 1; i >= 0; i--)
 	{
 		if (enemies.at(i)->completedDeathAnim())
 		{
