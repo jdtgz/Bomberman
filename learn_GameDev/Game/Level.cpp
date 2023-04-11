@@ -202,18 +202,19 @@ void Level::keyPressed(const sf::Keyboard::Key& key, Player& plr)
 	switch (key)
 	{
 	case sf::Keyboard::A:
-		for (int i = 0; i < bombCount; i++)
+		for (int i = 0; i < plr.getBombCount(); i++)
 		{
 			//Prevents the player from putting a bomb on top of a tile that isnt air.
 			//Without this if statement, the player can put a bomb on top of the door tile
 			//and the door would end up vanishing.
-			if (tilemap[playerX][playerY]->getType() == tileType::ID::AIR)
+			if (tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->getType() == tileType::ID::AIR)
 			{
 				if (bombManager[i] == false)
 				{
 					for (int i = 0; i < bombs.size(); i++)
 					{
-						if (bombs[i]->isColliding(playerSprite))
+						sf::Sprite t = plr.getSprite();
+						if (bombs[i]->isColliding(t))
 						{
 							std::cout << "COLLIDE!\n";
 							return;
@@ -222,27 +223,28 @@ void Level::keyPressed(const sf::Keyboard::Key& key, Player& plr)
 					bombManager[i] = true;
 
 					// initialize the bomb
-					if (detonator == false)
+					if (!plr.hasDetonator())
 					{
-						tilemap[playerX][playerY]->setTile(tileType::SOLID_AIR);
-						bombs.push_back(new Bomb(playerX, playerY, flameRange, true));
+						tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
+						bombs.push_back(new Bomb((int)plr.getPosition().x, (int)plr.getPosition().y, plr.getFlameRange(), true));
 					}
 					else
 					{
-						tilemap[playerX][playerY]->setTile(tileType::SOLID_AIR);
-						bombs.push_back(new Bomb(playerX, playerY, flameRange, false));
+						tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
+						bombs.push_back(new Bomb((int)plr.getPosition().x, (int)plr.getPosition().y, plr.getFlameRange(), false));
 					}
 					break;
 				}
 			}
-			break;
-		case sf::Keyboard::B:
-			for (int i = 0; i < bombs.size(); i++)
-			{
-				if (bombManager[i] == true  && plr.hasDetonator() == true)
-					bombs[i]->explode();
-			}
-			break;
+		}
+		break;
+	case sf::Keyboard::B:
+		for (int i = 0; i < bombs.size(); i++)
+		{
+			if (bombManager[i] == true && plr.hasDetonator() == true)
+				bombs[i]->explode();
+		}
+		break;
 	}
 }
 
@@ -282,7 +284,7 @@ void Level::setMap(sf::Vector2i pos, int type)
 void Level::setPowerup(const int& x, const int& y)
 {
 	std::cout << "POWERUP: " << x << ", " << y << '\n';
-	datamap[x][y] = tileType::POWERUP;
+	datamap[x][y] = tileType::POWERUP_HIDDEN;
 	delete tilemap[x][y];
 	tilemap[x][y] = new PowerUp((x - 1) * 48, (y - 1) * 48 + 100);
 }
