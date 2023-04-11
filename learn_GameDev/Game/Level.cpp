@@ -201,51 +201,50 @@ void Level::keyPressed(const sf::Keyboard::Key& key, Player& plr)
 	// change the direction of the player based on input
 	switch (key)
 	{
-		case sf::Keyboard::A:
-			for (int i = 0; i < plr.getBombCount(); i++)
+	case sf::Keyboard::A:
+		for (int i = 0; i < plr.getBombCount(); i++)
+		{
+			//Prevents the player from putting a bomb on top of a tile that isnt air.
+			//Without this if statement, the player can put a bomb on top of the door tile
+			//and the door would end up vanishing.
+			if (tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->getType() == tileType::ID::AIR)
 			{
 				if (bombManager[i] == false)
 				{
 					for (int i = 0; i < bombs.size(); i++)
 					{
-						sf::Sprite* tmp = new sf::Sprite(plr.getSprite());
-						if (bombs[i]->isColliding(*tmp))
+						sf::Sprite t = plr.getSprite();
+						if (bombs[i]->isColliding(t))
 						{
 							std::cout << "COLLIDE!\n";
 							return;
 						}
-						delete tmp; 
 					}
-					// set the bomb to be active
 					bombManager[i] = true;
 
-					// reserve a space for the bomb
-					tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
-				
-				
-					// If player has the detonator power up, create a bomb with no timer
-					if (plr.hasDetonator())
+					// initialize the bomb
+					if (!plr.hasDetonator())
 					{
-						bombs.push_back(new Bomb(plr.getPosition().x, plr.getPosition().y, 
-							plr.getFlameRange(), false));
+						tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
+						bombs.push_back(new Bomb((int)plr.getPosition().x, (int)plr.getPosition().y, plr.getFlameRange(), true));
 					}
-					// if no detonator power up, create a bomb with a timer
 					else
 					{
-						bombs.push_back(new Bomb(plr.getPosition().x, plr.getPosition().y,
-							plr.getFlameRange(), true));
+						tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
+						bombs.push_back(new Bomb((int)plr.getPosition().x, (int)plr.getPosition().y, plr.getFlameRange(), false));
 					}
 					break;
 				}
 			}
-			break;
-		case sf::Keyboard::B:
-			for (int i = 0; i < bombs.size(); i++)
-			{
-				if (bombManager[i] == true  && plr.hasDetonator() == true)
-					bombs[i]->explode();
-			}
-			break;
+		}
+		break;
+	case sf::Keyboard::B:
+		for (int i = 0; i < bombs.size(); i++)
+		{
+			if (bombManager[i] == true && plr.hasDetonator() == true)
+				bombs[i]->explode();
+		}
+		break;
 	}
 }
 
@@ -285,7 +284,7 @@ void Level::setMap(sf::Vector2i pos, int type)
 void Level::setPowerup(const int& x, const int& y)
 {
 	std::cout << "POWERUP: " << x << ", " << y << '\n';
-	datamap[x][y] = tileType::POWERUP;
+	datamap[x][y] = tileType::POWERUP_HIDDEN;
 	delete tilemap[x][y];
 	tilemap[x][y] = new PowerUp((x - 1) * 48, (y - 1) * 48 + 100);
 }
