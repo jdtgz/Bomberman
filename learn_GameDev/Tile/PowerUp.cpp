@@ -3,7 +3,7 @@
 
 // Create a PowerUp at (x,y) and set its powerUpType 
 PowerUp::PowerUp(const int& x, const int& y)
-	: Tile(x, y, tileType::POWERUP)
+	: Tile(x, y, tileType::POWERUP_HIDDEN)
 {
 	// set the power up type randomly
 	srand(time(NULL)); 
@@ -11,7 +11,6 @@ PowerUp::PowerUp(const int& x, const int& y)
 
 	// set the initial state of powerUp
 	destroyed = false; 
-	revealed = false;
 }
 
 
@@ -25,43 +24,44 @@ PowerUp::~PowerUp()
 // then destroy old mSprite & reveal actual mSprite
 void PowerUp::revealPowerUp()
 {
-	revealed = true;
+	// set the type to be a revealed powerUp
+	type = tileType::POWERUP_REVEALED; 
 
-	// Based on type, set the sprite
-	switch (type)
+	// Based on pwoerUpType, set the sprite
+	switch (powerUpType)
 	{
-	case powerups::BOMB_UP:
-		mSprite.setTextureRect({ 0, 48, 16, 16 });
-		std::cout << "BOMB UP\n";
-		break;
-	case powerups::FLAME_UP:
-		mSprite.setTextureRect({ 16, 48, 16, 16 });
-		std::cout << "FLAME UP\n";
-		break;
-	case powerups::SPEED_UP:
-		mSprite.setTextureRect({ 32, 48, 16, 16 });
-		std::cout << "SPEED UP\n";
-		break;
-	case powerups::WALL_PASS:
-		mSprite.setTextureRect({ 48, 48, 16, 16 });
-		std::cout << "WALL PASS\n";
-		break;
-	case powerups::DETONATOR:
-		mSprite.setTextureRect({ 64, 48, 16, 16 });
-		std::cout << "DETONATOR\n";
-		break;
-	case powerups::BOMB_PASS:
-		mSprite.setTextureRect({ 80, 48, 16, 16 });
-		std::cout << "BOMB PASS\n";
-		break;
-	case powerups::FLAME_PASS:
-		mSprite.setTextureRect({ 96, 48, 16, 16 });
-		std::cout << "FLAME PASS\n";
-		break;
-	case powerups::INVINCIBILITY:
-		mSprite.setTextureRect({ 112, 48, 16, 16 });
-		std::cout << "INVINCIBLE\n";
-		break;
+		case powerups::BOMB_UP:
+			mSprite.setTextureRect({ 0, 48, 16, 16 });
+			std::cout << "BOMB UP\n";
+			break;
+		case powerups::FLAME_UP:
+			mSprite.setTextureRect({ 16, 48, 16, 16 });
+			std::cout << "FLAME UP\n";
+			break;
+		case powerups::SPEED_UP:
+			mSprite.setTextureRect({ 32, 48, 16, 16 });
+			std::cout << "SPEED UP\n";
+			break;
+		case powerups::WALL_PASS:
+			mSprite.setTextureRect({ 48, 48, 16, 16 });
+			std::cout << "WALL PASS\n";
+			break;
+		case powerups::DETONATOR:
+			mSprite.setTextureRect({ 64, 48, 16, 16 });
+			std::cout << "DETONATOR\n";
+			break;
+		case powerups::BOMB_PASS:
+			mSprite.setTextureRect({ 80, 48, 16, 16 });
+			std::cout << "BOMB PASS\n";
+			break;
+		case powerups::FLAME_PASS:
+			mSprite.setTextureRect({ 96, 48, 16, 16 });
+			std::cout << "FLAME PASS\n";
+			break;
+		case powerups::INVINCIBILITY:
+			mSprite.setTextureRect({ 112, 48, 16, 16 });
+			std::cout << "INVINCIBLE\n";
+			break;
 	}
 
 	// scale the sprite properly
@@ -76,7 +76,7 @@ void PowerUp::interact()
 	destroyed = true;
 
 	// If the power up is revealed 
-	if (revealed)
+	if (type == tileType::POWERUP_REVEALED)
 	{
 		// spawn enemies on the screen
 		spawnEnemies();
@@ -91,7 +91,7 @@ void PowerUp::interact()
 void PowerUp::update(const float& dt)
 {
 	// initiate the blowUp animation IF the tile has been destoryed 
-	if (destroyed && type == tileType::POWERUP)
+	if (destroyed && type == tileType::POWERUP_HIDDEN)
 	{
 		// display one cycle of the blowUp animation
 		blowUp.applyToSprite(mSprite);
@@ -113,7 +113,7 @@ void PowerUp::applyPowerUp(Player& player)
 {
 	//determine what type of power up it is & update player
 	std::cout << "Obtained: ";
-	switch (type)
+	switch (powerUpType)
 	{
 		case powerups::BOMB_UP:
 			std::cout << "BOMB UP\n";
@@ -158,6 +158,7 @@ void PowerUp::applyPowerUp(Player& player)
 // then spwan enemies and sel-destruct
 void PowerUp::spawnEnemies()
 {
+	std::cout << "POWERUP DESTOYED, ENEMIES\n";
 }
 
 

@@ -33,9 +33,6 @@ class PowerUp: public Tile
 			BOMB_PASS, FLAME_PASS, INVINCIBILITY
 		};
 
-		// keeps track state of powerUp
-		bool revealed; 
-
 		// ID for type of attributes player should change
 		int powerUpType; 
 };

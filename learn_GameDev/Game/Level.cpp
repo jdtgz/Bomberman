@@ -156,7 +156,7 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
   
 	// place a powerUp
 	std::cout << "POWERUP: 10, 1\n"; 
-	datamap[10][1] = tileType::POWERUP; 
+	datamap[10][1] = tileType::POWERUP_HIDDEN; 
 	delete tilemap[10][1];
 	tilemap[10][1] = new PowerUp(480 -48, 100); 
 
@@ -361,8 +361,8 @@ void Level::update(const float& dt, Player& plr)
 			// If tileTypes conflict, they have been destroyed
 			if (datamap[x][y] != tilemap[x][y]->getType())
 			{
-				if (tilemap[x][y]->getType() == tileType::POWERUP) 
-					datamap[x][y] = tileType::POWERUP;
+				if (tilemap[x][y]->getType() == tileType::POWERUP_REVEALED) 
+					datamap[x][y] = tileType::POWERUP_REVEALED;
 
 				tilemap[x][y]->interact(); 
 			}

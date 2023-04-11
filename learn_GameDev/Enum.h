@@ -12,7 +12,8 @@ namespace tileType
 	Tile		-- Unbreakable tile
 	Door Closed	-- Effectively the same as a brick tile, but it becomes a door open tile when broken
 	Door Open	-- Exit door tile
-	Powerup		-- For powerups..?
+	PowerUp_Hidden -- behaves like a brick, but is a powerUp waiting to be revealed
+	PowerUp_Revealed -- PowerUp obj
 	*/
-	enum ID { AIR = 0, SOLID_AIR, BRICK, TILE, DOOR_CLOSED, DOOR_OPEN, POWERUP };
+	enum ID { AIR = 0, SOLID_AIR, BRICK, TILE, DOOR_CLOSED, DOOR_OPEN, POWERUP_HIDDEN, POWERUP_REVEALED };
 }
