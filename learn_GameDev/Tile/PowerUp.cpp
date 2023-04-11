@@ -75,6 +75,7 @@ void PowerUp::interact()
 	// destroy the powerUp
 	destroyed = true;
 
+	/*
 	// If the power up is revealed 
 	if (type == tileType::POWERUP_REVEALED)
 	{
@@ -84,6 +85,7 @@ void PowerUp::interact()
 		// set the block to air AND make the powerUp unaccessable 
 		setTile(tileType::AIR);
 	}
+	*/
 }
 
 
