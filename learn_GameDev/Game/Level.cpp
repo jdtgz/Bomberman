@@ -55,6 +55,19 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 	int totalBrickCount = 0, targetBrick = 0; // Used for random positions for PowerUp and Door
 	int totalAirCount = 0, targetAir = 0, enemyCount = 0; // Used for random enemy Placement
 
+	for (int i = 0; i < powerups.size(); i++)
+	{
+		//Remove any powerups that exist
+		delete tilemap[powerups.at(i).x][powerups.at(i).y];
+
+		//Replace them with a new generic tile
+		tilemap[powerups.at(i).x][powerups.at(i).y] =
+			new Tile((powerups.at(i).x - 1) * 48,
+				(powerups.at(i).y - 1) * 48 + 100,
+				tileType::AIR);
+	}
+	powerups = {}; //Empty array
+
 	//For every tile position
 	for (int x = 0; x < MAP_LENGTH - 1; x++)
 	{
@@ -159,12 +172,8 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 			}
 		}
 	}
-  
-	// place a powerUp
-	std::cout << "POWERUP: 10, 1\n"; 
-	datamap[10][1] = tileType::POWERUP; 
-	delete tilemap[10][1];
-	tilemap[10][1] = new PowerUp(480 -48, 100);
+
+	setPowerup(10, 1);
 }
 
 
@@ -270,6 +279,15 @@ void Level::draw(sf::RenderWindow& window) const
 void Level::setMap(sf::Vector2i pos, int type)
 {
 	datamap[pos.x][pos.y] = type;
+}
+
+
+void Level::setPowerup(const int& x, const int& y)
+{
+	std::cout << "POWERUP: " << x << ", " << y << '\n';
+	datamap[x][y] = tileType::POWERUP;
+	delete tilemap[x][y];
+	tilemap[x][y] = new PowerUp((x - 1) * 48, (y - 1) * 48 + 100);
 }
 
 
