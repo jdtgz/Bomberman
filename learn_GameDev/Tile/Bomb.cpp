@@ -54,7 +54,7 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 			{
 				if (m_position.y - i > 0)
 				{
-					std::cout << "can check up\n";
+					//std::cout << "can check up\n";
 					if (datamap[m_position.x][m_position.y - i] != tileType::AIR && !stop) //See if tile in way
 					{
 						m_exploding_range[0] = i;
@@ -210,9 +210,9 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 				drawSprite(sf::Vector2f(centerPos.x - (48 * k), centerPos.y), animationIndex::LEFT);
 		}
 
-		for (int i = 0; i < 4; i++)
-			std::cout << m_exploding_range[i] << ", ";
-		std::cout << "\n";
+		//for (int i = 0; i < 4; i++)
+		//	std::cout << m_exploding_range[i] << ", ";
+		//std::cout << "\n";
 	}
 }
 
@@ -405,11 +405,11 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 	{
 		if (m_position.y - i > 0)
 		{
-			std::cout << "can check up\n";
+			//std::cout << "can check up\n";
 			if (datamap[m_position.x][m_position.y - i] != tileType::AIR && !stop)
 			{
 				//std::cout << "Up explotion range " << m_exploding_range[0] << '\n';
-				std::cout << "Up: " << i << '\n';
+				//std::cout << "Up: " << i << '\n';
 
 				if (datamap[m_position.x][m_position.y - i] != tileType::TILE && !stop)
 				{
@@ -432,12 +432,12 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 	{
 		if (m_position.x + i < 31)
 		{
-			std::cout << "can check right\n";
+			//std::cout << "can check right\n";
 			if (datamap[m_position.x+i][m_position.y] != tileType::AIR && !stop)
 			{
 				//std::cout << "Right explotion range " << m_exploding_range[1] << '\n';
 
-				std::cout << "Right: " << i << '\n';
+				//std::cout << "Right: " << i << '\n';
 
 				if (datamap[m_position.x+i][m_position.y] != tileType::TILE && !stop)
 				{
@@ -460,12 +460,12 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 	{
 		if (m_position.y + i < 15)
 		{
-			std::cout << "can check down\n";
+			//std::cout << "can check down\n";
 			if (datamap[m_position.x][m_position.y + i] != tileType::AIR && !stop)
 			{
 				//std::cout << "Down explotion range " << m_exploding_range[2] << '\n';
 
-				std::cout << "Down: " << i << '\n';
+				//std::cout << "Down: " << i << '\n';
 
 				if (datamap[m_position.x][m_position.y + i] != tileType::TILE && !stop)
 				{
@@ -488,12 +488,12 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 	{
 		if (m_position.x - i > 0)
 		{
-			std::cout << "can check left\n";
+			//std::cout << "can check left\n";
 			if (datamap[m_position.x-i][m_position.y] != tileType::AIR && !stop)
 			{
 				//std::cout << "Left explotion range " << m_exploding_range[3] << '\n';
 
-				std::cout << "Left: " << i << '\n';
+				//std::cout << "Left: " << i << '\n';
 
 				if (datamap[m_position.x - i][m_position.y] != tileType::TILE && !stop)
 				{

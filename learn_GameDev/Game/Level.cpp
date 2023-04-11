@@ -194,30 +194,36 @@ void Level::keyPressed(const sf::Keyboard::Key& key)
 	case sf::Keyboard::A:
 		for (int i = 0; i < bombCount; i++)
 		{
-			if (bombManager[i] == false)
+			//Prevents the player from putting a bomb on top of a tile that isnt air.
+			//Without this if statement, the player can put a bomb on top of the door tile
+			//and the door would end up vanishing.
+			if (tilemap[playerX][playerY]->getType() == tileType::ID::AIR)
 			{
-				for (int i = 0; i < bombs.size(); i++)
+				if (bombManager[i] == false)
 				{
-					if (bombs[i]->isColliding(playerSprite))
+					for (int i = 0; i < bombs.size(); i++)
 					{
-						std::cout << "COLLIDE!\n";
-						return;
+						if (bombs[i]->isColliding(playerSprite))
+						{
+							std::cout << "COLLIDE!\n";
+							return;
+						}
 					}
-				}
-				bombManager[i] = true;
+					bombManager[i] = true;
 
-				// initialize the bomb
-				if (detonator == false)
-				{
-					tilemap[playerX][playerY]->setTile(tileType::SOLID_AIR);
-					bombs.push_back(new Bomb(playerX, playerY, flameRange, true));
+					// initialize the bomb
+					if (detonator == false)
+					{
+						tilemap[playerX][playerY]->setTile(tileType::SOLID_AIR);
+						bombs.push_back(new Bomb(playerX, playerY, flameRange, true));
+					}
+					else
+					{
+						tilemap[playerX][playerY]->setTile(tileType::SOLID_AIR);
+						bombs.push_back(new Bomb(playerX, playerY, flameRange, false));
+					}
+					break;
 				}
-				else
-				{
-					tilemap[playerX][playerY]->setTile(tileType::SOLID_AIR);
-					bombs.push_back(new Bomb(playerX, playerY, flameRange, false));
-				}
-				break;
 			}
 		}
 		break;
