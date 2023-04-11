@@ -46,7 +46,7 @@ void Tile::setTile(const tileType::ID& t)
 			mSprite.setTextureRect({ 16 * 6, 16 * 2, 16, 16 });
 			break;
 		case tileType::BRICK:
-		case tileType::POWERUP:
+		case tileType::POWERUP_HIDDEN:
 		case tileType::DOOR_CLOSED:
 			mSprite.setTextureRect({ 16 * 1, 16 * 1, 16, 16 });
 			break;

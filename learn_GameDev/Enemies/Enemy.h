@@ -27,11 +27,17 @@ public:
 	//Returns whether the enemy is alive or not
 	bool isAlive() const;
 
+	//Returns true when the death anim has been completed
+	bool completedDeathAnim() const;
+
 	//Returns the position of the enemy sprite
 	sf::Vector2f getPosition() const;
 
 	//Returns the tile coordinates of the enemy
 	sf::Vector2i getTilePosition() const;
+
+	//Returns the global bounds of the enemy
+	sf::FloatRect getBoundingBox() const;
 
 	//Destructor
 	~Enemy();
@@ -57,8 +63,6 @@ protected:
 	//Higher numbers result in more random ai, but more visual clipping
 	float clippingMargin;
 
-	const Player* playerRef; //Reference to the player for chasing
-
 	//Move forward based on the current heading
 	bool moveForward(Tile* [33][15]);
 
@@ -70,4 +74,9 @@ protected:
 
 	//Returns whether the enemy is close enough to a tile to be considered 'at' it
 	bool atTile(Tile* [33][15]);
+
+private:
+	bool dead;
+
+	const Player* playerRef; //Reference to the player for chasing
 };

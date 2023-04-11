@@ -6,9 +6,11 @@ Enemy::Enemy(const Player* plrPtr)
 	//Default values
 	heading = direction::NORTH;
 	curAnim = animIndex::RIGHT;
+	anims[animIndex::DEATH].showOnce();
 	moveSpeed = 1.f;
 	clippingMargin = 1.f;
 	alive = true;
+	dead = false;
 	playerRef = plrPtr;
 }
 
@@ -18,9 +20,16 @@ void Enemy::update(const float& dt)
 	anims[int(curAnim)].update(dt);
 	anims[int(curAnim)].applyToSprite(sprite);
 
-	sf::FloatRect enemyBounds = sprite.getGlobalBounds();
-	enemyBounds.height /= 1.1;
-	Collidable::updateRect(enemyBounds);
+	if (alive)
+	{
+		sf::FloatRect enemyBounds = sprite.getGlobalBounds();
+		enemyBounds.height /= 1.1;
+		Collidable::updateRect(enemyBounds);
+	}
+
+	if (curAnim == animIndex::DEATH &&
+		anims[curAnim].getCurrentFrame() == anims[curAnim].getFrameCount() - 1)
+		dead = true;
 }
 
 
@@ -179,6 +188,9 @@ void Enemy::die()
 {
 	alive = false;
 	curAnim = animIndex::DEATH;
+
+	//Prevent collision with dead enemies
+	Collidable::updateRect(sf::FloatRect(0, 0, 0, 0));
 }
 
 
@@ -186,6 +198,13 @@ bool Enemy::isAlive() const
 {
 	return alive;
 }
+
+
+bool Enemy::completedDeathAnim() const
+{
+	return dead;
+}
+
 
 sf::Vector2f Enemy::getPosition() const
 {
@@ -198,6 +217,12 @@ sf::Vector2i Enemy::getTilePosition() const
 	//Shift by one to adjust for border
 	return sf::Vector2i(sprite.getPosition().x / 48 + 1,
 		(sprite.getPosition().y - 100) / 48 + 1);
+}
+
+
+sf::FloatRect Enemy::getBoundingBox() const
+{
+	return sprite.getGlobalBounds();
 }
 
 

@@ -55,6 +55,19 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 	int totalBrickCount = 0, targetBrick = 0; // Used for random positions for PowerUp and Door
 	int totalAirCount = 0, targetAir = 0, enemyCount = 0; // Used for random enemy Placement
 
+	for (int i = 0; i < powerups.size(); i++)
+	{
+		//Remove any powerups that exist
+		delete tilemap[powerups.at(i).x][powerups.at(i).y];
+
+		//Replace them with a new generic tile
+		tilemap[powerups.at(i).x][powerups.at(i).y] =
+			new Tile((powerups.at(i).x - 1) * 48,
+				(powerups.at(i).y - 1) * 48 + 100,
+				tileType::AIR);
+	}
+	powerups = {}; //Empty array
+
 	//For every tile position
 	for (int x = 0; x < MAP_LENGTH - 1; x++)
 	{
@@ -74,6 +87,7 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 				//Randomly assign tiles to Brick
 				if (rand() % 4 == 1)
 				{
+					totalAirCount--; //Remove from air count and add to brick count
 					totalBrickCount++;
 					datamap[x][y] = tileType::BRICK;
 					tilemap[x][y]->setTile(tileType::BRICK); 
@@ -82,7 +96,12 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 		}
 	}
 
+	//Remove any enemies that may exist
+	for (int i = 0; i < enemies.size(); i++)
+		delete enemies[i];
+	enemies = {}; //Empty pointer array after deallocating all memory
 
+	//Add enemies to the map
 	while (enemyCount < 6)
 	{
 		i = 0;
@@ -92,22 +111,22 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 			for (int y = 0; y < MAP_HEIGHT-1; y++)
 			{
 				if (datamap[x][y] == tileType::AIR)
-					i++;
-				if (targetAir == i) //At randomly picked air tile
 				{
-					i++; //Increment counter to prevent spawning enemies in one spot
+					i++;
+					if (targetAir == i) //At randomly picked air tile
+					{
+						//TEMPORARY RANDOM
+						if (rand() % 2 == 0)
+							enemies.push_back(new Valcom(plrPtr, sf::Vector2i(x, y)));
+						else
+							enemies.push_back(new ONeal(plrPtr, sf::Vector2i(x, y)));
 
-					//TEMPORARY RANDOM
-					if(rand() % 2 == 0)
-						enemies.push_back(new Valcom(plrPtr, sf::Vector2i(x,y)));
-					else
-						enemies.push_back(new ONeal(plrPtr, sf::Vector2i(x, y)));
+						//Increment nmber of enemies on screen
+						enemyCount++;
 
-					//Increment nmber of enemies on screen
-					enemyCount++;
-
-					//DEBUG TESTING
-					std::cout << "ENEMY: " << x << ", " << y << '\n';
+						//DEBUG TESTING
+						std::cout << "ENEMY: " << x << ", " << y << '\n';
+					}
 				}
 			}
 		}
@@ -139,31 +158,22 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 		{
 			//Count the number of bricks
 			if (datamap[x][y] == tileType::BRICK)
-				i++;
-			if (targetBrick == i) //At randomly picked brick tile
 			{
-				i++; //Increment counter to prevent spawning multiple doors
+				i++;
+				if (targetBrick == i) //At randomly picked brick tile
+				{
+					//DEBUG TESTING
+					std::cout << "DOOR: " << x << ", " << y << '\n';
 
-				//DEBUG TESTING
-				std::cout << "DOOR: " << x << ", " << y << '\n';
-
-				//Set the tile to be a closed door
-				datamap[x][y] = tileType::DOOR_CLOSED;
-				tilemap[x][y]->setTile(tileType::DOOR_CLOSED);
+					//Set the tile to be a closed door
+					datamap[x][y] = tileType::DOOR_CLOSED;
+					tilemap[x][y]->setTile(tileType::DOOR_CLOSED);
+				}
 			}
 		}
 	}
   
-	// place a powerUp
-	std::cout << "POWERUP: 10, 1\n"; 
-	datamap[10][1] = tileType::POWERUP; 
-	delete tilemap[10][1];
-	tilemap[10][1] = new PowerUp(480 -48, 100); 
-
-	//TEMPORARY
-	//enemies.push_back(new Valcom(plrPtr));
-	//enemies.push_back(new ONeal(plrPtr));
-	//^^^^^^^^^
+  setPowerup(10, 1);
 }
 
 
@@ -186,7 +196,7 @@ int Level::getHeight() const
 
 
 // detects whether a key has been pressed and acts accordingly
-void Level::keyPressed(const sf::Keyboard::Key& key)
+void Level::keyPressed(const sf::Keyboard::Key& key, Player& plr)
 {
 	// change the direction of the player based on input
 	switch (key)
@@ -225,15 +235,14 @@ void Level::keyPressed(const sf::Keyboard::Key& key)
 					break;
 				}
 			}
-		}
-		break;
-	case sf::Keyboard::B:
-		for (int i = 0; i < bombs.size(); i++)
-		{
-			if (bombManager[i] = true)
-				bombs[i]->explode();
-		}
-		break;
+			break;
+		case sf::Keyboard::B:
+			for (int i = 0; i < bombs.size(); i++)
+			{
+				if (bombManager[i] == true  && plr.hasDetonator() == true)
+					bombs[i]->explode();
+			}
+			break;
 	}
 }
 
@@ -246,8 +255,18 @@ void Level::draw(sf::RenderWindow& window) const
 		for (int y = 0; y < MAP_HEIGHT; y++)
 			tilemap[x][y]->draw(window);
 	
-	for(int i = 0; i < enemies.size(); i++)
+	for (int i = 0; i < enemies.size(); i++)
+	{
 		enemies[i]->draw(window);
+
+		/* Display enemy hitbox
+		sf::RectangleShape box;
+		box.setPosition(enemies[i]->getBoundingBox().left, enemies[i]->getBoundingBox().top);
+		box.setSize(sf::Vector2f(enemies[i]->getBoundingBox().width, enemies[i]->getBoundingBox().height));
+		box.setFillColor(sf::Color(255, 255, 255, 100));
+		window.draw(box);
+		//*/
+	}
 
 	for (int i = 0; i < bombs.size(); i++)
 		bombs[i]->draw(window, datamap);
@@ -260,11 +279,21 @@ void Level::setMap(sf::Vector2i pos, int type)
 }
 
 
-//Detect collisions between player and tile
+void Level::setPowerup(const int& x, const int& y)
+{
+	std::cout << "POWERUP: " << x << ", " << y << '\n';
+	datamap[x][y] = tileType::POWERUP;
+	delete tilemap[x][y];
+	tilemap[x][y] = new PowerUp((x - 1) * 48, (y - 1) * 48 + 100);
+}
+
+
+// Detect collisions between player and tile
 void Level::collisions(Player& plr)
 {
 	sf::Vector2f offset;
 
+	// check to see the player's collisions with enemies 
 	for (int i = 0; i < enemies.size(); i++)
 	{
 		if (plr.check(*enemies[i]))
@@ -278,9 +307,10 @@ void Level::collisions(Player& plr)
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			if (tilemap[x][y]->getType() != tileType::AIR &&
-				tilemap[x][y]->getType() != tileType::DOOR_OPEN &&
-				!(tilemap[x][y]->getType() == tileType::SOLID_AIR && x == playerX && y == playerY))
+			// If the tile is
+			if (tilemap[x][y]->getType() != tileType::AIR && tilemap[x][y]->getType() != tileType::DOOR_OPEN &&
+				!(tilemap[x][y]->getType() == tileType::SOLID_AIR 
+					&& x == plr.getPosition().x && y == plr.getPosition().y))
 			{
 				sf::Vector2f center_tile = {
 					tilemap[x][y]->getBounds().left + (tilemap[x][y]->getBounds().width / 2),
@@ -306,38 +336,36 @@ void Level::collisions(Player& plr)
 }
 
 
-bool Level::deathCheck(std::vector<int> range, sf::Vector2i bombPos)
+bool Level::deathCheck(std::vector<int> range, sf::Vector2i bombPos, const sf::FloatRect& bounds)
 {
-	// Check if player is in spots above
+	// Check if entity is in spots above
 	for (int i = 0; i <= range[0]; i++)
 	{
-		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x, bombPos.y - i))
+		if (bounds.intersects(sf::FloatRect((bombPos.x - 1) * 48, (bombPos.y - i - 1) * 48 + 100, 48, 48)))
 			return true;
 	}
 	// to the right
 	for (int i = 0; i <= range[1]; i++)
 	{
-		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x + i, bombPos.y))
-			return true;
-	}
+		if (bounds.intersects(sf::FloatRect((bombPos.x + i - 1) * 48, (bombPos.y - 1) * 48 + 100, 48, 48)))
+			return true;	}
 	// below
 	for (int i = 0; i <= range[2]; i++)
 	{
-		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x, bombPos.y + i))
+		if (bounds.intersects(sf::FloatRect((bombPos.x - 1) * 48, (bombPos.y + i - 1) * 48 + 100, 48, 48)))
 			return true;
 	}
 	// and to the left of the bomb
 	for (int i = 0; i <= range[3]; i++)
 	{
-		if (sf::Vector2i(playerX, playerY) == sf::Vector2i(bombPos.x - i, bombPos.y))
-			return true; //If the positions match player dies
+		if (bounds.intersects(sf::FloatRect((bombPos.x - i - 1) * 48, (bombPos.y - 1) * 48 + 100, 48, 48)))
+			return true;
 	}
-	return false; // If no matches found player lives
+	return false; //Entity was not hit by bomb
 }
 
 
-void Level::update(const float& dt, sf::Vector2f playerPos, 
-	int bCount, int fRange, bool detonate, sf::Sprite pSprite)
+void Level::update(const float& dt, Player& plr)
 {
 	int offset = 1;
 	bool collided = false;
@@ -345,10 +373,23 @@ void Level::update(const float& dt, sf::Vector2f playerPos,
 	// update the enemies
 	for (int i = 0; i < enemies.size(); i++)
 	{
-		enemies[i]->update(dt);
-		enemies[i]->move(tilemap);
+		enemies.at(i)->update(dt);
+		if (enemies.at(i)->isAlive())
+			enemies.at(i)->move(tilemap);
 	}
 
+	//Delete all dead enemies
+	for (int i = enemies.size() - 1; i >= 0; i--)
+	{
+		if (enemies.at(i)->completedDeathAnim())
+		{
+			Enemy* temp = enemies.at(i);
+			enemies.at(i) = enemies.at(enemies.size() - 1);
+			enemies.at(enemies.size() - 1) = temp;
+			delete enemies.at(enemies.size() - 1);
+			enemies.pop_back();
+		}
+	}
 
 	// Check for tileType conflicts for every tile in datamap and tileMap
 	for (int x = 0; x < MAP_LENGTH; x++)
@@ -358,8 +399,8 @@ void Level::update(const float& dt, sf::Vector2f playerPos,
 			// If tileTypes conflict, they have been destroyed
 			if (datamap[x][y] != tilemap[x][y]->getType())
 			{
-				if (tilemap[x][y]->getType() == tileType::POWERUP) 
-					datamap[x][y] = tileType::POWERUP;
+				if (tilemap[x][y]->getType() == tileType::POWERUP_REVEALED) 
+					datamap[x][y] = tileType::POWERUP_REVEALED;
 
 				tilemap[x][y]->interact(); 
 			}
@@ -388,8 +429,14 @@ void Level::update(const float& dt, sf::Vector2f playerPos,
 					tilemap[bombs[0]->getPosition().x][bombs[0]->getPosition().y]->setTile(tileType::AIR);
 					
 					// Check if player dies
-					if(deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition()))
+					if(deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition(), plr.getBoundingBox()))
 						std::cout << "PLAYER DEAD\n";
+
+					// Check if enemies die
+					for (int e = 0; e < enemies.size(); e++)
+						if (deathCheck(bombs[0]->getExplodingRange(),
+							bombs[0]->getPosition(), enemies.at(e)->getBoundingBox()))
+							enemies.at(e)->die();
 
 					// Remove Bomb
 					delete bombs[0];
@@ -406,12 +453,4 @@ void Level::update(const float& dt, sf::Vector2f playerPos,
 	{
 		bombs[i]->update(dt);
 	}
-
-	//Set all data recived from player
-	playerX = playerPos.x;
-	playerY = playerPos.y;
-	flameRange = fRange;
-	bombCount = bCount;
-	detonator = detonate;
-	playerSprite = pSprite;
 }
