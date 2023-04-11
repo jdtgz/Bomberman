@@ -201,39 +201,36 @@ void Level::keyPressed(const sf::Keyboard::Key& key, Player& plr)
 	// change the direction of the player based on input
 	switch (key)
 	{
-		case sf::Keyboard::A:
-			for (int i = 0; i < plr.getBombCount(); i++)
+	case sf::Keyboard::A:
+		for (int i = 0; i < bombCount; i++)
+		{
+			//Prevents the player from putting a bomb on top of a tile that isnt air.
+			//Without this if statement, the player can put a bomb on top of the door tile
+			//and the door would end up vanishing.
+			if (tilemap[playerX][playerY]->getType() == tileType::ID::AIR)
 			{
 				if (bombManager[i] == false)
 				{
 					for (int i = 0; i < bombs.size(); i++)
 					{
-						sf::Sprite* tmp = new sf::Sprite(plr.getSprite());
-						if (bombs[i]->isColliding(*tmp))
+						if (bombs[i]->isColliding(playerSprite))
 						{
 							std::cout << "COLLIDE!\n";
 							return;
 						}
-						delete tmp; 
 					}
-					// set the bomb to be active
 					bombManager[i] = true;
 
-					// reserve a space for the bomb
-					tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
-				
-				
-					// If player has the detonator power up, create a bomb with no timer
-					if (plr.hasDetonator())
+					// initialize the bomb
+					if (detonator == false)
 					{
-						bombs.push_back(new Bomb(plr.getPosition().x, plr.getPosition().y, 
-							plr.getFlameRange(), false));
+						tilemap[playerX][playerY]->setTile(tileType::SOLID_AIR);
+						bombs.push_back(new Bomb(playerX, playerY, flameRange, true));
 					}
-					// if no detonator power up, create a bomb with a timer
 					else
 					{
-						bombs.push_back(new Bomb(plr.getPosition().x, plr.getPosition().y,
-							plr.getFlameRange(), true));
+						tilemap[playerX][playerY]->setTile(tileType::SOLID_AIR);
+						bombs.push_back(new Bomb(playerX, playerY, flameRange, false));
 					}
 					break;
 				}
