@@ -294,6 +294,11 @@ std::vector<int> Bomb::getExplodingRange()
 	return range;
 }
 
+sf::Sprite& Bomb::getSprite()
+{
+	return m_sprite;
+}
+
 
 // returns true if a sprite is colliding with the explosion
 bool Bomb::isColliding(sf::Sprite& sprite)
@@ -343,7 +348,7 @@ bool Bomb::isColliding(sf::Sprite& sprite)
 // Bomb collisions with other objects 
 bool Bomb::isBombColliding(sf::Sprite& sprite)
 {
-	if (sprite.getGlobalBounds().intersects(sprite.getGlobalBounds()))
+	if (m_sprite.getGlobalBounds().intersects(sprite.getGlobalBounds()))
 		return true;
 	return false;
 }

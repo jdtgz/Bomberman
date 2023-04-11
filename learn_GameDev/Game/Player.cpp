@@ -144,7 +144,7 @@ void Player::update(const float& dt)
 	
 	// Fix for the player being glitched out when between a tile on top and below
 	sf::FloatRect playerBounds = sprite.getGlobalBounds();
-	playerBounds.height /= 1.1;
+	//playerBounds.height /= 1.1;
 
 	Collidable::updateRect(playerBounds);
 }
@@ -197,7 +197,7 @@ sf::FloatRect Player::getBoundingBox() const
 
 
 // return sprite of player 
-sf::Sprite Player::getSprite() 
+sf::Sprite& Player::getSprite() 
 {
 	return sprite;
 }

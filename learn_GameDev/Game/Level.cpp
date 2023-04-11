@@ -223,16 +223,13 @@ void Level::keyPressed(const sf::Keyboard::Key& key, Player& plr)
 					bombManager[i] = true;
 
 					// initialize the bomb
+					//tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
+
 					if (!plr.hasDetonator())
-					{
-						tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
 						bombs.push_back(new Bomb((int)plr.getPosition().x, (int)plr.getPosition().y, plr.getFlameRange(), true));
-					}
 					else
-					{
-						tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
 						bombs.push_back(new Bomb((int)plr.getPosition().x, (int)plr.getPosition().y, plr.getFlameRange(), false));
-					}
+
 					break;
 				}
 			}
@@ -305,7 +302,7 @@ void Level::collisions(Player& plr)
 		}
 	}
 
-
+	//Tilemap collisions
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
@@ -454,5 +451,23 @@ void Level::update(const float& dt, Player& plr)
 	for (int i = 0; i < bombs.size(); i++)
 	{
 		bombs[i]->update(dt);
+	}
+
+	//Checks the players collisions with bombs
+	//If the bomb tile doesnt have solid air, check
+	//if the player is off of the bomb, set the tile to solid air
+	for (int i = 0; i < bombs.size(); i++)
+	{
+		Bomb* bomb = bombs.at(i);
+		sf::Vector2i position = bomb->getPosition();
+	
+		if (tilemap[position.x][position.y]->getType() != tileType::SOLID_AIR)
+		{
+			if (bomb->getPosition() != (sf::Vector2i)plr.getPosition())
+			{
+				tilemap[position.x][position.y]->setTile(tileType::SOLID_AIR);
+				std::cout << "E";
+			}
+		}
 	}
 }
