@@ -55,18 +55,15 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 	int totalBrickCount = 0, targetBrick = 0; // Used for random positions for PowerUp and Door
 	int totalAirCount = 0, targetAir = 0, enemyCount = 0; // Used for random enemy Placement
 
-	for (int i = 0; i < powerups.size(); i++)
-	{
-		//Remove any powerups that exist
-		delete tilemap[powerups.at(i).x][powerups.at(i).y];
+	
+	//Remove any powerups that exist
+	delete tilemap[powerUp_pos.x][powerUp_pos.y];
 
-		//Replace them with a new generic tile
-		tilemap[powerups.at(i).x][powerups.at(i).y] =
-			new Tile((powerups.at(i).x - 1) * 48,
-				(powerups.at(i).y - 1) * 48 + 100,
-				tileType::AIR);
-	}
-	powerups = {}; //Empty array
+	//Replace them with a new generic tile
+	tilemap[powerUp_pos.x][powerUp_pos.y] =
+		new Tile((powerUp_pos.x - 1) * 48,
+			(powerUp_pos.y - 1) * 48 + 100,
+			tileType::AIR);
 
 	//For every tile position
 	for (int x = 0; x < MAP_LENGTH - 1; x++)
@@ -287,6 +284,7 @@ void Level::setPowerup(const int& x, const int& y)
 	datamap[x][y] = tileType::POWERUP_HIDDEN;
 	delete tilemap[x][y];
 	tilemap[x][y] = new PowerUp((x - 1) * 48, (y - 1) * 48 + 100);
+	powerUp_pos = {x,y};
 }
 
 
@@ -309,12 +307,13 @@ void Level::collisions(Player& plr)
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			// If the tile is
-			if (tilemap[x][y]->getType() != tileType::AIR && tilemap[x][y]->getType() != tileType::DOOR_OPEN &&
-				!(tilemap[x][y]->getType() == tileType::SOLID_AIR 
-					&& x == plr.getPosition().x && y == plr.getPosition().y))
+			// if it is not an air,active door, or active powerUp, calc player push offset
+			if (tilemap[x][y]->getType() != tileType::AIR && tilemap[x][y]->getType() != tileType::DOOR_OPEN && 
+				tilemap[x][y]->getType() != tileType::POWERUP_REVEALED &&
+				!(tilemap[x][y]->getType() == tileType::SOLID_AIR && x == plr.getPosition().x && y == plr.getPosition().y))
 			{
-				sf::Vector2f center_tile = {
+				sf::Vector2f center_tile = 
+				{
 					tilemap[x][y]->getBounds().left + (tilemap[x][y]->getBounds().width / 2),
 					tilemap[x][y]->getBounds().top + (tilemap[x][y]->getBounds().height / 2)
 				};
@@ -333,6 +332,17 @@ void Level::collisions(Player& plr)
 				}
 			}
 		}
+
+	// if tile is colliding with the player
+	if (powerUp_pos.x >= 0 && plr.check(*tilemap[powerUp_pos.x][powerUp_pos.y]))
+	{
+		// If the tile being collided with is an active powerUp, adjust plr attributes 
+		if (tilemap[powerUp_pos.x][powerUp_pos.y]->getType() == tileType::POWERUP_REVEALED)
+		{
+			tilemap[powerUp_pos.x][powerUp_pos.y];
+		}
+
+	}
 
 	plr.move(offset.x, offset.y);
 }
