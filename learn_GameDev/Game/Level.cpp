@@ -172,8 +172,8 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 			}
 		}
 	}
-
-	setPowerup(10, 1);
+  
+  setPowerup(10, 1);
 }
 
 
@@ -402,8 +402,8 @@ void Level::update(const float& dt, Player& plr)
 			// If tileTypes conflict, they have been destroyed
 			if (datamap[x][y] != tilemap[x][y]->getType())
 			{
-				if (tilemap[x][y]->getType() == tileType::POWERUP) 
-					datamap[x][y] = tileType::POWERUP;
+				if (tilemap[x][y]->getType() == tileType::POWERUP_REVEALED) 
+					datamap[x][y] = tileType::POWERUP_REVEALED;
 
 				tilemap[x][y]->interact(); 
 			}
