@@ -358,12 +358,9 @@ void Level::update(const float& dt, Player& plr)
 	// update the enemies
 	for (int i = 0; i < enemies.size(); i++)
 	{
-		if (!enemies.at(i)->completedDeathAnim())
-		{
-			enemies.at(i)->update(dt);
-			if (enemies.at(i)->isAlive())
-				enemies.at(i)->move(tilemap);
-		}
+		enemies.at(i)->update(dt);
+		if (enemies.at(i)->isAlive())
+			enemies.at(i)->move(tilemap);
 	}
 
 	//Delete all dead enemies
