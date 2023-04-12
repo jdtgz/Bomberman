@@ -6,7 +6,6 @@ PowerUp::PowerUp(const int& x, const int& y)
 	: Tile(x, y, tileType::POWERUP_HIDDEN)
 {
 	// set the power up type randomly
-	srand(time(NULL)); 
 	powerUpType = (int)(rand() % 8);
 
 	// set the initial state of powerUp

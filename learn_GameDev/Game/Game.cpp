@@ -16,6 +16,7 @@ Game::Game() : startMenu(true)
 
 	//Generate the level
 	levelNumber = 0;
+	levelRegenPause = 0;
 	level.generate(levelNumber, &player);
 }
 
