@@ -141,12 +141,7 @@ void Player::update(const float& dt)
 	//Move sprite by velocity
 	move(xVel, yVel);
 
-	
-	// Fix for the player being glitched out when between a tile on top and below
-	sf::FloatRect playerBounds = sprite.getGlobalBounds();
-	//playerBounds.height /= 1.1;
-
-	Collidable::updateRect(playerBounds);
+	Collidable::updateRect(sprite.getGlobalBounds());
 }
 
 
