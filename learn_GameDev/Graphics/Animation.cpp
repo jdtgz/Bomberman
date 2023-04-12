@@ -65,6 +65,12 @@ void Animation::showOnce()
 }
 
 
+void Animation::setFrame(const int& f)
+{
+	iFrame = f % nFrames;
+}
+
+
 // return the currently frame being displayed
 int Animation::getCurrentFrame() const
 {

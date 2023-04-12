@@ -25,6 +25,12 @@ Player::~Player()
 
 void Player::reset()
 {
+	animations[int(animIndex::WALKING_LEFT)].setFrame(0);
+	animations[int(animIndex::WALKING_RIGHT)].setFrame(0);
+	animations[int(animIndex::WALKING_DOWN)].setFrame(0);
+	animations[int(animIndex::WALKING_UP)].setFrame(0);
+	animations[int(animIndex::DEATH)].setFrame(0);
+
 	// set the starting animation
 	curAnimation = animIndex::WALKING_RIGHT;
 	animations[int(curAnimation)].applyToSprite(sprite);
