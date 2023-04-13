@@ -44,7 +44,7 @@ void Player::reset()
 	}
 
 	// initialize the player/powerUp attributes 
-	bombCount = 2;
+	bombCount = 1;
 	flameRange = 1;
 	speed = 3.f;
 	wallPass = false;
