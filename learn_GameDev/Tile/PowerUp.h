@@ -19,13 +19,8 @@ class PowerUp: public Tile
 
 		// game functions
 		virtual void update(const float& dt); 
-		void applyPowerUp(Player& plr);
+		virtual void collisions(Player& plr); 
 		void spawnEnemies(); 
-
-		// player collisions & powerUps involved 
-		virtual void detectCollision(Player& plr,
-			const tileType::ID& u, const tileType::ID& d,
-			const tileType::ID& l, const tileType::ID& r);
 	private:
 		enum powerups
 		{

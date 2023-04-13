@@ -105,6 +105,13 @@ void Tile::update(const float& dt)
 }
 
 
+// when the player collides with the tile, do something 
+void Tile::collision(Player& plr)
+{
+
+}
+
+
 // returns the position of the tile's sprite (top, left)
 sf::Vector2f Tile::getPosition() const
 {

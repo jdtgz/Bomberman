@@ -47,7 +47,7 @@ private:
 
 	std::vector<std::vector<int>> datamap;
 	Tile* tilemap[33][15];
-	std::vector<sf::Vector2i> powerups;
+	sf::Vector2i powerUp_pos;
 
 	std::vector<Enemy*> enemies;
 
