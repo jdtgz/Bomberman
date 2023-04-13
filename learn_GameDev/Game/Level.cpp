@@ -330,7 +330,6 @@ void Level::collisions(Player& plr)
 					{
 						switch (tilemap[x][y]->getType())
 						{
-							
 						case tileType::POWERUP_REVEALED: 
 							/* Checks if the player is colliding with a revealed powerup */
 							((PowerUp*)tilemap[x][y])->applyPowerUp(plr);
@@ -339,6 +338,12 @@ void Level::collisions(Player& plr)
 						case tileType::DOOR_OPEN: 
 							/* Checks if the player is colliding with a open door */
 							
+							break;
+						case tileType::BRICK:
+							if (plr.hasWallPass())
+							{
+								offset = { 0, 0 };
+							}
 							break;
 						}
 					}
