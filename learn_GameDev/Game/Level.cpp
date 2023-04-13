@@ -293,12 +293,15 @@ void Level::collisions(Player& plr)
 	sf::Vector2f offset;
 
 	// check to see the player's collisions with enemies 
-	for (int i = 0; i < enemies.size(); i++)
+	if (!plr.isInvincible())
 	{
-		if (plr.check(*enemies[i]))
+		for (int i = 0; i < enemies.size(); i++)
 		{
-			playerDead = true;
-			std::cout << "PLAYER DEAD\n";
+			if (plr.check(*enemies[i]))
+			{
+				playerDead = true;
+				std::cout << "PLAYER DEAD\n";
+			}
 		}
 	}
 

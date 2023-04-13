@@ -308,5 +308,5 @@ bool Player::isInvincible() const
 // activate the invincibility powerUp
 void Player::enableInvincible()
 {
-	
+	invincible = true;
 }
