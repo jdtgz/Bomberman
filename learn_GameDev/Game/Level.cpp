@@ -326,7 +326,15 @@ void Level::collisions(Player& plr)
 
 				if (distance < 48 * 2)
 				{
-					plr.check(*tilemap[x][y], offset);
+					if (plr.check(*tilemap[x][y], offset))
+					{
+						//Checks if the player is colliding with a powerup
+						if (tilemap[x][y]->getType() == tileType::POWERUP_REVEALED)
+						{
+							((PowerUp*)tilemap[x][y])->applyPowerUp(plr);
+						}
+					}
+						
 				}
 			}
 		}
