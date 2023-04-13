@@ -6,7 +6,6 @@ PowerUp::PowerUp(const int& x, const int& y)
 	: Tile(x, y, tileType::POWERUP_HIDDEN)
 {
 	// set the power up type randomly
-	srand(time(NULL)); 
 	powerUpType = (int)(rand() % 8);
 
 	// set the initial state of powerUp
@@ -32,35 +31,43 @@ void PowerUp::revealPowerUp()
 	{
 		case powerups::BOMB_UP:
 			mSprite.setTextureRect({ 0, 48, 16, 16 });
-			std::cout << "BOMB UP\n";
+			if (DEBUG)
+				std::cout << "BOMB UP\n";
 			break;
 		case powerups::FLAME_UP:
 			mSprite.setTextureRect({ 16, 48, 16, 16 });
-			std::cout << "FLAME UP\n";
+			if (DEBUG)
+				std::cout << "FLAME UP\n";
 			break;
 		case powerups::SPEED_UP:
 			mSprite.setTextureRect({ 32, 48, 16, 16 });
-			std::cout << "SPEED UP\n";
+			if (DEBUG)
+				std::cout << "SPEED UP\n";
 			break;
 		case powerups::WALL_PASS:
 			mSprite.setTextureRect({ 48, 48, 16, 16 });
-			std::cout << "WALL PASS\n";
+			if (DEBUG)
+				std::cout << "WALL PASS\n";
 			break;
 		case powerups::DETONATOR:
 			mSprite.setTextureRect({ 64, 48, 16, 16 });
-			std::cout << "DETONATOR\n";
+			if (DEBUG)
+				std::cout << "DETONATOR\n";
 			break;
 		case powerups::BOMB_PASS:
 			mSprite.setTextureRect({ 80, 48, 16, 16 });
-			std::cout << "BOMB PASS\n";
+			if (DEBUG)
+				std::cout << "BOMB PASS\n";
 			break;
 		case powerups::FLAME_PASS:
 			mSprite.setTextureRect({ 96, 48, 16, 16 });
-			std::cout << "FLAME PASS\n";
+			if (DEBUG)
+				std::cout << "FLAME PASS\n";
 			break;
 		case powerups::INVINCIBILITY:
 			mSprite.setTextureRect({ 112, 48, 16, 16 });
-			std::cout << "INVINCIBLE\n";
+			if (DEBUG)
+				std::cout << "INVINCIBLE\n";
 			break;
 	}
 
@@ -114,39 +121,48 @@ void PowerUp::update(const float& dt)
 void PowerUp::applyPowerUp(Player& player)
 {
 	//determine what type of power up it is & update player
-	std::cout << "Obtained: ";
+	if (DEBUG)
+		std::cout << "Obtained: ";
 	switch (powerUpType)
 	{
 		case powerups::BOMB_UP:
-			std::cout << "BOMB UP\n";
+			if (DEBUG)
+				std::cout << "BOMB UP\n";
 			player.plusBomb(); 
 			break;
 		case powerups::FLAME_UP: 
-			std::cout << "FLAME UP\n";
+			if (DEBUG)
+				std::cout << "FLAME UP\n";
 			player.plusFlame(); 
 			break;
 		case powerups::SPEED_UP: 
-			std::cout << "SPEED UP\n";
+			if (DEBUG)
+				std::cout << "SPEED UP\n";
 			player.plusSpeed(); 
 			break; 
 		case powerups::WALL_PASS:
-			std::cout << "WALL PASS\n";
+			if (DEBUG)
+				std::cout << "WALL PASS\n";
 			player.enableWallPass(); 
 			break;
 		case powerups::DETONATOR:
-			std::cout << "DETONATOR\n";
+			if (DEBUG)
+				std::cout << "DETONATOR\n";
 			player.enableDetonator();
 			break;
 		case powerups::BOMB_PASS:
-			std::cout << "BOMB PASS\n";
+			if (DEBUG)
+				std::cout << "BOMB PASS\n";
 			player.enableBombPass(); 
 			break;
 		case powerups::FLAME_PASS:
-			std::cout << "FLAME PASS\n";
+			if (DEBUG)
+				std::cout << "FLAME PASS\n";
 			player.enableFlamePass(); 
 			break;
 		case powerups::INVINCIBILITY:
-			std::cout << "INVINCIBLE\n";
+			if (DEBUG)
+				std::cout << "INVINCIBLE\n";
 			player.enableInvincible();
 			break;
 	}	
@@ -160,7 +176,8 @@ void PowerUp::applyPowerUp(Player& player)
 // then spwan enemies and sel-destruct
 void PowerUp::spawnEnemies()
 {
-	std::cout << "POWERUP DESTOYED, ENEMIES\n";
+	if (DEBUG)
+		std::cout << "POWERUP DESTOYED, ENEMIES\n";
 }
 
 

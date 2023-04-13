@@ -34,7 +34,7 @@ void ONeal::init(const sf::Vector2i& tile, const direction& face)
 	sf::Texture* t = &TextureHolder::get(textures::ENEMIES);
 	anims[int(animIndex::RIGHT)].setUp(*t, 0, 16 * 3, 16, 16, 3);
 	anims[int(animIndex::LEFT)].setUp(*t, 0, 16 * 4, 16, 16, 3);
-	anims[int(animIndex::DEATH)].setUp(*t, 0, 16 * 5, 16, 16, 1);
+	anims[int(animIndex::DEATH)].setUp(*t, 0, 16 * 5, 16, 16, 5);
 
 	if (face == direction::WEST)
 		curAnim = animIndex::LEFT;

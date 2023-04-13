@@ -21,7 +21,7 @@ class Game
 		// helper functions for "run"
 		void processEvents();
 		void update(const sf::Time&);
-		void render();
+		void render(const sf::Time&);
 
 		// sfml screen attributes 
 		sf::RenderWindow* window;
@@ -44,4 +44,6 @@ class Game
 
 		//Start Menu
 		StartMenu startMenu;
+
+		float levelRegenPause;
 };

@@ -13,6 +13,24 @@ Player::Player()
 	animations[int(animIndex::WALKING_UP)].setUp(*t, 0, 16 * 3, 12, 16, 3);
 	animations[int(animIndex::DEATH)].setUp(*t, 0, 16 * 4, 16, 16, 7);
 
+	reset();
+}
+
+
+// destructor
+Player::~Player()
+{
+}
+
+
+void Player::reset()
+{
+	animations[int(animIndex::WALKING_LEFT)].setFrame(0);
+	animations[int(animIndex::WALKING_RIGHT)].setFrame(0);
+	animations[int(animIndex::WALKING_DOWN)].setFrame(0);
+	animations[int(animIndex::WALKING_UP)].setFrame(0);
+	animations[int(animIndex::DEATH)].setFrame(0);
+
 	// set the starting animation
 	curAnimation = animIndex::WALKING_RIGHT;
 	animations[int(curAnimation)].applyToSprite(sprite);
@@ -21,28 +39,50 @@ Player::Player()
 	// initialize movement attributes 
 	for (int i = 0; i < direction::COUNT; i++)
 	{
-		movement[i] = false; 
-		canMove[i] = true; 
+		movement[i] = false;
+		canMove[i] = true;
 	}
 
 	// initialize the player/powerUp attributes 
-	bombCount = 1; 
-	flameRange = 1; 
+	bombCount = 2;
+	flameRange = 1;
 	speed = 3.f;
-	wallPass = false; 
+	wallPass = false;
 	detonator = false;
-	bombPass = false; 
-	flamePass = false; 
-	invincible = false; 
+	bombPass = false;
+	flamePass = false;
+	invincible = false;
+
+	alive = true;
+	dead = false;
 
 	//Default position in the top left corner
 	sprite.setPosition(0, 100);
 }
 
 
-// destructor
-Player::~Player()
+bool Player::isAlive() const
 {
+	return alive;
+}
+
+
+bool Player::completedDeathAnim() const
+{
+	return dead;
+}
+
+
+void Player::die()
+{
+	if (DEBUG)
+		std::cout << "PLAYER DEAD\n";
+
+	alive = false;
+	curAnimation = animIndex::DEATH;
+
+	//Prevent collision with enemies
+	Collidable::updateRect(sf::FloatRect(0, 0, 0, 0));
 }
 
 
@@ -114,34 +154,63 @@ void Player::keyReleased(const sf::Keyboard::Key& key)
 void Player::draw(sf::RenderWindow& window) const
 {
 	window.draw(sprite);
+
+	if (DEBUG)
+	{
+		//Display hitbox
+		sf::RectangleShape box;
+		box.setPosition(getBoundingBox().left, getBoundingBox().top);
+		box.setSize(sf::Vector2f(getBoundingBox().width, getBoundingBox().height));
+		box.setFillColor(sf::Color(255, 0, 0, 100));
+		window.draw(box);
+	}
 }
 
 
 // update the animation of the player and the position based on movement attirbutes 
 void Player::update(const float& dt)
 {
-	// update animations 
-	if (movement[direction::NORTH] || movement[direction::SOUTH] 
-		|| movement[direction::WEST] || movement[direction::EAST])
+	if (alive)
 	{
+		// update animations 
+		if (movement[direction::NORTH] || movement[direction::SOUTH]
+			|| movement[direction::WEST] || movement[direction::EAST])
+		{
+			animations[int(curAnimation)].update(dt);
+			animations[int(curAnimation)].applyToSprite(sprite);
+		}
+
+		// Update velocity based on user input, move speed, and
+		// the direction the player can currently move in
+		int x = canMove[direction::WEST] * movement[direction::WEST] * -speed;
+		x += canMove[direction::EAST] * movement[direction::EAST] * speed;
+
+		int y = canMove[direction::NORTH] * movement[direction::NORTH] * -speed;
+		y += canMove[direction::SOUTH] * movement[direction::SOUTH] * speed;
+
+		setVelocity(x, y);
+
+		//Move sprite by velocity
+		move(xVel, yVel);
+
+		// Fix for the player being glitched out when between a tile on top and below
+		sf::FloatRect playerBounds = sprite.getGlobalBounds();
+		playerBounds.height -= speed;
+
+		Collidable::updateRect(playerBounds);
+	}
+	//Must be dead
+	else
+	{
+		//Play death animation
 		animations[int(curAnimation)].update(dt);
 		animations[int(curAnimation)].applyToSprite(sprite);
 	}
-
-	// Update velocity based on user input, move speed, and
-	// the direction the player can currently move in
-	int x = canMove[direction::WEST] * movement[direction::WEST] * -speed; 
-	x += canMove[direction::EAST] * movement[direction::EAST] * speed; 
-
-	int y = canMove[direction::NORTH] * movement[direction::NORTH] * -speed;
-	y += canMove[direction::SOUTH] * movement[direction::SOUTH] * speed;
-
-	setVelocity(x, y);
-
-	//Move sprite by velocity
-	move(xVel, yVel);
-
-	Collidable::updateRect(sprite.getGlobalBounds());
+	
+	//Death animation completed
+	if (curAnimation == animIndex::DEATH &&
+		animations[(int)curAnimation].getCurrentFrame() == animations[(int)curAnimation].getFrameCount() - 1)
+		dead = true;
 }
 
 
@@ -187,7 +256,12 @@ sf::Vector2f Player::getPosition() const
 //Get the hitbox for the player sprite
 sf::FloatRect Player::getBoundingBox() const
 {
-	return sprite.getGlobalBounds();
+	sf::FloatRect alteredBox = sprite.getGlobalBounds();
+	alteredBox.left += 1.5 + speed;
+	alteredBox.top += 3.75 + speed;
+	alteredBox.width -= 3 + 2 * speed;
+	alteredBox.height -= 7.5 + 2 * speed;
+	return alteredBox;
 }
 
 
