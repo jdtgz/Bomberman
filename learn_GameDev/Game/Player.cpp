@@ -75,14 +75,17 @@ bool Player::completedDeathAnim() const
 
 void Player::die()
 {
-	if (DEBUG)
-		std::cout << "PLAYER DEAD\n";
+	if (!invincible)
+	{
+		if (DEBUG)
+			std::cout << "PLAYER DEAD\n";
 
-	alive = false;
-	curAnimation = animIndex::DEATH;
+		alive = false;
+		curAnimation = animIndex::DEATH;
 
-	//Prevent collision with enemies
-	Collidable::updateRect(sf::FloatRect(0, 0, 0, 0));
+		//Prevent collision with enemies
+		Collidable::updateRect(sf::FloatRect(0, 0, 0, 0));
+	}
 }
 
 

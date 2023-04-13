@@ -291,21 +291,18 @@ void Level::collisions(Player& plr)
 
 	// check to see the player's collisions with enemies 
 	for (int i = 0; i < enemies.size(); i++)
-	{
 		if (plr.check(*enemies[i]))
-		{
 			plr.die();
-		}
-	}
   
 	//Tilemap collisions
 	for (int x = 0; x < MAP_LENGTH; x++)
+	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
 			//If the tile is not an air or open door,
 			if (tilemap[x][y]->getType() != tileType::AIR && tilemap[x][y]->getType() != tileType::DOOR_OPEN &&
 				//Not solid air that the player is standing on or solid air while the player has bomb pass,
-				!(tilemap[x][y]->getType() == tileType::SOLID_AIR 
+				!(tilemap[x][y]->getType() == tileType::SOLID_AIR
 					&& (x == plr.getPosition().x && y == plr.getPosition().y || plr.hasBombPass())) &&
 				//Not a brick, closed door, or hidden powerup while the player has wall pass
 				!((tilemap[x][y]->getType() == tileType::BRICK ||
@@ -333,29 +330,19 @@ void Level::collisions(Player& plr)
 					{
 						switch (tilemap[x][y]->getType())
 						{
-						case tileType::POWERUP_REVEALED: 
+						case tileType::POWERUP_REVEALED:
 							/* Checks if the player is colliding with a revealed powerup */
 							((PowerUp*)tilemap[x][y])->collision(plr);
-							
+
 							break;
-						case tileType::DOOR_OPEN: 
+						case tileType::DOOR_OPEN:
 							/* Checks if the player is colliding with a open door */
 							tilemap[x][y]->collision(plr);
 						}
-					}	
+					}
 				}
 			}
 		}
-
-	// if tile is colliding with the player
-	if (powerUp_pos.x >= 0 && plr.check(*tilemap[powerUp_pos.x][powerUp_pos.y]))
-	{
-		// If the tile being collided with is an active powerUp, adjust plr attributes 
-		if (tilemap[powerUp_pos.x][powerUp_pos.y]->getType() == tileType::POWERUP_REVEALED)
-		{
-			tilemap[powerUp_pos.x][powerUp_pos.y];
-		}
-
 	}
 
 	plr.move(offset.x, offset.y);
@@ -455,7 +442,7 @@ void Level::update(const float& dt, Player& plr)
 					tilemap[bombs[0]->getPosition().x][bombs[0]->getPosition().y]->setTile(tileType::AIR);
 					
 					// Check if player dies
-          if (deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition(), plr.getBoundingBox()))
+					if (deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition(), plr.getBoundingBox()))
 						plr.die();
 
 					// Check if enemies die
