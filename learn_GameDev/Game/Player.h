@@ -14,6 +14,12 @@ class Player : public Collidable
 		Player();
 		~Player();
 
+		void reset();
+
+		bool isAlive() const;
+		bool completedDeathAnim() const;
+		void die();
+
 		// Given a key, do something
 		void keyPressed(const sf::Keyboard::Key& key);
 		void keyReleased(const sf::Keyboard::Key& key);
@@ -31,7 +37,7 @@ class Player : public Collidable
 		void setCanMove(const int& dir, const bool& v);
 		sf::Vector2f getPosition() const;
 		sf::FloatRect getBoundingBox() const;
-		sf::Sprite getSprite();
+		sf::Sprite& getSprite();
 
 		// powerup/player attributes 
 		int getBombCount() const; 
@@ -91,4 +97,10 @@ class Player : public Collidable
 		bool bombPass;
 		bool flamePass; 
 		bool invincible;
+
+		//Is the player alive
+		bool alive;
+
+		//Has the player death animation ended
+		bool dead;
 };

@@ -55,7 +55,5 @@ private:
 	bool bombManager[10] = { false };
 	std::vector<Bomb*> bombs;
 
-	bool playerDead = false;
-
 	void setPowerup(const int&, const int&);
 };

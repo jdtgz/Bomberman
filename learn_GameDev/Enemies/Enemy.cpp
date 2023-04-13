@@ -22,9 +22,7 @@ void Enemy::update(const float& dt)
 
 	if (alive)
 	{
-		sf::FloatRect enemyBounds = sprite.getGlobalBounds();
-		enemyBounds.height /= 1.1;
-		Collidable::updateRect(enemyBounds);
+		Collidable::updateRect(getBoundingBox());
 	}
 
 	if (curAnim == animIndex::DEATH &&
@@ -181,6 +179,16 @@ bool Enemy::atTile(Tile* tilemap[33][15])
 void Enemy::draw(sf::RenderWindow& w) const
 {
 	w.draw(sprite);
+
+	if (DEBUG)
+	{
+		//Display hitbox
+		sf::RectangleShape box;
+		box.setPosition(getBoundingBox().left, getBoundingBox().top);
+		box.setSize(sf::Vector2f(getBoundingBox().width, getBoundingBox().height));
+		box.setFillColor(sf::Color(255, 0, 0, 100));
+		w.draw(box);
+	}
 }
 
 
@@ -222,7 +230,12 @@ sf::Vector2i Enemy::getTilePosition() const
 
 sf::FloatRect Enemy::getBoundingBox() const
 {
-	return sprite.getGlobalBounds();
+	sf::FloatRect alteredBox = sprite.getGlobalBounds();
+	alteredBox.left += 1.5 + moveSpeed;
+	alteredBox.top += 1.5 + moveSpeed;
+	alteredBox.width -= 3 + 2 * moveSpeed;
+	alteredBox.height -= 3 + 2 * moveSpeed;
+	return alteredBox;
 }
 
 

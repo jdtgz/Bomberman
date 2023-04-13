@@ -12,10 +12,11 @@ Game::Game() : startMenu(true)
 
 	view.setSize(sf::Vector2f(window->getSize()));
 
-	player.getSprite().setPosition(48 * 31 / 2, 48 * 13 / 2);
+	//player.getSprite().setPosition(48 * 31 / 2, 48 * 13 / 2);
 
 	//Generate the level
 	levelNumber = 0;
+	levelRegenPause = 0;
 	level.generate(levelNumber, &player);
 }
 
@@ -60,7 +61,7 @@ void Game::run()
 		}
 
 		//Display updated gamestate
-		render();
+		render(timePerFrame);
 	}
 }
 
@@ -72,7 +73,7 @@ void Game::processEvents()
 	while (window->pollEvent(evnt))
 	{
 		// If start menu is active, dont go through game events
-		if (!startMenu.isActive())
+		if (!startMenu.isActive() && player.isAlive())
 		{
 			switch (evnt.type)
 			{
@@ -137,7 +138,7 @@ void Game::update(const sf::Time& dt)
 
 
 // Draw all objects to the window
-void Game::render()
+void Game::render(const sf::Time& dt)
 {
 	window->clear(); 
   
@@ -148,8 +149,22 @@ void Game::render()
 		window->setView(view);
 
 		// draw the level and player 
-		level.draw(*window);
-		player.draw(*window);
+		if (!player.completedDeathAnim())
+		{
+			level.draw(*window);
+			player.draw(*window);
+		}
+		else
+		{
+			levelRegenPause += dt.asSeconds();
+			//Wait time for level regeneration
+			if (levelRegenPause >= 5)
+			{
+				levelRegenPause = 0;
+				level.generate(levelNumber, &player);
+				player.reset();
+			}
+		}
 	}
 	else
 	{

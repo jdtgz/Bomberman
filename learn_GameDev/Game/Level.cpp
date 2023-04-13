@@ -121,8 +121,8 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 						//Increment nmber of enemies on screen
 						enemyCount++;
 
-						//DEBUG TESTING
-						std::cout << "ENEMY: " << x << ", " << y << '\n';
+						if (DEBUG)
+							std::cout << "ENEMY: " << x << ", " << y << '\n';
 					}
 				}
 			}
@@ -159,8 +159,8 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 				i++;
 				if (targetBrick == i) //At randomly picked brick tile
 				{
-					//DEBUG TESTING
-					std::cout << "DOOR: " << x << ", " << y << '\n';
+					if (DEBUG)
+						std::cout << "DOOR: " << x << ", " << y << '\n';
 
 					//Set the tile to be a closed door
 					datamap[x][y] = tileType::DOOR_CLOSED;
@@ -169,8 +169,15 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 			}
 		}
 	}
-  
-  setPowerup(10, 1);
+	
+	//Remove all bombs
+	for (int i = 0; i < bombs.size(); i++)
+		delete bombs.at(i);
+	bombs = {};
+	for (int i = 0; i < 10; i++)
+		bombManager[i] = false;
+
+	setPowerup(10, 1);
 }
 
 
@@ -213,23 +220,21 @@ void Level::keyPressed(const sf::Keyboard::Key& key, Player& plr)
 						sf::Sprite t = plr.getSprite();
 						if (bombs[i]->isColliding(t))
 						{
-							std::cout << "COLLIDE!\n";
+							if (DEBUG)
+								std::cout << "COLLIDE!\n";
 							return;
 						}
 					}
 					bombManager[i] = true;
 
 					// initialize the bomb
+					//tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
+
 					if (!plr.hasDetonator())
-					{
-						tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
 						bombs.push_back(new Bomb((int)plr.getPosition().x, (int)plr.getPosition().y, plr.getFlameRange(), true));
-					}
 					else
-					{
-						tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
 						bombs.push_back(new Bomb((int)plr.getPosition().x, (int)plr.getPosition().y, plr.getFlameRange(), false));
-					}
+
 					break;
 				}
 			}
@@ -255,17 +260,7 @@ void Level::draw(sf::RenderWindow& window) const
 			tilemap[x][y]->draw(window);
 	
 	for (int i = 0; i < enemies.size(); i++)
-	{
 		enemies[i]->draw(window);
-
-		/* Display enemy hitbox
-		sf::RectangleShape box;
-		box.setPosition(enemies[i]->getBoundingBox().left, enemies[i]->getBoundingBox().top);
-		box.setSize(sf::Vector2f(enemies[i]->getBoundingBox().width, enemies[i]->getBoundingBox().height));
-		box.setFillColor(sf::Color(255, 255, 255, 100));
-		window.draw(box);
-		//*/
-	}
 
 	for (int i = 0; i < bombs.size(); i++)
 		bombs[i]->draw(window, datamap);
@@ -280,7 +275,8 @@ void Level::setMap(sf::Vector2i pos, int type)
 
 void Level::setPowerup(const int& x, const int& y)
 {
-	std::cout << "POWERUP: " << x << ", " << y << '\n';
+	if (DEBUG)
+		std::cout << "POWERUP: " << x << ", " << y << '\n';
 	datamap[x][y] = tileType::POWERUP_HIDDEN;
 	delete tilemap[x][y];
 	tilemap[x][y] = new PowerUp((x - 1) * 48, (y - 1) * 48 + 100);
@@ -297,23 +293,28 @@ void Level::collisions(Player& plr)
 	for (int i = 0; i < enemies.size(); i++)
 	{
 		if (plr.check(*enemies[i]))
-		{
-			playerDead = true;
-			std::cout << "PLAYER DEAD\n";
-		}
+			plr.die();
 	}
-
-
+  
+	//Tilemap collisions
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			// if it is not an air,active door, or active powerUp, calc player push offset
-			if (tilemap[x][y]->getType() != tileType::AIR && tilemap[x][y]->getType() != tileType::DOOR_OPEN && 
+			//If the tile is not an air or open door,
+			if (tilemap[x][y]->getType() != tileType::AIR && tilemap[x][y]->getType() != tileType::DOOR_OPEN &&
+				//Not a revealed powerup
 				tilemap[x][y]->getType() != tileType::POWERUP_REVEALED &&
-				!(tilemap[x][y]->getType() == tileType::SOLID_AIR && x == plr.getPosition().x && y == plr.getPosition().y))
+				//Not solid air that the player is standing on or solid air while the player has bomb pass,
+				!(tilemap[x][y]->getType() == tileType::SOLID_AIR 
+					&& (x == plr.getPosition().x && y == plr.getPosition().y || plr.hasBombPass())) &&
+				//Not a brick, closed door, or hidden powerup while the player has wall pass
+				!((tilemap[x][y]->getType() == tileType::BRICK ||
+					tilemap[x][y]->getType() == tileType::DOOR_CLOSED ||
+					tilemap[x][y]->getType() == tileType::POWERUP_HIDDEN) &&
+					plr.hasWallPass()))
 			{
-				sf::Vector2f center_tile = 
-				{
+				//Then collide with then tile
+				sf::Vector2f center_tile = {
 					tilemap[x][y]->getBounds().left + (tilemap[x][y]->getBounds().width / 2),
 					tilemap[x][y]->getBounds().top + (tilemap[x][y]->getBounds().height / 2)
 				};
@@ -328,7 +329,20 @@ void Level::collisions(Player& plr)
 
 				if (distance < 48 * 2)
 				{
-					plr.check(*tilemap[x][y], offset);
+					if (plr.check(*tilemap[x][y], offset))
+					{
+						switch (tilemap[x][y]->getType())
+						{
+						case tileType::POWERUP_REVEALED: 
+							/* Checks if the player is colliding with a revealed powerup */
+							((PowerUp*)tilemap[x][y])->applyPowerUp(plr);
+							
+							break;
+						case tileType::DOOR_OPEN: 
+							/* Checks if the player is colliding with a open door */
+							break;
+						}
+					}	
 				}
 			}
 		}
@@ -441,8 +455,8 @@ void Level::update(const float& dt, Player& plr)
 					tilemap[bombs[0]->getPosition().x][bombs[0]->getPosition().y]->setTile(tileType::AIR);
 					
 					// Check if player dies
-					if(deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition(), plr.getBoundingBox()))
-						std::cout << "PLAYER DEAD\n";
+					if (deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition(), plr.getBoundingBox()))
+						plr.die();
 
 					// Check if enemies die
 					for (int e = 0; e < enemies.size(); e++)
@@ -464,5 +478,20 @@ void Level::update(const float& dt, Player& plr)
 	for (int i = 0; i < bombs.size(); i++)
 	{
 		bombs[i]->update(dt);
+	}
+
+	//Checks the players collisions with bombs
+	//If the bomb tile doesnt have solid air, check
+	//if the player is off of the bomb, set the tile to solid air
+	for (int i = 0; i < bombs.size(); i++)
+	{
+		Bomb* bomb = bombs.at(i);
+		sf::Vector2i position = bomb->getPosition();
+	
+		if (tilemap[position.x][position.y]->getType() != tileType::SOLID_AIR)
+		{
+			if (!bomb->isEntityColliding(plr.getBoundingBox()))
+				tilemap[position.x][position.y]->setTile(tileType::SOLID_AIR);
+		}
 	}
 }
