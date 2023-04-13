@@ -463,7 +463,7 @@ void Level::update(const float& dt, Player& plr)
 	
 		if (tilemap[position.x][position.y]->getType() != tileType::SOLID_AIR)
 		{
-			if (bomb->getPosition() != (sf::Vector2i)plr.getPosition())
+			if (!bomb->isEntityColliding(plr.getBoundingBox()))
 				tilemap[position.x][position.y]->setTile(tileType::SOLID_AIR);
 		}
 	}
