@@ -302,8 +302,6 @@ void Level::collisions(Player& plr)
 		{
 			//If the tile is not an air or open door,
 			if (tilemap[x][y]->getType() != tileType::AIR && tilemap[x][y]->getType() != tileType::DOOR_OPEN &&
-				//Not a revealed powerup
-				tilemap[x][y]->getType() != tileType::POWERUP_REVEALED &&
 				//Not solid air that the player is standing on or solid air while the player has bomb pass,
 				!(tilemap[x][y]->getType() == tileType::SOLID_AIR 
 					&& (x == plr.getPosition().x && y == plr.getPosition().y || plr.hasBombPass())) &&
@@ -335,12 +333,12 @@ void Level::collisions(Player& plr)
 						{
 						case tileType::POWERUP_REVEALED: 
 							/* Checks if the player is colliding with a revealed powerup */
-							((PowerUp*)tilemap[x][y])->applyPowerUp(plr);
+							((PowerUp*)tilemap[x][y])->collision(plr);
 							
 							break;
 						case tileType::DOOR_OPEN: 
 							/* Checks if the player is colliding with a open door */
-							break;
+							tilemap[x][y]->collision(plr);
 						}
 					}	
 				}

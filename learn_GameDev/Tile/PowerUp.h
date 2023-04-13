@@ -19,7 +19,7 @@ class PowerUp: public Tile
 
 		// game functions
 		virtual void update(const float& dt); 
-		virtual void collisions(Player& plr); 
+		virtual void collision(Player& plr) override; 
 		void spawnEnemies(); 
 	private:
 		enum powerups

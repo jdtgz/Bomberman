@@ -115,7 +115,7 @@ void PowerUp::update(const float& dt)
 	}
 }
 
-void PowerUp::collisions(Player& plr)
+void PowerUp::collision(Player& player)
 {
 	//determine what type of power up it is & update player
 	if (DEBUG)
