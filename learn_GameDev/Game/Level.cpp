@@ -451,8 +451,9 @@ void Level::update(const float& dt, Player& plr)
 					tilemap[bombs[0]->getPosition().x][bombs[0]->getPosition().y]->setTile(tileType::AIR);
 					
 					// Check if player dies
-					if(deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition(), plr.getBoundingBox()))
-						std::cout << "PLAYER DEAD\n";
+					if (!plr.isInvincible())
+						if(deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition(), plr.getBoundingBox()))
+							std::cout << "PLAYER DEAD\n";
 
 					// Check if enemies die
 					for (int e = 0; e < enemies.size(); e++)
