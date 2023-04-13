@@ -20,7 +20,7 @@ Bomb::Bomb(int x, int y, int range, bool has_timer)
 	else
 		m_timer = sf::seconds(-1);
 
-	m_sprite.setPosition(((x - 1) * 48), ((y + 1) * 48)); //Bomb position is left most explosion 
+	m_sprite.setPosition(((x - 1) * 48), ((y + 1) * 48) + 4); //Bomb position is left most explosion 
 	m_position = sf::Vector2i(x, y);
 
 	initAnimation();
@@ -157,7 +157,7 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 		};
 
 		//Center explosion
-		sf::Vector2f centerPos(((m_position.x - 1) * 48), ((m_position.y + 1) * 48));
+		sf::Vector2f centerPos(((m_position.x - 1) * 48), (((m_position.y + 1) * 48) + 4));
 		drawSprite(centerPos, animationIndex::CENTER);
 
 
@@ -294,6 +294,11 @@ std::vector<int> Bomb::getExplodingRange()
 	return range;
 }
 
+sf::Sprite& Bomb::getSprite()
+{
+	return m_sprite;
+}
+
 
 // returns true if a sprite is colliding with the explosion
 bool Bomb::isColliding(sf::Sprite& sprite)
@@ -343,7 +348,7 @@ bool Bomb::isColliding(sf::Sprite& sprite)
 // Bomb collisions with other objects 
 bool Bomb::isBombColliding(sf::Sprite& sprite)
 {
-	if (sprite.getGlobalBounds().intersects(sprite.getGlobalBounds()))
+	if (m_sprite.getGlobalBounds().intersects(sprite.getGlobalBounds()))
 		return true;
 	return false;
 }
@@ -515,9 +520,18 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 }
 
 
-// *Needs explanation*
-bool Bomb::isEntityColliding(sf::Sprite& sprite)
+//This was repurposed to do colliding checks with floatrects instead of sprites
+//due to an issue with checking the sprites themselves
+//Fixes the issue where the player would suddenly go off the bomb when its placed
+bool Bomb::isEntityColliding(sf::FloatRect rect)
 {
+	//This is here because getting the sprites size would most of the time be 0 instead of 48
+	sf::FloatRect bombBounds = 
+		sf::FloatRect((m_position.x - 1) * 48, (m_position.y + 1) * 48, 48, 48);
+
+	if (bombBounds.intersects(rect))
+		return true;
+
 	return false;
 }
 

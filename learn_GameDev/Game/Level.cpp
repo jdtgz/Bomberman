@@ -231,16 +231,13 @@ void Level::keyPressed(const sf::Keyboard::Key& key, Player& plr)
 					bombManager[i] = true;
 
 					// initialize the bomb
+					//tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
+
 					if (!plr.hasDetonator())
-					{
-						tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
 						bombs.push_back(new Bomb((int)plr.getPosition().x, (int)plr.getPosition().y, plr.getFlameRange(), true));
-					}
 					else
-					{
-						tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
 						bombs.push_back(new Bomb((int)plr.getPosition().x, (int)plr.getPosition().y, plr.getFlameRange(), false));
-					}
+
 					break;
 				}
 			}
@@ -300,15 +297,23 @@ void Level::collisions(Player& plr)
 		if (plr.check(*enemies[i]))
 			plr.die();
 	}
-
+  
+	//Tilemap collisions
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			// If the tile is
+			//If the tile is not an air or open door,
 			if (tilemap[x][y]->getType() != tileType::AIR && tilemap[x][y]->getType() != tileType::DOOR_OPEN &&
+				//Not solid air that the player is standing on or solid air while the player has bomb pass,
 				!(tilemap[x][y]->getType() == tileType::SOLID_AIR 
-					&& x == plr.getPosition().x && y == plr.getPosition().y))
+					&& (x == plr.getPosition().x && y == plr.getPosition().y || plr.hasBombPass())) &&
+				//Not a brick, closed door, or hidden powerup while the player has wall pass
+				!((tilemap[x][y]->getType() == tileType::BRICK ||
+					tilemap[x][y]->getType() == tileType::DOOR_CLOSED ||
+					tilemap[x][y]->getType() == tileType::POWERUP_HIDDEN) &&
+					plr.hasWallPass()))
 			{
+				//Then collide with then tile
 				sf::Vector2f center_tile = {
 					tilemap[x][y]->getBounds().left + (tilemap[x][y]->getBounds().width / 2),
 					tilemap[x][y]->getBounds().top + (tilemap[x][y]->getBounds().height / 2)
@@ -324,7 +329,20 @@ void Level::collisions(Player& plr)
 
 				if (distance < 48 * 2)
 				{
-					plr.check(*tilemap[x][y], offset);
+					if (plr.check(*tilemap[x][y], offset))
+					{
+						switch (tilemap[x][y]->getType())
+						{
+						case tileType::POWERUP_REVEALED: 
+							/* Checks if the player is colliding with a revealed powerup */
+							((PowerUp*)tilemap[x][y])->applyPowerUp(plr);
+							
+							break;
+						case tileType::DOOR_OPEN: 
+							/* Checks if the player is colliding with a open door */
+							break;
+						}
+					}	
 				}
 			}
 		}
@@ -449,5 +467,20 @@ void Level::update(const float& dt, Player& plr)
 	for (int i = 0; i < bombs.size(); i++)
 	{
 		bombs[i]->update(dt);
+	}
+
+	//Checks the players collisions with bombs
+	//If the bomb tile doesnt have solid air, check
+	//if the player is off of the bomb, set the tile to solid air
+	for (int i = 0; i < bombs.size(); i++)
+	{
+		Bomb* bomb = bombs.at(i);
+		sf::Vector2i position = bomb->getPosition();
+	
+		if (tilemap[position.x][position.y]->getType() != tileType::SOLID_AIR)
+		{
+			if (!bomb->isEntityColliding(plr.getBoundingBox()))
+				tilemap[position.x][position.y]->setTile(tileType::SOLID_AIR);
+		}
 	}
 }

@@ -193,7 +193,6 @@ void Player::update(const float& dt)
 		//Move sprite by velocity
 		move(xVel, yVel);
 
-
 		// Fix for the player being glitched out when between a tile on top and below
 		sf::FloatRect playerBounds = sprite.getGlobalBounds();
 		playerBounds.height -= speed;
@@ -267,7 +266,7 @@ sf::FloatRect Player::getBoundingBox() const
 
 
 // return sprite of player 
-sf::Sprite Player::getSprite() 
+sf::Sprite& Player::getSprite() 
 {
 	return sprite;
 }

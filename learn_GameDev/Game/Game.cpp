@@ -12,7 +12,7 @@ Game::Game() : startMenu(true)
 
 	view.setSize(sf::Vector2f(window->getSize()));
 
-	player.getSprite().setPosition(48 * 31 / 2, 48 * 13 / 2);
+	//player.getSprite().setPosition(48 * 31 / 2, 48 * 13 / 2);
 
 	//Generate the level
 	levelNumber = 0;

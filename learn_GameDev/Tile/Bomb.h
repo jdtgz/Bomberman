@@ -20,6 +20,7 @@ public:
 	bool getExploded();
 	bool getExploding();
 	std::vector<int> getExplodingRange();
+	sf::Sprite& getSprite();
 
 	// Collision methods 
 	bool isBombColliding(sf::Sprite& sprite);
@@ -27,7 +28,7 @@ public:
 	bool isColliding(sf::Sprite& sprite);
 	std::vector<std::vector<int>>
 		datamapExplosionCollision(std::vector<std::vector<int>>);
-	bool isEntityColliding(sf::Sprite& sprite);
+	bool isEntityColliding(sf::FloatRect rect);
 	void showCollisions(sf::RenderWindow& window);
 
 
