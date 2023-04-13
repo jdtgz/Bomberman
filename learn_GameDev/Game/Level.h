@@ -47,15 +47,13 @@ private:
 
 	std::vector<std::vector<int>> datamap;
 	Tile* tilemap[33][15];
-	std::vector<sf::Vector2i> powerups;
+	sf::Vector2i powerUp_pos;
 
 	std::vector<Enemy*> enemies;
 
 	//bomb manager
 	bool bombManager[10] = { false };
 	std::vector<Bomb*> bombs;
-
-	bool playerDead = false;
 
 	void setPowerup(const int&, const int&);
 };

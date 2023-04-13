@@ -55,18 +55,15 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 	int totalBrickCount = 0, targetBrick = 0; // Used for random positions for PowerUp and Door
 	int totalAirCount = 0, targetAir = 0, enemyCount = 0; // Used for random enemy Placement
 
-	for (int i = 0; i < powerups.size(); i++)
-	{
-		//Remove any powerups that exist
-		delete tilemap[powerups.at(i).x][powerups.at(i).y];
+	
+	//Remove any powerups that exist
+	delete tilemap[powerUp_pos.x][powerUp_pos.y];
 
-		//Replace them with a new generic tile
-		tilemap[powerups.at(i).x][powerups.at(i).y] =
-			new Tile((powerups.at(i).x - 1) * 48,
-				(powerups.at(i).y - 1) * 48 + 100,
-				tileType::AIR);
-	}
-	powerups = {}; //Empty array
+	//Replace them with a new generic tile
+	tilemap[powerUp_pos.x][powerUp_pos.y] =
+		new Tile((powerUp_pos.x - 1) * 48,
+			(powerUp_pos.y - 1) * 48 + 100,
+			tileType::AIR);
 
 	//For every tile position
 	for (int x = 0; x < MAP_LENGTH - 1; x++)
@@ -124,8 +121,8 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 						//Increment nmber of enemies on screen
 						enemyCount++;
 
-						//DEBUG TESTING
-						std::cout << "ENEMY: " << x << ", " << y << '\n';
+						if (DEBUG)
+							std::cout << "ENEMY: " << x << ", " << y << '\n';
 					}
 				}
 			}
@@ -162,8 +159,8 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 				i++;
 				if (targetBrick == i) //At randomly picked brick tile
 				{
-					//DEBUG TESTING
-					std::cout << "DOOR: " << x << ", " << y << '\n';
+					if (DEBUG)
+						std::cout << "DOOR: " << x << ", " << y << '\n';
 
 					//Set the tile to be a closed door
 					datamap[x][y] = tileType::DOOR_CLOSED;
@@ -172,8 +169,15 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 			}
 		}
 	}
-  
-  setPowerup(10, 1);
+	
+	//Remove all bombs
+	for (int i = 0; i < bombs.size(); i++)
+		delete bombs.at(i);
+	bombs = {};
+	for (int i = 0; i < 10; i++)
+		bombManager[i] = false;
+
+	setPowerup(10, 1);
 }
 
 
@@ -216,7 +220,8 @@ void Level::keyPressed(const sf::Keyboard::Key& key, Player& plr)
 						sf::Sprite t = plr.getSprite();
 						if (bombs[i]->isColliding(t))
 						{
-							std::cout << "COLLIDE!\n";
+							if (DEBUG)
+								std::cout << "COLLIDE!\n";
 							return;
 						}
 					}
@@ -255,17 +260,7 @@ void Level::draw(sf::RenderWindow& window) const
 			tilemap[x][y]->draw(window);
 	
 	for (int i = 0; i < enemies.size(); i++)
-	{
 		enemies[i]->draw(window);
-
-		/* Display enemy hitbox
-		sf::RectangleShape box;
-		box.setPosition(enemies[i]->getBoundingBox().left, enemies[i]->getBoundingBox().top);
-		box.setSize(sf::Vector2f(enemies[i]->getBoundingBox().width, enemies[i]->getBoundingBox().height));
-		box.setFillColor(sf::Color(255, 255, 255, 100));
-		window.draw(box);
-		//*/
-	}
 
 	for (int i = 0; i < bombs.size(); i++)
 		bombs[i]->draw(window, datamap);
@@ -280,10 +275,12 @@ void Level::setMap(sf::Vector2i pos, int type)
 
 void Level::setPowerup(const int& x, const int& y)
 {
-	std::cout << "POWERUP: " << x << ", " << y << '\n';
+	if (DEBUG)
+		std::cout << "POWERUP: " << x << ", " << y << '\n';
 	datamap[x][y] = tileType::POWERUP_HIDDEN;
 	delete tilemap[x][y];
 	tilemap[x][y] = new PowerUp((x - 1) * 48, (y - 1) * 48 + 100);
+	powerUp_pos = {x,y};
 }
 
 
@@ -293,18 +290,14 @@ void Level::collisions(Player& plr)
 	sf::Vector2f offset;
 
 	// check to see the player's collisions with enemies 
-	if (!plr.isInvincible())
+	for (int i = 0; i < enemies.size(); i++)
 	{
-		for (int i = 0; i < enemies.size(); i++)
+		if (plr.check(*enemies[i]))
 		{
-			if (plr.check(*enemies[i]))
-			{
-				playerDead = true;
-				std::cout << "PLAYER DEAD\n";
-			}
+			plr.die();
 		}
 	}
-
+  
 	//Tilemap collisions
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
@@ -342,17 +335,28 @@ void Level::collisions(Player& plr)
 						{
 						case tileType::POWERUP_REVEALED: 
 							/* Checks if the player is colliding with a revealed powerup */
-							((PowerUp*)tilemap[x][y])->applyPowerUp(plr);
+							((PowerUp*)tilemap[x][y])->collision(plr);
 							
 							break;
 						case tileType::DOOR_OPEN: 
 							/* Checks if the player is colliding with a open door */
-							break;
+							tilemap[x][y]->collision(plr);
 						}
 					}	
 				}
 			}
 		}
+
+	// if tile is colliding with the player
+	if (powerUp_pos.x >= 0 && plr.check(*tilemap[powerUp_pos.x][powerUp_pos.y]))
+	{
+		// If the tile being collided with is an active powerUp, adjust plr attributes 
+		if (tilemap[powerUp_pos.x][powerUp_pos.y]->getType() == tileType::POWERUP_REVEALED)
+		{
+			tilemap[powerUp_pos.x][powerUp_pos.y];
+		}
+
+	}
 
 	plr.move(offset.x, offset.y);
 }
@@ -451,9 +455,8 @@ void Level::update(const float& dt, Player& plr)
 					tilemap[bombs[0]->getPosition().x][bombs[0]->getPosition().y]->setTile(tileType::AIR);
 					
 					// Check if player dies
-					if (!plr.isInvincible())
-						if(deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition(), plr.getBoundingBox()))
-							std::cout << "PLAYER DEAD\n";
+          if (deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition(), plr.getBoundingBox()))
+						plr.die();
 
 					// Check if enemies die
 					for (int e = 0; e < enemies.size(); e++)

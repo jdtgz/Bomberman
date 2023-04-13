@@ -24,7 +24,8 @@ class Tile : public Collidable
 
 		// Game funcitons 
 		void draw(sf::RenderWindow& window);
-		virtual void update(const float& dt); 
+		virtual void update(const float& dt);
+		virtual void collision(Player& plr); 
 
 		// Accessors
 		sf::Vector2f getPosition() const;
