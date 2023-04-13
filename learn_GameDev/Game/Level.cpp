@@ -177,6 +177,8 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 	for (int i = 0; i < 10; i++)
 		bombManager[i] = false;
 
+	tilemap[0][0]->setTile(tileType::TILE);
+
 	setPowerup(10, 1);
 }
 
