@@ -7,7 +7,7 @@ Game::Game() : startMenu(true)
 	srand(time(NULL));
 
 	//Create a new window
-	window = new sf::RenderWindow(sf::VideoMode(750, 750), "Bomberman");
+	window = new sf::RenderWindow(sf::VideoMode(750, 750), "Bomberman", sf::Style::Titlebar | sf::Style::Close);
 	window->setFramerateLimit(144);
 
 	view.setSize(sf::Vector2f(window->getSize()));
