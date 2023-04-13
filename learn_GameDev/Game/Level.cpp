@@ -306,11 +306,18 @@ void Level::collisions(Player& plr)
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			// If the tile is
-			if (tilemap[x][y]->getType() != tileType::AIR && tilemap[x][y]->getType() != tileType::DOOR_OPEN &&
+			//If the tile is not an air or open door,
+			if ((tilemap[x][y]->getType() != tileType::AIR && tilemap[x][y]->getType() != tileType::DOOR_OPEN &&
+				//Not solid air that the player is standing on,
 				!(tilemap[x][y]->getType() == tileType::SOLID_AIR 
-					&& x == plr.getPosition().x && y == plr.getPosition().y))
+					&& x == plr.getPosition().x && y == plr.getPosition().y)) &&
+				//and not a brick, closed door, or hidden powerup while the player has wall pass
+				!((tilemap[x][y]->getType() == tileType::BRICK ||
+					tilemap[x][y]->getType() == tileType::DOOR_CLOSED ||
+					tilemap[x][y]->getType() == tileType::POWERUP_HIDDEN) &&
+					plr.hasWallPass()))
 			{
+				//Then ollide with then tile
 				sf::Vector2f center_tile = {
 					tilemap[x][y]->getBounds().left + (tilemap[x][y]->getBounds().width / 2),
 					tilemap[x][y]->getBounds().top + (tilemap[x][y]->getBounds().height / 2)
@@ -337,13 +344,6 @@ void Level::collisions(Player& plr)
 							break;
 						case tileType::DOOR_OPEN: 
 							/* Checks if the player is colliding with a open door */
-							
-							break;
-						case tileType::BRICK:
-							if (plr.hasWallPass())
-							{
-								offset = { 0, 0 };
-							}
 							break;
 						}
 					}
