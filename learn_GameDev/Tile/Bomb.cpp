@@ -20,7 +20,7 @@ Bomb::Bomb(int x, int y, int range, bool has_timer)
 	else
 		m_timer = sf::seconds(-1);
 
-	m_sprite.setPosition(((x - 1) * 48), ((y + 1) * 48)); //Bomb position is left most explosion 
+	m_sprite.setPosition(((x - 1) * 48), ((y + 1) * 48) + 4); //Bomb position is left most explosion 
 	m_position = sf::Vector2i(x, y);
 
 	initAnimation();
@@ -157,7 +157,7 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 		};
 
 		//Center explosion
-		sf::Vector2f centerPos(((m_position.x - 1) * 48), ((m_position.y + 1) * 48));
+		sf::Vector2f centerPos(((m_position.x - 1) * 48), (((m_position.y + 1) * 48) + 4));
 		drawSprite(centerPos, animationIndex::CENTER);
 
 
