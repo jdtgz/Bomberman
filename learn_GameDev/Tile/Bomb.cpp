@@ -526,8 +526,8 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 bool Bomb::isEntityColliding(sf::FloatRect rect)
 {
 	//This is here because getting the sprites size would most of the time be 0 instead of 48
-	sf::FloatRect bombBounds = { m_sprite.getPosition().x, m_sprite.getPosition().y,
-	48, 48 };
+	sf::FloatRect bombBounds = 
+		sf::FloatRect((m_position.x - 1) * 48, (m_position.y + 1) * 48, 48, 48);
 
 	if (bombBounds.intersects(rect))
 		return true;
