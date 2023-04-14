@@ -7,11 +7,11 @@ class Collidable
 {
 public:
 
-	//Returns true if this intersects with other
+	/* Returns true if this intersects with other */
 	bool check(Collidable& other);
 
-	//Does the same as check(Collidable&), 
-	//but modifies the correction/offset accordingly
+	/* Does the same as check(Collidable&), */     
+	/* but modifies the correction/offset accordingly */
 	bool check(Collidable& other, sf::Vector2f& correction);
 
 	/* Gets the bounds of the collider */
@@ -21,6 +21,7 @@ public:
 	sf::RectangleShape getVisualBounds();
 
 protected:
+	/* Updates the rect for the collidable */
 	void updateRect(sf::FloatRect rect);
 
 private:
