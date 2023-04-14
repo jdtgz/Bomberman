@@ -2,12 +2,13 @@
 #include "../Graphics/TextureHolder.h"
 #include "../Graphics/Animation.h"
 
+/* The bomb is able to explode and destroy tiles */
+/* that are in the range of the explosion */
 class Bomb
 {
 public:
 	// constructor/destructor
 	Bomb(int x, int y, int range, bool timer);
-	~Bomb();
 
 	// Game functions 
 	void draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap);
