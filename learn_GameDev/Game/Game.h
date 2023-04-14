@@ -22,6 +22,7 @@ class Game
 		void processEvents();
 		void update(const sf::Time&);
 		void render(const sf::Time&);
+		void updateView(); 
 
 		// sfml screen attributes 
 		sf::RenderWindow* window;
