@@ -82,6 +82,7 @@ private:
 	//Default will be m_range
 	int m_exploding_range[4];
 
-
+	/* This is only for updating the range in the draw method.*/
+	/* Makes it so that a piece of code is only called once */
 	bool m_exploded_update;
 };

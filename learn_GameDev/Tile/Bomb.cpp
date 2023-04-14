@@ -30,13 +30,14 @@ Bomb::Bomb(int x, int y, int range, bool has_timer)
 // draws the bomb onto the game window
 void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 {
-	//Bomb
+	//If not exploded, draw the bombs animation
 	if (!m_exploded)
 	{
 		m_animations[(int)animationIndex::BOMB].applyToSprite(m_sprite);
 		target.draw(m_sprite);
 	}
-
+	//If the bomb has exploded but the explosion is not finished,
+	//draw the explosion animation
 	else if (!m_explosion_finished)
 	{
 		if (!m_exploded_update)
