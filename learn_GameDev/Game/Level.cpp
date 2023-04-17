@@ -6,7 +6,6 @@
 
 Level::Level()
 {
-	//Set positions and sizes of the tiles
 	int xPos = -48, yPos = 52;
 
 	datamap.resize(MAP_LENGTH);
@@ -39,7 +38,6 @@ Level::Level()
 
 Level::~Level()
 {
-	//Unallocate tilemap memory
 	for (int x = 0; x < MAP_LENGTH; x++)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 			delete tilemap[x][y];
@@ -48,13 +46,16 @@ Level::~Level()
 		delete enemies[i];
 }
 
+
 // Creates a new level, called on player death & game start
 void Level::generate(const int& levelNum, const Player* plrPtr)
 {
 	int i = 0;
-	int totalBrickCount = 0, targetBrick = 0; // Used for random positions for PowerUp and Door
-	int totalAirCount = 0, targetAir = 0, enemyCount = 0; // Used for random enemy Placement
-
+	// Used for random positions for PowerUp and Door
+	int totalBrickCount = 0, targetBrick = 0; 
+	
+	// Used for random enemy Placement
+	int totalAirCount = 0, targetAir = 0, enemyCount = 0; 
 	
 	//Removeany lefover powerups
 	delete tilemap[powerUp_pos.x][powerUp_pos.y];
@@ -90,16 +91,15 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 
 	//Add Powerup to the Map
 	targetBrick = rand() % totalBrickCount + 1; //Pick random brick tile
-	i = 0; //Reset counter
+	i = 0;
 	for (int x = 0; x < MAP_LENGTH; x++)
 	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			//Count the number of bricks
 			if (datamap[x][y] == tileType::BRICK)
 			{
 				i++;
-				if (targetBrick == i) //At randomly picked brick tile
+				if (targetBrick == i) 
 				{
 					setPowerup(x, y);
 					totalBrickCount--;
@@ -109,8 +109,8 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 	}
 
 	//Add Door to the Map
-	targetBrick = rand() % totalBrickCount + 1; //Pick random brick tile
-	i = 0; //Reset counter
+	targetBrick = rand() % totalBrickCount + 1;
+	i = 0;
 	for (int x = 0; x < MAP_LENGTH; x++)
 	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
@@ -118,7 +118,7 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 			if (datamap[x][y] == tileType::BRICK)
 			{
 				i++;
-				if (targetBrick == i) //At randomly picked brick tile
+				if (targetBrick == i)
 				{
 					if (DEBUG)
 						std::cout << "DOOR: " << x << ", " << y << '\n';
@@ -136,7 +136,7 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 	for (int i = 0; i < 10; i++)
 		bombManager[i] = false;
 
-	//Remove any enemies that may exist
+
 	for (int i = 0; i < enemies.size(); i++)
 		delete enemies[i];
 	enemies = {}; //Empty pointer array after deallocating all memory
@@ -150,7 +150,7 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 		{
 			for (int y = 0; y < MAP_HEIGHT - 1; y++)
 			{
-				if (datamap[x][y] == tileType::AIR)
+				if (datamap[x][y] == tileType::AIR && (x + y) > 1)
 				{
 					i++;
 					if (targetAir == i) //At randomly picked air tile
@@ -195,7 +195,6 @@ int Level::getHeight() const
 }
 
 
-// detects whether a key has been pressed and acts accordingly
 void Level::keyPressed(const sf::Keyboard::Key& key, Player& plr)
 {
 	switch (key)
@@ -367,6 +366,7 @@ bool Level::deathCheck(std::vector<int> range, sf::Vector2i bombPos, const sf::F
 }
 
 
+// Update TileMap, Bomb and Enemy Status, and Player-Bomb collision checks
 void Level::update(const float& dt, Player& plr)
 {
 	int offset = 1;

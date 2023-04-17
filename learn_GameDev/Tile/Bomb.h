@@ -2,8 +2,8 @@
 #include "../Graphics/TextureHolder.h"
 #include "../Graphics/Animation.h"
 
-/* The bomb is able to explode and destroy tiles */
-/* that are in the range of the explosion */
+/* The bomb is able to explode and destroy tiles
+that are in the range of the explosion */
 class Bomb
 {
 public:
@@ -25,13 +25,10 @@ public:
 
 	// Collision methods 
 	bool isBombColliding(sf::Sprite& sprite);
-	bool isExplosionColliding(sf::Sprite& sprite);
 	bool isColliding(sf::Sprite& sprite);
 	std::vector<std::vector<int>>
 		datamapExplosionCollision(std::vector<std::vector<int>>);
 	bool isEntityColliding(sf::FloatRect rect);
-	void showCollisions(sf::RenderWindow& window);
-
 
 private:
 	// Total Bomb animations
