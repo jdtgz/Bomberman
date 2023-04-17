@@ -56,8 +56,8 @@ void ONeal::move(Tile* tilemap[33][15])
 	if (chasePlayer)
 		pf = pathfindingHeading(tilemap);
 	//If istance between the player and enemy is large enough
-	//then 30% chance to start chasing the player
-	else if (distanceToPlayer() > 5 && rand() % 10 <= 3)
+	//then 10% chance to start chasing the player
+	else if (distanceToPlayer() > 5 && rand() % 10 <= 1)
 		chasePlayer = true;
 
 	

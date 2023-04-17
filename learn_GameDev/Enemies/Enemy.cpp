@@ -12,6 +12,7 @@ Enemy::Enemy(const Player* plrPtr)
 	pathfindingDebounce = PATHFINDING_DEBOUNCE_MAX;
 	alive = true;
 	deathEnded = false;
+	wallpass = false;
 	playerRef = plrPtr;
 }
 
@@ -49,8 +50,7 @@ bool Enemy::moveForward(Tile* tilemap[33][15])
 	case direction::NORTH:
 		//If the tile position is on the map and the sprite is
 		//below the top bound and the northern tile is air, move
-		if (t.y >= 0 && sprite.getPosition().y >= 100 &&
-			tilemap[t.x][t.y]->getType() == tileType::AIR)
+		if (t.y >= 0 && sprite.getPosition().y >= 100 && walkableTile(tilemap, t))
 		{
 			sprite.move(0, -moveSpeed);
 			moved = true;
@@ -59,8 +59,7 @@ bool Enemy::moveForward(Tile* tilemap[33][15])
 	case direction::SOUTH:
 		//If the tile position is on the map and the sprite is
 		//above the bottom bound and the southern tile is air, move
-		if (t.y < 14 && sprite.getPosition().y < 48 * 12 + 100 &&
-			tilemap[t.x][t.y + 1]->getType() == tileType::AIR)
+		if (t.y < 14 && sprite.getPosition().y < 48 * 12 + 100 && walkableTile(tilemap, { t.x, t.y + 1 }))
 		{
 			sprite.move(0, moveSpeed);
 			moved = true;
@@ -69,8 +68,7 @@ bool Enemy::moveForward(Tile* tilemap[33][15])
 	case direction::EAST:
 		//If the tile position is on the map and the sprite is
 		//left of the right bound and the eastern tile is air, move
-		if (t.x >= 0 && sprite.getPosition().x < 48 * 30 &&
-			tilemap[t.x + 1][t.y]->getType() == tileType::AIR)
+		if (t.x >= 0 && sprite.getPosition().x < 48 * 30 && walkableTile(tilemap, { t.x + 1, t.y }))
 		{
 			sprite.move(moveSpeed, 0);
 			moved = true;
@@ -79,8 +77,7 @@ bool Enemy::moveForward(Tile* tilemap[33][15])
 	case direction::WEST:
 		//If the tile position is on the map and the sprite is
 		//right of the left bound and the western tile is air, move
-		if (t.x < 32 && sprite.getPosition().x >= 0 &&
-			tilemap[t.x][t.y]->getType() == tileType::AIR)
+		if (t.x < 32 && sprite.getPosition().x >= 0 && walkableTile(tilemap, t))
 		{
 			sprite.move(-moveSpeed, 0);
 			moved = true;
@@ -111,8 +108,7 @@ void Enemy::randomHeading(Tile* tilemap[33][15])
 		if (rand() % 2 == 0)
 		{
 			//If not on the west wall and the western tile is air
-			if (t.x > 1 &&
-				tilemap[t.x - 1][t.y]->getType() == tileType::AIR)
+			if (t.x > 1 && walkableTile(tilemap, { t.x - 1, t.y }))
 			{
 				heading = direction::WEST;
 				curAnim = animIndex::LEFT;
@@ -121,8 +117,7 @@ void Enemy::randomHeading(Tile* tilemap[33][15])
 		else
 		{
 			//If not on the east wall and the eastern tile is air
-			if (t.x < 31 &&
-				tilemap[t.x + 1][t.y]->getType() == tileType::AIR)
+			if (t.x < 31 && walkableTile(tilemap, { t.x + 1, t.y }))
 			{
 				heading = direction::EAST;
 				curAnim = animIndex::RIGHT;
@@ -134,15 +129,13 @@ void Enemy::randomHeading(Tile* tilemap[33][15])
 		if (rand() % 2 == 0)
 		{
 			//If not on the north wall and the northern tile is air
-			if (t.y > 1 &&
-				tilemap[t.x][t.y - 1]->getType() == tileType::AIR)
+			if (t.y > 1 && walkableTile(tilemap, { t.x, t.y - 1 }))
 				heading = direction::NORTH;
 		}
 		else
 		{
 			//If not on the south wall and the southern tile is air
-			if (t.y < 13 &&
-				tilemap[t.x][t.y + 1]->getType() == tileType::AIR)
+			if (t.y < 13 && walkableTile(tilemap, { t.x, t.y + 1 }))
 				heading = direction::SOUTH;
 		}
 	}
@@ -341,7 +334,7 @@ std::vector<sf::Vector2i> Enemy::pathfind(Tile* tilemap[33][15])
 
 			//Check for a tile in that direction
 			if (current.x > 0 && current.x < 32 && current.y > 0 && current.y < 14 &&
-				tilemap[(current + offset).x][(current + offset).y]->getType() == tileType::AIR)
+				walkableTile(tilemap, current + offset))
 			{
 				//Determine if the tile has already been found by the enemy
 				int iterator = 0;
@@ -411,4 +404,21 @@ float Enemy::distanceToPlayer() const
 {
 	return sqrt(pow(getTilePosition().x - playerRef->getTilePosition().x, 2) +
 		pow(getTilePosition().y - playerRef->getTilePosition().y, 2));
+}
+
+
+bool Enemy::walkableTile(Tile* tilemap[33][15], const sf::Vector2i& t)
+{
+	bool walkable = false;
+	if (tilemap[t.x][t.y]->getType() == tileType::AIR ||
+		tilemap[t.x][t.y]->getType() == tileType::DOOR_OPEN ||
+		tilemap[t.x][t.y]->getType() == tileType::POWERUP_REVEALED ||
+		(wallpass &&
+			(tilemap[t.x][t.y]->getType() == tileType::BRICK ||
+				tilemap[t.x][t.y]->getType() == tileType::DOOR_CLOSED ||
+				tilemap[t.x][t.y]->getType() == tileType::POWERUP_HIDDEN)))
+	{
+		walkable = true;
+	}
+	return walkable;
 }

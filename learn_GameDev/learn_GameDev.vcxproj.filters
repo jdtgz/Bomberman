@@ -41,6 +41,9 @@
     <ClCompile Include="Tile\Bomb.cpp">
       <Filter>Tiles</Filter>
     </ClCompile>
+    <ClCompile Include="Enemies\Dahl.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enum.h" />
@@ -82,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="Tile\Bomb.h">
       <Filter>Tiles</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemies\Dahl.h">
+      <Filter>Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

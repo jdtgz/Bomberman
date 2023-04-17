@@ -49,6 +49,9 @@ protected:
 	//Higher numbers result in more random ai, but more visual clipping
 	float clippingMargin;
 
+	//Similar to player wallpass, allows for enemy to move through bricks
+	bool wallpass;
+
 	bool moveForward(Tile* [33][15]);
 	void bounce();
 	void randomHeading(Tile* [33][15]);
@@ -74,4 +77,6 @@ private:
 
 	//Creates a path between this enemy and the player
 	std::vector<sf::Vector2i> pathfind(Tile* [33][15]);
+
+	bool walkableTile(Tile* [33][15], const sf::Vector2i&);
 };
