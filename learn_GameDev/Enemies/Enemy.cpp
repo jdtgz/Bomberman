@@ -258,14 +258,24 @@ bool Enemy::pathfindingHeading(Tile* tilemap[33][15])
 			path.pop_back();
 		}
 
-		if (tPos.y - 1 == next.y)
-			heading = direction::NORTH;
-		else if (tPos.y + 1 == next.y)
-			heading = direction::SOUTH;
-		else if (tPos.x - 1 == next.x)
-			heading = direction::WEST;
-		else if (tPos.x + 1 == next.x)
-			heading = direction::EAST;
+		if (path.size() > 0)
+		{
+			next = path.at(path.size() - 1);
+			if (tPos.y - 1 == next.y)
+				heading = direction::NORTH;
+			else if (tPos.y + 1 == next.y)
+				heading = direction::SOUTH;
+			else if (tPos.x - 1 == next.x)
+			{
+				heading = direction::WEST;
+				curAnim = animIndex::LEFT;
+			}
+			else if (tPos.x + 1 == next.x)
+			{
+				heading = direction::EAST;
+				curAnim = animIndex::RIGHT;
+			}
+		}
 	}
 
 	return pathToFollow;
