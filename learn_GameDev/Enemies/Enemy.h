@@ -61,9 +61,16 @@ protected:
 	//Returns whether the enemy is close enough to a tile to be considered 'at' it
 	bool atTile(Tile* [33][15]);
 
+	bool pathfindingHeading(Tile* [33][15]);
+
 private:
 	//Death animation is over
 	bool deathEnded;
 
 	const Player* playerRef; //Reference to the player for chasing
+
+	int pathfindingDebounce;
+	const int PATHFINDING_DEBOUNCE_MAX = 300;
+	std::vector<sf::Vector2i> path;
+	std::vector<sf::Vector2i> pathfind(Tile* [33][15]);
 };

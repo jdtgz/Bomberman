@@ -9,6 +9,7 @@ Enemy::Enemy(const Player* plrPtr)
 	anims[animIndex::DEATH].showOnce();
 	moveSpeed = 1.f;
 	clippingMargin = 1.f;
+	pathfindingDebounce = PATHFINDING_DEBOUNCE_MAX;
 	alive = true;
 	deathEnded = false;
 	playerRef = plrPtr;
@@ -229,6 +230,153 @@ sf::FloatRect Enemy::getBoundingBox() const
 	alteredBox.width -= 3 + 2 * moveSpeed;
 	alteredBox.height -= 3 + 2 * moveSpeed;
 	return alteredBox;
+}
+
+
+bool Enemy::pathfindingHeading(Tile* tilemap[33][15])
+{
+	bool pathToFollow = false;
+
+	//Once every number of calls, update the path
+	if (++pathfindingDebounce > PATHFINDING_DEBOUNCE_MAX)
+	{
+		pathfindingDebounce = 0;
+		path = pathfind(tilemap);
+	}
+
+	if (path.size() > 0)
+	{
+		//Get the next path
+		sf::Vector2i next = path.at(path.size() - 1);
+		sf::Vector2i tPos = getTilePosition();
+
+		pathToFollow = true;
+
+		//If at the next tile, then go to the next tile
+		if (atTile(tilemap) && tPos == next)
+		{
+			path.pop_back();
+		}
+
+		if (tPos.y - 1 == next.y)
+			heading = direction::NORTH;
+		else if (tPos.y + 1 == next.y)
+			heading = direction::SOUTH;
+		else if (tPos.x - 1 == next.x)
+			heading = direction::WEST;
+		else if (tPos.x + 1 == next.x)
+			heading = direction::EAST;
+	}
+
+	return pathToFollow;
+}
+
+
+std::vector<sf::Vector2i> Enemy::pathfind(Tile* tilemap[33][15])
+{
+	const sf::Vector2i start = getTilePosition(), end = playerRef->getTilePosition();
+	std::vector<sf::Vector3i> open, closed;
+	sf::Vector2i current, offset;
+	int steps = 0;
+
+	//Add start to the open list
+	open.push_back({ start.x, start.y, steps });
+
+	while (open.size() > 0 && current != end)
+	{
+		//Get the first item in the vector
+		current = { open.at(0).x, open.at(0).y };
+
+		//Move current to closed list
+		open.erase(open.begin());
+		closed.push_back({ current.x, current.y, steps });
+
+		steps++;
+
+		//for each direction
+		for (int i = 0; i < 4; i++)
+		{
+			//Get an offset of one tile in that direction
+			switch (i)
+			{
+			case direction::NORTH:
+				offset = { 0, -1 };
+				break;
+			case direction::EAST:
+				offset = { 1, 0 };
+				break;
+			case direction::SOUTH:
+				offset = { 0, 1 };
+				break;
+			case direction::WEST:
+				offset = { -1,0 };
+			}
+
+			//Check for a tile in that direction
+			if (current.x > 0 && current.x < 32 && current.y > 0 && current.y < 14 &&
+				tilemap[(current + offset).x][(current + offset).y]->getType() == tileType::AIR)
+			{
+				//Determine if the tile has already been found by the enemy
+				int iterator = 0;
+				while (iterator < closed.size() &&
+					!(closed.at(iterator).x == (current + offset).x &&
+						closed.at(iterator).y == (current + offset).y))
+					iterator++;
+				//If it has not already been found, then add it
+				if (iterator == closed.size())
+					open.push_back({ (current + offset).x, (current + offset).y, steps });
+				//If it has been found but this path is faster, update with the faster path
+				else if (closed.at(iterator).z > steps)
+					closed.at(iterator).z = steps;
+			}
+		}
+	}
+
+	std::vector<sf::Vector2i> foundPath = {};
+
+	//Reconstruct path if the end was found
+	if (current == end)
+	{
+		while (current != start)
+		{
+			foundPath.push_back(current);
+
+			sf::Vector3i shortest = { -1,-1,-1 };
+
+			//for each direction
+			for (int i = 0; i < 4; i++)
+			{
+				//Get an offset of one tile in that direction
+				switch (i)
+				{
+				case direction::NORTH:
+					offset = { 0, -1 };
+					break;
+				case direction::EAST:
+					offset = { 1, 0 };
+					break;
+				case direction::SOUTH:
+					offset = { 0, 1 };
+					break;
+				case direction::WEST:
+					offset = { -1,0 };
+				}
+
+				for (int c = 0; c < closed.size(); c++)
+				{
+					if (closed.at(c).x == current.x + offset.x && closed.at(c).y == current.y + offset.y)
+					{
+						if (shortest.z == -1 || shortest.z > closed.at(c).z)
+							shortest = closed.at(c);
+					}
+				}
+			}
+
+			current = { shortest.x, shortest.y };
+		}
+	}
+
+	return foundPath;
 }
 
 
