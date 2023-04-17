@@ -139,6 +139,10 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 		delete enemies[i];
 	enemies = {}; //Empty pointer array after deallocating all memory
 
+	loadLevel(2, totalAirCount, plrPtr);
+
+	/*
+
 	//Add Enemies to the Map
 	while (enemyCount < 6)
 	{
@@ -169,11 +173,80 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 			}
 		}
 	}
+	*/
+
 
 	//Note: Figure out why this needs to be called here
 	tilemap[0][0]->setTile(tileType::TILE);
 }
 
+
+//Loads the enemy types from a file
+void Level::loadLevel(int levelNum, int totalAirCount, const Player* plrPtr)
+{
+	int targetAir = 0, enemyCount = 0, i = 0; // Used for random enemy Placement
+	int lineNum = 1;
+	std::vector<int> enemyIDList = {};
+	std::ifstream fileHandle;
+
+	fileHandle.open("LevelData.txt");
+
+	enemyIDList.resize(6);
+
+	//Take the string of numbers and stor them in the enemy ID array
+	if (fileHandle.is_open())
+	{
+		std::string line;
+
+		//Go down untill Line matches Level number
+		while (lineNum < levelNum)
+		{
+			std::getline(fileHandle, line);
+			lineNum++;
+		}
+
+		while (std::getline(fileHandle, line))
+		{
+			std::istringstream ss(line);
+			ss >> enemyIDList[0] >> enemyIDList[1] >> enemyIDList[2] >> enemyIDList[3] >> enemyIDList[4] >> enemyIDList[5];
+		}
+		fileHandle.close();
+	}
+
+	while (enemyCount < enemyIDList.size())
+	{
+		i = 0;
+		targetAir = rand() % totalAirCount + 1;
+		for (int x = 0; x < MAP_LENGTH - 1; x++)
+		{
+			for (int y = 0; y < MAP_HEIGHT - 1; y++)
+			{
+				if (datamap[x][y] == tileType::AIR && (x + y) > 1)
+				{
+					i++;
+					if (targetAir == i) //At randomly picked air tile
+					{
+						switch (enemyIDList[enemyCount]) //CHANGE TO PERCENTS
+						{
+							case 0:
+								enemies.push_back(new Valcom(plrPtr, sf::Vector2i(x, y)));
+								break;
+							case 1: 
+								enemies.push_back(new ONeal(plrPtr, sf::Vector2i(x, y)));
+								break;
+						}
+
+						//Increment nmber of enemies on screen
+						enemyCount++;
+
+						if (DEBUG)
+							std::cout << "ENEMY: " << x << ", " << y << '\n';
+					}
+				}
+			}
+		}
+	}
+}
 
 void Level::end()
 {
