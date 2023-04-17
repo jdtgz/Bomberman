@@ -21,6 +21,7 @@ Player::~Player()
 }
 
 
+//Set all atributes of the Player back to their base state
 void Player::reset()
 {
 	animations[int(animIndex::WALKING_LEFT)].setFrame(0);
@@ -34,14 +35,13 @@ void Player::reset()
 	animations[int(curAnimation)].applyToSprite(sprite);
 
 
-	// initialize movement attributes 
 	for (int i = 0; i < direction::COUNT; i++)
 	{
 		movement[i] = false;
 		canMove[i] = true;
 	}
 
-	// initialize the player/powerUp attributes 
+
 	bombCount = 1;
 	flameRange = 1;
 	speed = 3.f;
@@ -54,7 +54,6 @@ void Player::reset()
 	alive = true;
 	dead = false;
 
-	//Default position in the top left corner
 	sprite.setPosition(0, 100);
 }
 
@@ -87,10 +86,8 @@ void Player::die()
 }
 
 
-// detects whether a key has been pressed and acts accordingly
 void Player::keyPressed(const sf::Keyboard::Key& key)
 {
-	// change the direction of the player based on input
 	switch (key)
 	{
 		case sf::Keyboard::Up:
@@ -108,7 +105,6 @@ void Player::keyPressed(const sf::Keyboard::Key& key)
 }
 
 
-// detects if a key is no longer being pressed and stops movement
 void Player::keyReleased(const sf::Keyboard::Key& key)
 {
 	switch (key)
@@ -145,7 +141,7 @@ void Player::draw(sf::RenderWindow& window) const
 }
 
 
-// update the animation of the player and the position based on movement attirbutes 
+// update the animation and position of the player
 void Player::update(const float& dt)
 {
 	if (alive)
@@ -168,7 +164,6 @@ void Player::update(const float& dt)
 
 		move(xVel, yVel);
 
-		// Fix for the player being glitched out when between a tile on top and below
 		sf::FloatRect playerBounds = sprite.getGlobalBounds();
 		playerBounds.height -= speed;
 
@@ -239,7 +234,6 @@ sf::Vector2i Player::getTilePosition() const
 }
 
 
-//Get the hitbox for the player sprite
 sf::FloatRect Player::getBoundingBox() const
 {
 	sf::FloatRect alteredBox = sprite.getGlobalBounds();
