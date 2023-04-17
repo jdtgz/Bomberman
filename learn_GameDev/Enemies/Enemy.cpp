@@ -16,6 +16,11 @@ Enemy::Enemy(const Player* plrPtr)
 }
 
 
+Enemy::~Enemy()
+{
+}
+
+
 void Enemy::update(const float& dt)
 {
 	anims[int(curAnim)].update(dt);
@@ -34,6 +39,7 @@ void Enemy::update(const float& dt)
 }
 
 
+//Move forward based on the current heading
 bool Enemy::moveForward(Tile* tilemap[33][15])
 {
 	sf::Vector2i t = getTilePosition();
@@ -84,6 +90,7 @@ bool Enemy::moveForward(Tile* tilemap[33][15])
 }
 
 
+//Change heading so the enemy moves 'backwards'
 void Enemy::bounce()
 {
 	heading = (direction)((heading + 2) % 4);
@@ -95,6 +102,7 @@ void Enemy::bounce()
 }
 
 
+//Randomly assign a heading if certain conditions are met
 void Enemy::randomHeading(Tile* tilemap[33][15])
 {
 	sf::Vector2i t = getTilePosition();
@@ -141,6 +149,7 @@ void Enemy::randomHeading(Tile* tilemap[33][15])
 }
 
 
+//Returns whether the enemy is close enough to a tile to be considered 'at' it
 bool Enemy::atTile(Tile* tilemap[33][15])
 {
 	sf::Vector2i t = getTilePosition();
@@ -393,9 +402,4 @@ std::vector<sf::Vector2i> Enemy::pathfind(Tile* tilemap[33][15])
 	}
 
 	return foundPath;
-}
-
-
-Enemy::~Enemy()
-{
 }
