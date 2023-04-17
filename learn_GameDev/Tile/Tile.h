@@ -14,20 +14,17 @@ class Tile : public Collidable
 		Tile() = default; 
 		Tile(const int& x, const int& y, const tileType::ID& typ);
 		~Tile();
-
-		// tile ID functions
-		tileType::ID getType() const;
-		void setTile(const tileType::ID& typ);
 	
-		// Collision response function 
-		virtual void interact();
-
 		// Game funcitons 
+		virtual void interact();
 		void draw(sf::RenderWindow& window);
 		virtual void update(const float& dt);
 		virtual void collision(Player& plr); 
+		virtual void spawnEnemies(); 
 
-		// Accessors
+		// Accessors/Modifiers 
+		tileType::ID getType() const;
+		void setTile(const tileType::ID& typ);
 		sf::Vector2f getPosition() const;
 
 	protected: 
@@ -38,7 +35,7 @@ class Tile : public Collidable
 		// Type of the tile 
 		tileType::ID type;
 
-		// Tracks "health" state of tile
+		// state of the block
 		bool destroyed; 
 
 };

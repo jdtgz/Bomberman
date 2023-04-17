@@ -9,44 +9,29 @@
 class Enemy : public Collidable
 {
 public:
-	//Constructor, requires player for chasing
 	Enemy(const Player*);
 
-	//Update for animation
 	void update(const float&);
 
-	//Abstract virtual function for movement ai
 	virtual void move(Tile*[33][15]) = 0;
 
-	//Draw to the screen
 	void draw(sf::RenderWindow&) const;
 
-	//Tell the enemy it is dead
 	void die();
-
-	//Returns whether the enemy is alive or not
 	bool isAlive() const;
-
-	//Returns true when the death anim has been completed
 	bool completedDeathAnim() const;
 
-	//Returns the position of the enemy sprite
 	sf::Vector2f getPosition() const;
-
-	//Returns the tile coordinates of the enemy
 	sf::Vector2i getTilePosition() const;
-
-	//Returns the global bounds of the enemy
 	sf::FloatRect getBoundingBox() const;
 
-	//Destructor
 	~Enemy();
 protected:
 	//Animation & Visuals
 	enum animIndex
 	{
-		LEFT = 0,
-		RIGHT,
+		RIGHT = 0,
+		LEFT,
 		DEATH,
 		COUNT
 	};
@@ -54,6 +39,7 @@ protected:
 	Animation anims[int(animIndex::COUNT)];
 	animIndex curAnim;
 
+	//Enemy is alive
 	bool alive;
 
 	direction heading;
@@ -75,8 +61,16 @@ protected:
 	//Returns whether the enemy is close enough to a tile to be considered 'at' it
 	bool atTile(Tile* [33][15]);
 
+	bool pathfindingHeading(Tile* [33][15]);
+
 private:
-	bool dead;
+	//Death animation is over
+	bool deathEnded;
 
 	const Player* playerRef; //Reference to the player for chasing
+
+	int pathfindingDebounce;
+	const int PATHFINDING_DEBOUNCE_MAX = 300;
+	std::vector<sf::Vector2i> path;
+	std::vector<sf::Vector2i> pathfind(Tile* [33][15]);
 };

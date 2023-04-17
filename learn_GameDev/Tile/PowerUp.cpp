@@ -99,78 +99,71 @@ void PowerUp::interact()
 // Update the sprite state of the tile
 void PowerUp::update(const float& dt)
 {
-	// initiate the blowUp animation IF the tile has been destoryed 
+	// If the PowerUp is destroyed and it is hidden, initiate reveal sequence 
 	if (destroyed && type == tileType::POWERUP_HIDDEN)
 	{
-		// display one cycle of the blowUp animation
 		blowUp.applyToSprite(mSprite);
 		blowUp.update(dt);
 		
-		// if lsat the last frame of the animation
+		// If animation is finished, reveal the powerUp sprite
 		if (blowUp.getCurrentFrame() == 5)
-		{
-			// reveal the powerUp
 			revealPowerUp(); 
-		}
 	}
 }
 
-void PowerUp::collision(Player& player)
+
+// Reveals the powerUp when it's is colliding with the player and destroys it
+void PowerUp::collision(Player& plr)
 {
-	//determine what type of power up it is & update player
-	if (DEBUG)
-		std::cout << "Obtained: ";
 	switch (powerUpType)
 	{
 		case powerups::BOMB_UP:
 			if (DEBUG)
 				std::cout << "BOMB UP\n";
-			player.plusBomb(); 
+			plr.plusBomb(); 
 			break;
 		case powerups::FLAME_UP: 
 			if (DEBUG)
 				std::cout << "FLAME UP\n";
-			player.plusFlame(); 
+			plr.plusFlame(); 
 			break;
 		case powerups::SPEED_UP: 
 			if (DEBUG)
 				std::cout << "SPEED UP\n";
-			player.plusSpeed(); 
+			plr.plusSpeed(); 
 			break; 
 		case powerups::WALL_PASS:
 			if (DEBUG)
 				std::cout << "WALL PASS\n";
-			player.enableWallPass(); 
+			plr.enableWallPass(); 
 			break;
 		case powerups::DETONATOR:
 			if (DEBUG)
 				std::cout << "DETONATOR\n";
-			player.enableDetonator();
+			plr.enableDetonator();
 			break;
 		case powerups::BOMB_PASS:
 			if (DEBUG)
 				std::cout << "BOMB PASS\n";
-			player.enableBombPass(); 
+			plr.enableBombPass(); 
 			break;
 		case powerups::FLAME_PASS:
 			if (DEBUG)
 				std::cout << "FLAME PASS\n";
-			player.enableFlamePass(); 
+			plr.enableFlamePass(); 
 			break;
 		case powerups::INVINCIBILITY:
 			if (DEBUG)
 				std::cout << "INVINCIBLE\n";
-			player.enableInvincible();
+			plr.enableInvincible();
 			break;
 	}
-
-	// set the tile to air once it has served its purpose
 	setTile(tileType::AIR);
 }
 
 
-// if the powerUp has already been revealed && collides with a bomb,
-// then spwan enemies and sel-destruct
+// Spawns enemies in all directions from the current PowerUp tile
+// powerUp tile must be revealed and colliding with an explosion
 void PowerUp::spawnEnemies()
 {
 	if (DEBUG)

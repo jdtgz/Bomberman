@@ -36,6 +36,7 @@ class Player : public Collidable
 		void setCanMove(const int& dir, const bool& v);
 		void updateMoves(int dir);
 		sf::Vector2f getPosition() const;
+		sf::Vector2i getTilePosition() const;
 		sf::FloatRect getBoundingBox() const;
 		sf::Sprite& getSprite();
 
