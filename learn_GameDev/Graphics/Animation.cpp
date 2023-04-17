@@ -1,7 +1,6 @@
 #include "Animation.h"
 
 
-// default constructor
 Animation::Animation()
 {  
 	texture = nullptr; 
@@ -13,7 +12,6 @@ Animation::Animation()
 }
 
 
-// destructor
 Animation::~Animation()
 {
 	delete[] frames;
@@ -37,7 +35,7 @@ void Animation::setUp(sf::Texture& t, const int& x, const int& y,
 }
 
 
-// applyies the right textureRect to the animation and scales it
+// applies the right textureRect to the animation and scales it
 void Animation::applyToSprite(sf::Sprite& s) const
 {
 	s.setTexture(*texture);
@@ -58,7 +56,7 @@ void Animation::update(const float& dt)
 }
 
 
-// makes a animation cycle once  
+// Prevents the animation to loop 
 void Animation::showOnce()
 {
 	looping = false; 
@@ -71,7 +69,6 @@ void Animation::setFrame(const int& f)
 }
 
 
-// return the currently frame being displayed
 int Animation::getCurrentFrame() const
 {
 	return iFrame; 

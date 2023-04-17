@@ -51,9 +51,11 @@ Level::~Level()
 void Level::generate(const int& levelNum, const Player* plrPtr)
 {
 	int i = 0;
-	int totalBrickCount = 0, targetBrick = 0; // Used for random positions for PowerUp and Door
-	int totalAirCount = 0, targetAir = 0, enemyCount = 0; // Used for random enemy Placement
-
+	// Used for random positions for PowerUp and Door
+	int totalBrickCount = 0, targetBrick = 0; 
+	
+	// Used for random enemy Placement
+	int totalAirCount = 0, targetAir = 0, enemyCount = 0; 
 	
 	//Removeany lefover powerups
 	delete tilemap[powerUp_pos.x][powerUp_pos.y];

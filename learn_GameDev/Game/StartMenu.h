@@ -6,7 +6,7 @@ class StartMenu
 public:
 	StartMenu(const bool&);
 
-	bool isActive() const { return active; }
+	bool isActive() const;
 
 	void update();
 	void draw(sf::RenderWindow& window);

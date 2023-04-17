@@ -50,19 +50,29 @@ void ONeal::init(const sf::Vector2i& tile, const direction& face)
 
 void ONeal::move(Tile* tilemap[33][15])
 {
-	//Set heading based on pathfinding
-	bool pfH = pathfindingHeading(tilemap);
+	bool pf = false;
 
-	//Move forward
-	bool moved = moveForward(tilemap);
+	//If chasing player, then set the heading based on pathfinding
+	if (chasePlayer)
+		pf = pathfindingHeading(tilemap);
+	//If istance between the player and enemy is large enough
+	//then 30% chance to start chasing the player
+	else if (distanceToPlayer() > 5 && rand() % 10 <= 3)
+		chasePlayer = true;
 
-	//If no movement occurred (wall in front) and not pathfinding
-	if (!moved && !pfH)
+	
+	//If not moving forward (hitting wall)
+	if (!moveForward(tilemap))
+	{
 		//Bounce off of the wall
 		bounce();
 
+		//Stop chasing the player
+		chasePlayer = false;
+	}
+
 	//If at a tile and the debounce is valid and not pathfinding
-	if (!pfH && atTile(tilemap) && ++dirDebounce >= 5)
+	if (!pf && atTile(tilemap) && ++dirDebounce >= 5)
 	{
 		//Reset debounce counter
 		dirDebounce = 0;
