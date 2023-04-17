@@ -10,7 +10,6 @@
 class Player : public Collidable
 {
 	public:
-		// constructor/destructor
 		Player();
 		~Player();
 
@@ -20,19 +19,19 @@ class Player : public Collidable
 		bool completedDeathAnim() const;
 		void die();
 
-		// Given a key, do something
+
 		void keyPressed(const sf::Keyboard::Key& key);
 		void keyReleased(const sf::Keyboard::Key& key);
 
-		// Draws player onto the screen
+
 		void draw(sf::RenderWindow& window) const;
 
-		// updates attributes of player while in main
+
 		void update(const float& dt);
 		void setVelocity(const int& newX, const int& newY);
 		sf::Vector2f getVelocity() const;
 
-		//Collision
+
 		void move(const float& x, const float& y);
 		void setCanMove(const int& dir, const bool& v);
 		void updateMoves(int dir);
@@ -40,7 +39,7 @@ class Player : public Collidable
 		sf::FloatRect getBoundingBox() const;
 		sf::Sprite& getSprite();
 
-		// powerup/player attributes 
+
 		int getBombCount() const; 
 		void plusBomb(); 
 

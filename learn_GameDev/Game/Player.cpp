@@ -16,7 +16,6 @@ Player::Player()
 }
 
 
-// destructor
 Player::~Player()
 {
 }
