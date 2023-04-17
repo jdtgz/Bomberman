@@ -35,6 +35,7 @@ class Player : public Collidable
 		//Collision
 		void move(const float& x, const float& y);
 		void setCanMove(const int& dir, const bool& v);
+		void updateMoves(int dir);
 		sf::Vector2f getPosition() const;
 		sf::FloatRect getBoundingBox() const;
 		sf::Sprite& getSprite();
@@ -65,14 +66,12 @@ class Player : public Collidable
 		void enableInvincible(); 		
 
 	private:
-		// Visual attributes
-		// total animations of the player
 		enum class animIndex
 		{
-			WALKING_LEFT = 0,
+			WALKING_UP = 0,
 			WALKING_RIGHT,
 			WALKING_DOWN,
-			WALKING_UP,
+			WALKING_LEFT,
 			DEATH,
 			COUNT
 		};
@@ -80,17 +79,12 @@ class Player : public Collidable
 		Animation animations[int(animIndex::COUNT)];
 		animIndex curAnimation;
 
-
-		// Movement attributes 
 		int xVel, yVel;
-		// Direction that the player is moving 
 		bool movement[direction::COUNT];
-		// Directions where player 'can possibly' move
 		bool canMove[direction::COUNT];
 
-		// player attirbutes 
 		int bombCount; 
-		int flameRange; 
+		int flameRange;
 		float speed;
 		bool wallPass; 
 		bool detonator; 
