@@ -55,8 +55,9 @@ void Valcom::move(Tile* tilemap[33][15])
 		//Bounce off of the wall
 		bounce();
 
-	//If at a tile and the debounce is valid
-	if (atTile(tilemap) && ++dirDebounce >= 10)
+	//If at a tile and the debounce is valid (more likely to when player is close)
+	if (atTile(tilemap) && (++dirDebounce >= 10 ||
+		(distanceToPlayer() < 3 && dirDebounce >= 3)))
 	{
 		//Reset debounce counter
 		dirDebounce = 0;

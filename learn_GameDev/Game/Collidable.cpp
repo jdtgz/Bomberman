@@ -2,12 +2,15 @@
 #include <iostream>
 
 
+// Returns true if this intersects with other
 bool Collidable::check(Collidable& other)
 {
     return m_rect.intersects(other.m_rect);
 }
 
 
+// Does the same as check(Collidable&)   
+// but modifies the correction/offset accordingly 
 bool Collidable::check(Collidable& other, sf::Vector2f& v_correction)
 {
     sf::FloatRect inter;
@@ -78,6 +81,7 @@ const sf::FloatRect& Collidable::getBounds() const
 }
 
 
+// Returns a RectangleShape in case you want to draw the collision to the screen 
 sf::RectangleShape Collidable::getVisualBounds()
 {
     sf::RectangleShape temp({ m_rect.width, m_rect.height });
@@ -90,6 +94,7 @@ sf::RectangleShape Collidable::getVisualBounds()
 }
 
 
+// Updates the rect for the collidable
 void Collidable::updateRect(sf::FloatRect rect)
 {
     m_rect = rect;

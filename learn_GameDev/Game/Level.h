@@ -11,34 +11,23 @@
 class Level
 {
 public:
-	// constructor/destructor
 	Level();
 	~Level();
 
-	// load the stage
 	void generate(const int& levelNum, const Player* plrPtr);
-	// end the level 
 	void end();
-
-	// get the height/lenth of game board
+	void draw(sf::RenderWindow& window) const;
 	int getLength() const;
 	int getHeight() const;
 
 	// manage bombs
 	void keyPressed(const sf::Keyboard::Key& key, Player& plr);
 
-	// draw level onto sfml screen 
-	void draw(sf::RenderWindow& window) const;
-
-	// sets the datamap
+	//Set Datamap
 	void setMap(sf::Vector2i pos, int type);
 
-	// track player collisions 
 	void collisions(Player& plr);
 	bool deathCheck(std::vector<int> range, sf::Vector2i bombPos, const sf::FloatRect& bounds);
-
-	// track enemy collisions 
-	// void collisions(Enemy&);
 
 	void update(const float& dt, Player& plr);
 private:
@@ -46,14 +35,12 @@ private:
 	const int MAP_HEIGHT = 15;
 
 	std::vector<std::vector<int>> datamap;
-	Tile* tilemap[33][15];
+	std::vector<Bomb*> bombs;
+	std::vector<Enemy*> enemies;
 	sf::Vector2i powerUp_pos;
 
-	std::vector<Enemy*> enemies;
-
-	//bomb manager
+	Tile* tilemap[33][15];
 	bool bombManager[10] = { false };
-	std::vector<Bomb*> bombs;
 
 	void setPowerup(const int&, const int&);
 };

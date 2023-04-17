@@ -25,7 +25,6 @@ TextureHolder::~TextureHolder()
 
 void TextureHolder::load(const textures::id& id, const std::string& filename)
 {
-	//std::unique_ptr<sf::Texture> txture(new sf::Texture()); 
 	sf::Texture* txture = new sf::Texture();
 	txture->loadFromFile(filename);
 
@@ -39,6 +38,7 @@ sf::Texture& TextureHolder::get(const textures::id& id)
 	found = textureMap.find(id);
 
 
+	// Prevents loading of a non-existing texture in map
 	if (found != textureMap.end())
 		return *textureMap[found->first];
 	else

@@ -1,6 +1,7 @@
 #include "Bomb.h"
 #include "../Enum.h"
 
+
 // Creates a bomb at (x,y)
 // @param range -> number of tiles explosion reaches in all directions 
 // @param has_timer -> determines if explosion will explode on a timer
@@ -19,8 +20,9 @@ Bomb::Bomb(int x, int y, int range, bool has_timer)
 		m_timer = sf::seconds(2.5);
 	else
 		m_timer = sf::seconds(-1);
-
-	m_sprite.setPosition(((x - 1) * 48), ((y + 1) * 48) + 4); //Bomb position is left most explosion 
+	
+	//Bomb position is left most explosion 
+	m_sprite.setPosition(((x - 1) * 48), ((y + 1) * 48) + 4); 
 	m_position = sf::Vector2i(x, y);
 
 	initAnimation();
@@ -36,15 +38,17 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 		m_animations[(int)animationIndex::BOMB].applyToSprite(m_sprite);
 		target.draw(m_sprite);
 	}
-	//If the bomb has exploded but the explosion is not finished,
-	//draw the explosion animation
+
+	// If the bomb has exploded but the explosion is not finished,
+	// draw the explosion animation
 	else if (!m_explosion_finished)
 	{
 		if (!m_exploded_update)
 		{
 			bool stop = false;
 
-			//Used to decrease the amount of lines needed
+			// calculates where the explosion animations should display 
+			// based on bomb position, range, and surroundings 
 			auto updateRange = [&](int xoffset, int yoffset, int range_direction, int iterator)
 			{
 				int x = m_position.x + (xoffset * iterator);
@@ -61,7 +65,7 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 					m_exploding_range[range_direction] = iterator;
 			};
 
-			//Check up
+			// Check up
 			for (int i = 1; i <= m_range; i++)
 			{
 				if (m_position.y - i > 0)
@@ -73,9 +77,9 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 				}
 			}
 
-			stop = false; // reset if explotion finished
+			stop = false; // reset if explosion finished
 
-			//Check right
+			// Check right
 			for (int i = 1; i <= m_range; i++)
 			{
 				if (m_position.x + i < 31)
@@ -89,7 +93,7 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 
 			stop = false;
 
-			//Check down
+			// Check down
 			for (int i = 1; i <= m_range; i++)
 			{
 				if (m_position.y + i < 15)
@@ -103,7 +107,7 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 
 			stop = false;
 
-			//Check left
+			// Check left
 			for (int i = 1; i <= m_range; i++)
 			{
 				if (m_position.x - i > 0)
@@ -118,7 +122,7 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 			m_exploded_update = true;
 		}
 
-		//Decrease line count with lambda function to draw sprites
+		// draws animaition and sprites onto screen 
 		auto drawSprite = [&](const sf::Vector2f position, animationIndex type)
 		{
 			m_animations[(int)type].applyToSprite(m_sprite);
@@ -126,12 +130,12 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 			target.draw(m_sprite);
 		};
 
-		//Center explosion
+		// Center explosion
 		sf::Vector2f centerPos(((m_position.x - 1) * 48), (((m_position.y + 1) * 48) + 4));
 		drawSprite(centerPos, animationIndex::CENTER);
 
 
-		//North drawing
+		// North drawing
 		for (int i = 0; i < m_exploding_range[0]; i++)
 		{
 			int k = i + 1;
@@ -175,7 +179,7 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 }
 
 
-// updates the bomb's state
+// sets the proper sprite in each frame of the game 
 void Bomb::update(float dt)
 {
 	if (m_explode_clock.getElapsedTime() > m_timer && !m_exploded && m_timer.asSeconds() != -1)
@@ -214,7 +218,6 @@ void Bomb::explode()
 }
 
 
-// return range of explosion
 int Bomb::getRange() const 
 { 
 	return m_range; 
@@ -252,6 +255,7 @@ std::vector<int> Bomb::getExplodingRange()
 	return range;
 }
 
+
 sf::Sprite& Bomb::getSprite()
 {
 	return m_sprite;
@@ -265,8 +269,8 @@ bool Bomb::isColliding(sf::Sprite& sprite)
 	{
 		sf::Vector2f centerPos(((m_position.x - 1) * 48), ((m_position.y + 1) * 48));
 
-		//returns a boolean depending on if the sprites 
-		//bounding box intersects with bomb
+		// returns a boolean depending on if the sprites 
+		// bounding box intersects with bomb
 		auto intersectionCheck = [&](sf::Vector2f positionToCheck) -> bool
 		{
 			bool result = false;
@@ -312,56 +316,12 @@ bool Bomb::isBombColliding(sf::Sprite& sprite)
 }
 
 
-// Explosion collisions with other objects 
-bool Bomb::isExplosionColliding(sf::Sprite& sprite)
-{
-	if (m_exploded && !m_explosion_finished)
-	{
-		sf::Vector2f centerPos(((m_position.x - 1) * 48), ((m_position.y + 1) * 48));
-
-		//returns a boolean depending on if the sprites 
-		//bounding box intersects with bomb
-		auto intersectionCheck = [&](sf::Vector2f positionToCheck) -> bool
-		{
-			bool result = false;
-			m_sprite.setPosition(positionToCheck);
-			if (sprite.getGlobalBounds().intersects(m_sprite.getGlobalBounds()))
-				result = true;
-			m_sprite.setPosition(centerPos);
-			return result;
-		};
-
-		if (intersectionCheck(centerPos))
-			return true;
-
-		//Loop through the range of the bomb
-		for (int i = 0; i < m_range; i++)
-		{
-			int k = i + 1;
-			sf::Vector2f leftPos = sf::Vector2f(centerPos.x - (48 * k), centerPos.y);
-			sf::Vector2f rightPos = sf::Vector2f(centerPos.x + (48 * k), centerPos.y);
-			sf::Vector2f downPos = sf::Vector2f(centerPos.x, centerPos.y + (48 * k));
-			sf::Vector2f upPos = sf::Vector2f(centerPos.x, centerPos.y - (48 * k));
-
-			if (intersectionCheck(leftPos) || intersectionCheck(rightPos) ||
-				intersectionCheck(downPos) || intersectionCheck(upPos))
-				return true;
-		}
-	}
-	else if (!m_explosion_finished)
-	{
-		return m_sprite.getGlobalBounds().intersects(sprite.getGlobalBounds());
-	}
-
-	return false;
-}
-
-
 // updates datamap after explosion takes affect on environment
 std::vector<std::vector<int>> 
 Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 {
 	bool stop = false;
+
 
 	auto updateRange = [&](int xoffset, int yoffset, int range_direction, int iterator)
 	{
@@ -415,12 +375,12 @@ Bomb::datamapExplosionCollision(std::vector<std::vector<int>> datamap)
 }
 
 
-//This was repurposed to do colliding checks with floatrects instead of sprites
-//due to an issue with checking the sprites themselves
-//Fixes the issue where the player would suddenly go off the bomb when its placed
+// This was repurposed to do colliding checks with floatrects instead of sprites
+// due to an issue with checking the sprites themselves
+// Fixes the issue where the player would suddenly go off the bomb when its placed
 bool Bomb::isEntityColliding(sf::FloatRect rect)
 {
-	//This is here because getting the sprites size would most of the time be 0 instead of 48
+	// This is here because getting the sprites size would most of the time be 0 instead of 48
 	sf::FloatRect bombBounds = 
 		sf::FloatRect((m_position.x - 1) * 48, (m_position.y + 1) * 48, 48, 48);
 
@@ -428,38 +388,6 @@ bool Bomb::isEntityColliding(sf::FloatRect rect)
 		return true;
 
 	return false;
-}
-
-
-// *Needs explanation*
-void Bomb::showCollisions(sf::RenderWindow& target)
-{
-	sf::Vector2f centerPos(((m_position.x - 1) * 48), ((m_position.y + 1) * 48));
-	m_sprite.setPosition(centerPos);
-	target.draw(m_sprite);
-
-	//Loop through the range of the bomb
-	for (int i = 0; i < m_range; i++)
-	{
-		int k = i + 1;
-		sf::Vector2f leftPos = sf::Vector2f(centerPos.x - (48 * k), centerPos.y);
-		sf::Vector2f rightPos = sf::Vector2f(centerPos.x + (48 * k), centerPos.y);
-		sf::Vector2f downPos = sf::Vector2f(centerPos.x, centerPos.y + (48 * k));
-		sf::Vector2f upPos = sf::Vector2f(centerPos.x, centerPos.y - (48 * k));
-
-
-		m_sprite.setPosition(leftPos);
-		target.draw(m_sprite);
-
-		m_sprite.setPosition(rightPos);
-		target.draw(m_sprite);
-
-		m_sprite.setPosition(downPos);
-		target.draw(m_sprite);
-
-		m_sprite.setPosition(upPos);
-		target.draw(m_sprite);
-	}
 }
 
 

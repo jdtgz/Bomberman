@@ -10,7 +10,6 @@
 class Player : public Collidable
 {
 	public:
-		// constructor/destructor
 		Player();
 		~Player();
 
@@ -20,27 +19,28 @@ class Player : public Collidable
 		bool completedDeathAnim() const;
 		void die();
 
-		// Given a key, do something
+
 		void keyPressed(const sf::Keyboard::Key& key);
 		void keyReleased(const sf::Keyboard::Key& key);
 
-		// Draws player onto the screen
+
 		void draw(sf::RenderWindow& window) const;
 
-		// updates attributes of player while in main
+
 		void update(const float& dt);
 		void setVelocity(const int& newX, const int& newY);
 		sf::Vector2f getVelocity() const;
 
-		//Collision
+
 		void move(const float& x, const float& y);
 		void setCanMove(const int& dir, const bool& v);
+		void updateMoves(int dir);
 		sf::Vector2f getPosition() const;
 		sf::Vector2i getTilePosition() const;
 		sf::FloatRect getBoundingBox() const;
 		sf::Sprite& getSprite();
 
-		// powerup/player attributes 
+
 		int getBombCount() const; 
 		void plusBomb(); 
 
@@ -66,14 +66,12 @@ class Player : public Collidable
 		void enableInvincible(); 		
 
 	private:
-		// Visual attributes
-		// total animations of the player
 		enum class animIndex
 		{
-			WALKING_LEFT = 0,
+			WALKING_UP = 0,
 			WALKING_RIGHT,
 			WALKING_DOWN,
-			WALKING_UP,
+			WALKING_LEFT,
 			DEATH,
 			COUNT
 		};
@@ -81,17 +79,12 @@ class Player : public Collidable
 		Animation animations[int(animIndex::COUNT)];
 		animIndex curAnimation;
 
-
-		// Movement attributes 
 		int xVel, yVel;
-		// Direction that the player is moving 
 		bool movement[direction::COUNT];
-		// Directions where player 'can possibly' move
 		bool canMove[direction::COUNT];
 
-		// player attirbutes 
 		int bombCount; 
-		int flameRange; 
+		int flameRange;
 		float speed;
 		bool wallPass; 
 		bool detonator; 

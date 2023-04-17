@@ -11,9 +11,9 @@ class Enemy : public Collidable
 public:
 	Enemy(const Player*);
 
-	void update(const float&);
+	void update(const float& dt);
 
-	virtual void move(Tile*[33][15]) = 0;
+	virtual void move(Tile* tilemap[33][15]) = 0;
 
 	void draw(sf::RenderWindow&) const;
 
@@ -49,19 +49,12 @@ protected:
 	//Higher numbers result in more random ai, but more visual clipping
 	float clippingMargin;
 
-	//Move forward based on the current heading
 	bool moveForward(Tile* [33][15]);
-
-	//Change heading so the enemy moves 'backwards'
 	void bounce();
-
-	//Randomly assign a heading if certain conditions are met
 	void randomHeading(Tile* [33][15]);
-
-	//Returns whether the enemy is close enough to a tile to be considered 'at' it
 	bool atTile(Tile* [33][15]);
-
 	bool pathfindingHeading(Tile* [33][15]);
+	float distanceToPlayer() const;
 
 private:
 	//Death animation is over
@@ -69,8 +62,16 @@ private:
 
 	const Player* playerRef; //Reference to the player for chasing
 
+	//Counter to prevent the mass-calling of pathfinding,
+	//at least for while it is very laggy
 	int pathfindingDebounce;
+
+	//Max for pathfindingDebounce
 	const int PATHFINDING_DEBOUNCE_MAX = 300;
+
+	//The current path found by pathfind
 	std::vector<sf::Vector2i> path;
+
+	//Creates a path between this enemy and the player
 	std::vector<sf::Vector2i> pathfind(Tile* [33][15]);
 };
