@@ -16,4 +16,6 @@ private:
 
 	//Debounce counter to delay random heading changes
 	int dirDebounce;
+	
+	bool chasePlayer;
 };

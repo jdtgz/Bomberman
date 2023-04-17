@@ -250,8 +250,6 @@ bool Enemy::pathfindingHeading(Tile* tilemap[33][15])
 		sf::Vector2i next = path.at(path.size() - 1);
 		sf::Vector2i tPos = getTilePosition();
 
-		pathToFollow = true;
-
 		//If at the next tile, then go to the next tile
 		if (atTile(tilemap) && tPos == next)
 		{
@@ -261,19 +259,27 @@ bool Enemy::pathfindingHeading(Tile* tilemap[33][15])
 		if (path.size() > 0)
 		{
 			next = path.at(path.size() - 1);
-			if (tPos.y - 1 == next.y)
-				heading = direction::NORTH;
-			else if (tPos.y + 1 == next.y)
-				heading = direction::SOUTH;
-			else if (tPos.x - 1 == next.x)
+			if (tPos.x - 1 == next.x && (heading % 2 == 1 || atTile(tilemap)))
 			{
 				heading = direction::WEST;
 				curAnim = animIndex::LEFT;
+				pathToFollow = true;
 			}
-			else if (tPos.x + 1 == next.x)
+			else if (tPos.x + 1 == next.x && (heading % 2 == 1 || atTile(tilemap)))
 			{
 				heading = direction::EAST;
 				curAnim = animIndex::RIGHT;
+				pathToFollow = true;
+			}
+			else if (tPos.y - 1 == next.y && (heading % 2 == 0 || atTile(tilemap)))
+			{
+				heading = direction::NORTH;
+				pathToFollow = true;
+			}
+			else if (tPos.y + 1 == next.y && (heading % 2 == 0 || atTile(tilemap)))
+			{
+				heading = direction::SOUTH;
+				pathToFollow = true;
 			}
 		}
 	}
