@@ -65,6 +65,7 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 			(powerUp_pos.y - 1) * 48 + 100,
 			tileType::AIR);
 
+	//Add Bricks to the Map
 	//For every tile position
 	for (int x = 0; x < MAP_LENGTH - 1; x++)
 	{
@@ -93,62 +94,29 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 		}
 	}
 
-	//Remove any enemies that may exist
-	for (int i = 0; i < enemies.size(); i++)
-		delete enemies[i];
-	enemies = {}; //Empty pointer array after deallocating all memory
-
-	//Add enemies to the map
-	while (enemyCount < 6)
+	//Add Powerup to the Map
+	targetBrick = rand() % totalBrickCount + 1; //Pick random brick tile
+	i = 0; //Reset counter
+	for (int x = 0; x < MAP_LENGTH; x++)
 	{
-		i = 0;
-		targetAir = rand() % totalAirCount + 1;
-		for (int x = 0; x < MAP_LENGTH-1; x++)
+		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			for (int y = 0; y < MAP_HEIGHT-1; y++)
+			//Count the number of bricks
+			if (datamap[x][y] == tileType::BRICK)
 			{
-				if (datamap[x][y] == tileType::AIR)
+				i++;
+				if (targetBrick == i) //At randomly picked brick tile
 				{
-					i++;
-					if (targetAir == i) //At randomly picked air tile
-					{
-						//TEMPORARY RANDOM
-						if (rand() % 2 == 0)
-							enemies.push_back(new Valcom(plrPtr, sf::Vector2i(x, y)));
-						else
-							enemies.push_back(new ONeal(plrPtr, sf::Vector2i(x, y)));
-
-						//Increment nmber of enemies on screen
-						enemyCount++;
-
-						if (DEBUG)
-							std::cout << "ENEMY: " << x << ", " << y << '\n';
-					}
+					setPowerup(x, y);
+					totalBrickCount--;
 				}
 			}
 		}
-
 	}
 
-	/*
-	//PowerUp Set
-	targetBrick = rand % totalBrickCount; //pick random brick block
-
-	for (int x = 0; x < mapLength; x++)
-	{
-		for (int y = 0; y < mapHeight; y++)
-		{
-			if(tilemap[x][y]->getType() == 1)
-				i++;
-			if(targetBrick == i)
-				// set x,y to a powerup
-		}
-	}
-	*/
-
+	//Add Door to the Map
 	targetBrick = rand() % totalBrickCount + 1; //Pick random brick tile
 	i = 0; //Reset counter
-
 	for (int x = 0; x < MAP_LENGTH; x++)
 	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
@@ -177,9 +145,44 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 	for (int i = 0; i < 10; i++)
 		bombManager[i] = false;
 
-	tilemap[0][0]->setTile(tileType::TILE);
+	//Remove any enemies that may exist
+	for (int i = 0; i < enemies.size(); i++)
+		delete enemies[i];
+	enemies = {}; //Empty pointer array after deallocating all memory
 
-	setPowerup(10, 1);
+	//Add Enemies to the Map
+	while (enemyCount < 6)
+	{
+		i = 0;
+		targetAir = rand() % totalAirCount + 1;
+		for (int x = 0; x < MAP_LENGTH - 1; x++)
+		{
+			for (int y = 0; y < MAP_HEIGHT - 1; y++)
+			{
+				if (datamap[x][y] == tileType::AIR)
+				{
+					i++;
+					if (targetAir == i) //At randomly picked air tile
+					{
+						//TEMPORARY RANDOM
+						if (rand() % 2 == 0)
+							enemies.push_back(new Valcom(plrPtr, sf::Vector2i(x, y)));
+						else
+							enemies.push_back(new ONeal(plrPtr, sf::Vector2i(x, y)));
+
+						//Increment nmber of enemies on screen
+						enemyCount++;
+
+						if (DEBUG)
+							std::cout << "ENEMY: " << x << ", " << y << '\n';
+					}
+				}
+			}
+		}
+	}
+
+	//Note: Figure out why this needs to be called here
+	tilemap[0][0]->setTile(tileType::TILE);
 }
 
 
