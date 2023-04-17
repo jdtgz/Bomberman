@@ -3,14 +3,14 @@
 
 Enemy::Enemy(const Player* plrPtr)
 {
-	//Default values
+	//Default enemy values
 	heading = direction::NORTH;
 	curAnim = animIndex::RIGHT;
 	anims[animIndex::DEATH].showOnce();
 	moveSpeed = 1.f;
 	clippingMargin = 1.f;
 	alive = true;
-	dead = false;
+	deathEnded = false;
 	playerRef = plrPtr;
 }
 
@@ -27,7 +27,9 @@ void Enemy::update(const float& dt)
 
 	if (curAnim == animIndex::DEATH &&
 		anims[curAnim].getCurrentFrame() == anims[curAnim].getFrameCount() - 1)
-		dead = true;
+	{
+		deathEnded = true;
+	}
 }
 
 
@@ -83,23 +85,12 @@ bool Enemy::moveForward(Tile* tilemap[33][15])
 
 void Enemy::bounce()
 {
-	switch (heading)
-	{
-	//Maintain animation direction when changing to north/south
-	case direction::NORTH:
-		heading = direction::SOUTH;
-		break;
-	case direction::SOUTH:
-		heading = direction::NORTH;
-		break;
-	case direction::EAST:
-		heading = direction::WEST;
+	heading = (direction)((heading + 2) % 4);
+
+	if (heading == direction::WEST)
 		curAnim = animIndex::LEFT; //Adjust animation to face left
-		break;
-	case direction::WEST:
-		heading = direction::EAST;
+	else if (heading == direction::EAST)
 		curAnim = animIndex::RIGHT; //Adjust animation to face right
-	}
 }
 
 
@@ -170,7 +161,9 @@ bool Enemy::atTile(Tile* tilemap[33][15])
 			abs(sprite.getPosition().x -
 				tilemap[t.x][t.y]->getPosition().x) < clippingMargin &&
 			sprite.getPosition().x >= tilemap[t.x][t.y]->getPosition().x))
+	{
 		at = true;
+	}
 
 	return at;
 }
@@ -210,7 +203,7 @@ bool Enemy::isAlive() const
 
 bool Enemy::completedDeathAnim() const
 {
-	return dead;
+	return deathEnded;
 }
 
 
