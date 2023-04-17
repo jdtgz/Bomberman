@@ -3,16 +3,11 @@
 
 Game::Game() : startMenu(true)
 {
-	//Randomize generator
 	srand(time(NULL));
 
-	//Create a new window
 	window = new sf::RenderWindow(sf::VideoMode(750, 750), "Bomberman", sf::Style::Titlebar | sf::Style::Close);
 	window->setFramerateLimit(144);
-
 	view.setSize(sf::Vector2f(window->getSize()));
-
-	//player.getSprite().setPosition(48 * 31 / 2, 48 * 13 / 2);
 
 	//Generate the level
 	levelNumber = 0;
@@ -23,7 +18,6 @@ Game::Game() : startMenu(true)
 
 Game::~Game() 
 {
-	//Unallocate window
 	delete window; 
 }
 
@@ -32,52 +26,39 @@ Game::~Game()
 // Keeps track of time for movement and animations
 void Game::run()
 {
-	//Initialize clock & delta time
 	sf::Clock clock; 
 	sf::Time timeSinceLastTick = sf::Time::Zero;
 
 	while (window->isOpen())
 	{
-		//Poll events
 		processEvents();
 
-		//Calculate dt
 		timeSinceLastTick += clock.restart();
 
-		//While there is time in the current tick
+		// Take input and update level stage while current frame is active
 		while (timeSinceLastTick > timePerFrame)
 		{
-			//Decrement dt
 			timeSinceLastTick -= timePerFrame;
-
-			//Poll events again
 			processEvents();
-		
-			//Detect all collisions and adjust player accordingly
 			level.collisions(player);
-
-			//Tick
 			update(timePerFrame); 
 		}
-
-		//Display updated gamestate
 		render(timePerFrame);
 	}
 }
 
 
-//Event manager
+// Takes user input and interprets what it means 
 void Game::processEvents()
 {
 	sf::Event evnt;
 	while (window->pollEvent(evnt))
 	{
-		// If start menu is active, dont go through game events
+		// If start menu is active and playe is alive, dont process input
 		if (!startMenu.isActive() && player.isAlive())
 		{
 			switch (evnt.type)
 			{
-				// Tell the player when a key is down
 				case sf::Event::KeyPressed:
 					// manage the player's movement inputs
 					player.keyPressed(evnt.key.code);
@@ -85,51 +66,32 @@ void Game::processEvents()
 					// manage the player's bomb inputs
 					level.keyPressed(evnt.key.code, player);
 					break;
-					// Tell the player when a key is released
 				case sf::Event::KeyReleased:
 					// manage the player's movement inputs
 					player.keyReleased(evnt.key.code);
 					break;
 			}
 		}
-
-		//Closes the window
+		
+		// Closes window
 		if (evnt.type == sf::Event::Closed)
 			window->close();
 	}
 }
 
 
-// Tick
+// Updates the state of all level and window objects in game of a single frame
+// Calls functions from Level, player, and game for real-time updates
 void Game::update(const sf::Time& dt)
 {
-	//If start menu is active, dont update game
+	// If start menu is active, dont update game
 	if (!startMenu.isActive())
 	{
-		// update the player's animations and position
 		player.update(dt.asSeconds());
-
-		//Prevent viewport from going off of the map
-		if (player.getSprite().getPosition().x > (view.getSize().x / 2) - 48 &&
-			player.getSprite().getPosition().x < (31 * 48) - (view.getSize().x / 3))
-		{
-			view.setCenter(sf::Vector2f(player.getSprite().getPosition().x,
-				window->getSize().y / 2 + 48));
-		}
-		else if (player.getSprite().getPosition().x < (view.getSize().x / 2) - 48)
-		{
-			view.setCenter(sf::Vector2f((view.getSize().x / 2) - 48,
-				window->getSize().y / 2 + 48));
-		}
-		else if (player.getSprite().getPosition().x > (31 * 48) - (view.getSize().x / 3))
-		{
-			view.setCenter(sf::Vector2f((31 * 48) - (view.getSize().x / 3),
-				window->getSize().y / 2 + 48));
-		}
-
-		// update all in-game objects 
+		updateView(); 
 		level.update(dt.asSeconds(), player);
 	}
+	// Else, update the menu
 	else
 	{
 		startMenu.update();
@@ -172,4 +134,28 @@ void Game::render(const sf::Time& dt)
 	}
   
 	window->display(); 
+}
+
+
+// Uses the player's position to keep viewport focused on them
+void Game::updateView()
+{
+	sf::Vector2f plr = player.getSprite().getPosition(); 
+
+	/*Need commnets on what each condition is testing*/
+	if (plr.x > (view.getSize().x / 2) - 48 && plr.x < (31 * 48) - (view.getSize().x / 3))
+	{
+		view.setCenter(sf::Vector2f(player.getSprite().getPosition().x,
+			window->getSize().y / 2 + 48));
+	}
+	else if (plr.x < (view.getSize().x / 2) - 48)
+	{
+		view.setCenter(sf::Vector2f((view.getSize().x / 2) - 48,
+			window->getSize().y / 2 + 48));
+	}
+	else if (plr.x > (31 * 48) - (view.getSize().x / 3))
+	{
+		view.setCenter(sf::Vector2f((31 * 48) - (view.getSize().x / 3),
+			window->getSize().y / 2 + 48));
+	}
 }
