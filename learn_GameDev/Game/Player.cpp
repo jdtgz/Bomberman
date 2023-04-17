@@ -256,6 +256,14 @@ sf::Vector2f Player::getPosition() const
 }
 
 
+sf::Vector2i Player::getTilePosition() const
+{
+	//Shift by one to adjust for border
+	return sf::Vector2i(sprite.getPosition().x / 48 + 1,
+		(sprite.getPosition().y - 100) / 48 + 1);
+}
+
+
 //Get the hitbox for the player sprite
 sf::FloatRect Player::getBoundingBox() const
 {

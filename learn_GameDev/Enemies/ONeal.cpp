@@ -50,16 +50,19 @@ void ONeal::init(const sf::Vector2i& tile, const direction& face)
 
 void ONeal::move(Tile* tilemap[33][15])
 {
+	//Set heading based on pathfinding
+	bool pfH = pathfindingHeading(tilemap);
+
 	//Move forward
 	bool moved = moveForward(tilemap);
 
-	//If no movement occurred (wall in front)
-	if (!moved)
+	//If no movement occurred (wall in front) and not pathfinding
+	if (!moved && !pfH)
 		//Bounce off of the wall
 		bounce();
 
-	//If at a tile and the debounce is valid
-	if (atTile(tilemap) && ++dirDebounce >= 5)
+	//If at a tile and the debounce is valid and not pathfinding
+	if (!pfH && atTile(tilemap) && ++dirDebounce >= 5)
 	{
 		//Reset debounce counter
 		dirDebounce = 0;

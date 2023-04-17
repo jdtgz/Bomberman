@@ -50,11 +50,8 @@ void Valcom::init(const sf::Vector2i& tile, const direction& face)
 
 void Valcom::move(Tile* tilemap[33][15])
 {
-	//Move forward
-	bool moved = moveForward(tilemap);
-
 	//If no movement occurred (wall in front)
-	if (!moved)
+	if (!moveForward(tilemap))
 		//Bounce off of the wall
 		bounce();
 
