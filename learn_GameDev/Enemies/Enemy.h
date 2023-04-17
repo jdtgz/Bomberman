@@ -54,6 +54,7 @@ protected:
 	void randomHeading(Tile* [33][15]);
 	bool atTile(Tile* [33][15]);
 	bool pathfindingHeading(Tile* [33][15]);
+	float distanceToPlayer() const;
 
 private:
 	//Death animation is over
@@ -61,8 +62,16 @@ private:
 
 	const Player* playerRef; //Reference to the player for chasing
 
+	//Counter to prevent the mass-calling of pathfinding,
+	//at least for while it is very laggy
 	int pathfindingDebounce;
+
+	//Max for pathfindingDebounce
 	const int PATHFINDING_DEBOUNCE_MAX = 300;
+
+	//The current path found by pathfind
 	std::vector<sf::Vector2i> path;
+
+	//Creates a path between this enemy and the player
 	std::vector<sf::Vector2i> pathfind(Tile* [33][15]);
 };

@@ -242,6 +242,7 @@ sf::FloatRect Enemy::getBoundingBox() const
 }
 
 
+//Tell the enemy what the path to follow is when pathfinding
 bool Enemy::pathfindingHeading(Tile* tilemap[33][15])
 {
 	bool pathToFollow = false;
@@ -297,6 +298,7 @@ bool Enemy::pathfindingHeading(Tile* tilemap[33][15])
 }
 
 
+//Generate a path between this enemy and the player
 std::vector<sf::Vector2i> Enemy::pathfind(Tile* tilemap[33][15])
 {
 	const sf::Vector2i start = getTilePosition(), end = playerRef->getTilePosition();
@@ -402,4 +404,11 @@ std::vector<sf::Vector2i> Enemy::pathfind(Tile* tilemap[33][15])
 	}
 
 	return foundPath;
+}
+
+
+float Enemy::distanceToPlayer() const
+{
+	return sqrt(pow(getTilePosition().x - playerRef->getTilePosition().x, 2) +
+		pow(getTilePosition().y - playerRef->getTilePosition().y, 2));
 }
