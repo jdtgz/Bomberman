@@ -1,6 +1,9 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include <vector>
+#include <fstream>
+#include <sstream>
+#include <cstdlib>
 #include "../Tile/Tile.h"
 #include "../Enemies/Enemy.h"
 #include "../Tile/Tile.h"
@@ -15,7 +18,8 @@ public:
 	~Level();
 
 	void generate(const int& levelNum, const Player* plrPtr);
-	void end();
+	void loadLevel(int levelNum, int totalAirCount, const Player* plrPtr);
+	bool isLevelCleared() const;
 	void draw(sf::RenderWindow& window) const;
 	int getLength() const;
 	int getHeight() const;
@@ -43,4 +47,6 @@ private:
 	bool bombManager[10] = { false };
 
 	void setPowerup(const int&, const int&);
+
+	bool levelCleared;
 };
