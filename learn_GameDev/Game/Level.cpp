@@ -507,7 +507,7 @@ void Level::update(const float& dt, Player& plr)
 
 					// Check if player dies
 					if (deathCheck(bombs[0]->getExplodingRange(), bombs[0]->getPosition(), plr.getBoundingBox())
-						&& plr.hasFlamePass())
+						&& !plr.hasFlamePass())
 						plr.die();
 
 					// Check if enemies die
