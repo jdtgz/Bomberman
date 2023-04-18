@@ -142,7 +142,10 @@ void Game::render(const sf::Time& dt)
 			if (levelScreenClock.getElapsedTime().asSeconds() >= 5)
 			{
 				if (player.completedDeathAnim())
+				{
 					player.reset();
+					levelNumber = 1;
+				}
 				else if (level.isLevelCleared())
 				{
 					levelNumber++;
