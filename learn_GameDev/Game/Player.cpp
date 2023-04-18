@@ -45,11 +45,11 @@ void Player::reset()
 	bombCount = 1;
 	flameRange = 1;
 	speed = 3.f;
-	wallPass = false;
+	wallPass = true;
 	detonator = false;
 	bombPass = false;
 	flamePass = false;
-	invincible = false;
+	invincible = true;
 
 	alive = true;
 	dead = false;

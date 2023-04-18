@@ -174,12 +174,14 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 
 	//Note: Figure out why this needs to be called here
 	tilemap[0][0]->setTile(tileType::TILE);
+
+	levelCleared = false;
 }
 
 
-void Level::end()
+bool Level::isLevelCleared() const
 {
-	//will check for level end
+	return levelCleared;
 }
 
 
@@ -289,7 +291,7 @@ void Level::collisions(Player& plr)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
 			//If the tile is not an air or open door,
-			if (tilemap[x][y]->getType() != tileType::AIR && tilemap[x][y]->getType() != tileType::DOOR_OPEN &&
+			if (tilemap[x][y]->getType() != tileType::AIR &&
 				//Not solid air that the player is standing on or solid air while the player has bomb pass,
 				!(tilemap[x][y]->getType() == tileType::SOLID_AIR
 					&& (x == plr.getPosition().x && y == plr.getPosition().y || plr.hasBombPass())) &&
@@ -324,6 +326,9 @@ void Level::collisions(Player& plr)
 							break;
 						case tileType::DOOR_OPEN:
 							tilemap[x][y]->collision(plr);
+
+							levelCleared = true;
+							break;
 						}
 					}
 				}
