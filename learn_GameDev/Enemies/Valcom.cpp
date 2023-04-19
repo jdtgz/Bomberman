@@ -26,7 +26,7 @@ Valcom::Valcom(const Player* plrPtr,
 
 void Valcom::init(const sf::Vector2i& tile, const direction& face)
 {
-	heading = face;
+	setHeading(face);
 	moveSpeed = 1.f;
 	clippingMargin = 0.25f;
 	dirDebounce = 0;
@@ -35,12 +35,6 @@ void Valcom::init(const sf::Vector2i& tile, const direction& face)
 	anims[int(animIndex::RIGHT)].setUp(*t, 0, 16 * 0, 16, 16, 3);
 	anims[int(animIndex::LEFT)].setUp(* t, 0, 16 * 1, 16, 16, 3);
 	anims[int(animIndex::DEATH)].setUp(*t, 0, 16 * 2, 16, 16, 5);
-
-	if (face == direction::WEST)
-		curAnim = animIndex::LEFT;
-	else
-		curAnim = animIndex::RIGHT;
-
 	anims[int(curAnim)].applyToSprite(sprite);
 
 	//Adjust tile position to world position

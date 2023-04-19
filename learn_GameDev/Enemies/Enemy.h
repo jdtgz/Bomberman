@@ -45,6 +45,8 @@ protected:
 	direction heading;
 	float moveSpeed;
 
+	void setHeading(const direction&);
+
 	//The distance the enemy sprite can clip into walls
 	//Higher numbers result in more random ai, but more visual clipping
 	float clippingMargin;

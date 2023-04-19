@@ -4,7 +4,7 @@
 Enemy::Enemy(const Player* plrPtr)
 {
 	//Default enemy values
-	heading = direction::NORTH;
+	setHeading(direction::NORTH);
 	curAnim = animIndex::RIGHT;
 	anims[animIndex::DEATH].showOnce();
 	moveSpeed = 1.f;
@@ -90,12 +90,7 @@ bool Enemy::moveForward(Tile* tilemap[33][15])
 //Change heading so the enemy moves 'backwards'
 void Enemy::bounce()
 {
-	heading = (direction)((heading + 2) % 4);
-
-	if (heading == direction::WEST)
-		curAnim = animIndex::LEFT; //Adjust animation to face left
-	else if (heading == direction::EAST)
-		curAnim = animIndex::RIGHT; //Adjust animation to face right
+	setHeading((direction)((heading + 2) % 4));
 }
 
 
@@ -110,8 +105,7 @@ void Enemy::randomHeading(Tile* tilemap[33][15])
 			//If not on the west wall and the western tile is air
 			if (t.x > 1 && walkableTile(tilemap, { t.x - 1, t.y }))
 			{
-				heading = direction::WEST;
-				curAnim = animIndex::LEFT;
+				setHeading(direction::WEST);
 			}
 		}
 		else
@@ -119,8 +113,7 @@ void Enemy::randomHeading(Tile* tilemap[33][15])
 			//If not on the east wall and the eastern tile is air
 			if (t.x < 31 && walkableTile(tilemap, { t.x + 1, t.y }))
 			{
-				heading = direction::EAST;
-				curAnim = animIndex::RIGHT;
+				setHeading(direction::EAST);
 			}
 		}
 	}
@@ -130,13 +123,13 @@ void Enemy::randomHeading(Tile* tilemap[33][15])
 		{
 			//If not on the north wall and the northern tile is air
 			if (t.y > 1 && walkableTile(tilemap, { t.x, t.y - 1 }))
-				heading = direction::NORTH;
+				setHeading(direction::NORTH);
 		}
 		else
 		{
 			//If not on the south wall and the southern tile is air
 			if (t.y < 13 && walkableTile(tilemap, { t.x, t.y + 1 }))
-				heading = direction::SOUTH;
+				setHeading(direction::SOUTH);
 		}
 	}
 }
@@ -235,6 +228,17 @@ sf::FloatRect Enemy::getBoundingBox() const
 }
 
 
+void Enemy::setHeading(const direction& d)
+{
+	heading = d;
+
+	if (d == direction::WEST)
+		curAnim = animIndex::LEFT; //Adjust animation to face left
+	else if (d == direction::EAST)
+		curAnim = animIndex::RIGHT; //Adjust animation to face right
+}
+
+
 //Tell the enemy what the path to follow is when pathfinding
 bool Enemy::pathfindingHeading(Tile* tilemap[33][15])
 {
@@ -262,27 +266,31 @@ bool Enemy::pathfindingHeading(Tile* tilemap[33][15])
 		if (path.size() > 0)
 		{
 			next = path.at(path.size() - 1);
-			if (tPos.x - 1 == next.x && (heading % 2 == 1 || atTile(tilemap)))
+			if (heading % 2 == 1 || atTile(tilemap))
 			{
-				heading = direction::WEST;
-				curAnim = animIndex::LEFT;
-				pathToFollow = true;
+				if (tPos.x - 1 == next.x)
+				{
+					setHeading(direction::WEST);
+					pathToFollow = true;
+				}
+				else if (tPos.x + 1 == next.x)
+				{
+					setHeading(direction::EAST);
+					pathToFollow = true;
+				}
 			}
-			else if (tPos.x + 1 == next.x && (heading % 2 == 1 || atTile(tilemap)))
+			else if (heading % 2 == 0 || atTile(tilemap))
 			{
-				heading = direction::EAST;
-				curAnim = animIndex::RIGHT;
-				pathToFollow = true;
-			}
-			else if (tPos.y - 1 == next.y && (heading % 2 == 0 || atTile(tilemap)))
-			{
-				heading = direction::NORTH;
-				pathToFollow = true;
-			}
-			else if (tPos.y + 1 == next.y && (heading % 2 == 0 || atTile(tilemap)))
-			{
-				heading = direction::SOUTH;
-				pathToFollow = true;
+				if (tPos.y - 1 == next.y)
+				{
+					setHeading(direction::NORTH);
+					pathToFollow = true;
+				}
+				else if (tPos.y + 1 == next.y)
+				{
+					setHeading(direction::SOUTH);
+					pathToFollow = true;
+				}
 			}
 		}
 	}

@@ -26,7 +26,7 @@ ONeal::ONeal(const Player* plrPtr,
 
 void ONeal::init(const sf::Vector2i& tile, const direction& face)
 {
-	heading = face;
+	setHeading(face);
 	moveSpeed = 1.5f;
 	clippingMargin = 1.25f;
 	dirDebounce = 0;
@@ -35,12 +35,6 @@ void ONeal::init(const sf::Vector2i& tile, const direction& face)
 	anims[int(animIndex::RIGHT)].setUp(*t, 0, 16 * 3, 16, 16, 3);
 	anims[int(animIndex::LEFT)].setUp(*t, 0, 16 * 4, 16, 16, 3);
 	anims[int(animIndex::DEATH)].setUp(*t, 0, 16 * 5, 16, 16, 5);
-
-	if (face == direction::WEST)
-		curAnim = animIndex::LEFT;
-	else
-		curAnim = animIndex::RIGHT;
-
 	anims[int(curAnim)].applyToSprite(sprite);
 
 	//Adjust tile position to world position
