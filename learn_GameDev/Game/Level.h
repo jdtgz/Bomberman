@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
+#include "Scoreboard.h"
 #include "../Tile/Tile.h"
 #include "../Enemies/Enemy.h"
 #include "../Tile/Tile.h"

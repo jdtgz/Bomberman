@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\Animation.cpp" />
+    <ClCompile Include="Scoreboard.cpp" />
     <ClCompile Include="Tile\Bomb.cpp" />
     <ClCompile Include="Game\Collidable.cpp" />
     <ClCompile Include="Enemies\Enemy.cpp" />
@@ -151,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\Animation.h" />
+    <ClInclude Include="Scoreboard.h" />
     <ClInclude Include="Tile\Bomb.h" />
     <ClInclude Include="Game\Collidable.h" />
     <ClInclude Include="Enemies\Enemy.h" />

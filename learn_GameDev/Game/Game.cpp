@@ -5,7 +5,7 @@ Game::Game() : startMenu(true)
 {
 	srand(time(NULL));
 
-	window = new sf::RenderWindow(sf::VideoMode(750, 750), "Bomberman", sf::Style::Titlebar | sf::Style::Close);
+	window = new sf::RenderWindow(sf::VideoMode(750, 800), "Bomberman", sf::Style::Titlebar | sf::Style::Close);
 	window->setFramerateLimit(144);
 	view.setSize(sf::Vector2f(window->getSize()));
 
@@ -179,16 +179,16 @@ void Game::updateView()
 	if (plr.x > (view.getSize().x / 2) - 48 && plr.x < (31 * 48) - (view.getSize().x / 3))
 	{
 		view.setCenter(sf::Vector2f(player.getSprite().getPosition().x,
-			window->getSize().y / 2 + 48));
+			window->getSize().y / 2 - 52));
 	}
 	else if (plr.x < (view.getSize().x / 2) - 48)
 	{
 		view.setCenter(sf::Vector2f((view.getSize().x / 2) - 48,
-			window->getSize().y / 2 + 48));
+			window->getSize().y / 2 - 52));
 	}
 	else if (plr.x > (31 * 48) - (view.getSize().x / 3))
 	{
 		view.setCenter(sf::Vector2f((31 * 48) - (view.getSize().x / 3),
-			window->getSize().y / 2 + 48));
+			window->getSize().y / 2 - 52));
 	}
 }

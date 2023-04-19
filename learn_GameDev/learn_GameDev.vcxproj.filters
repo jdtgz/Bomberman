@@ -41,6 +41,7 @@
     <ClCompile Include="Tile\Bomb.cpp">
       <Filter>Tiles</Filter>
     </ClCompile>
+    <ClCompile Include="Scoreboard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enum.h" />
@@ -83,6 +84,7 @@
     <ClInclude Include="Tile\Bomb.h">
       <Filter>Tiles</Filter>
     </ClInclude>
+    <ClInclude Include="Scoreboard.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Textures\bomberman_player.png">
