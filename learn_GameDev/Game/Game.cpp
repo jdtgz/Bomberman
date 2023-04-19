@@ -10,9 +10,10 @@ Game::Game() : startMenu(true)
 	view.setSize(sf::Vector2f(window->getSize()));
 
 	//Generate the level
-	levelNumber = 0;
-	levelRegenPause = 0;
+	levelNumber = 1;
 	level.generate(levelNumber, &player);
+
+	font.loadFromFile("Textures/font.TTF");
 }
 
 
@@ -54,8 +55,8 @@ void Game::processEvents()
 	sf::Event evnt;
 	while (window->pollEvent(evnt))
 	{
-		// If start menu is active and playe is alive, dont process input
-		if (!startMenu.isActive() && player.isAlive())
+		// If start menu is active, player is alive, and level isnt cleared, dont process input
+		if (!startMenu.isActive() && player.isAlive() && !level.isLevelCleared())
 		{
 			switch (evnt.type)
 			{
@@ -87,9 +88,12 @@ void Game::update(const sf::Time& dt)
 	// If start menu is active, dont update game
 	if (!startMenu.isActive())
 	{
-		player.update(dt.asSeconds());
-		updateView(); 
-		level.update(dt.asSeconds(), player);
+		if (!level.isLevelCleared())
+		{
+			player.update(dt.asSeconds());
+			updateView();
+			level.update(dt.asSeconds(), player);
+		}
 	}
 	// Else, update the menu
 	else
@@ -111,20 +115,49 @@ void Game::render(const sf::Time& dt)
 		window->setView(view);
 
 		// draw the level and player 
-		if (!player.completedDeathAnim())
+		if (!player.completedDeathAnim() && !level.isLevelCleared())
 		{
 			level.draw(*window);
 			player.draw(*window);
+
+			levelScreenClock.restart();
 		}
-		else
+
+		if (player.completedDeathAnim() || level.isLevelCleared())
 		{
-			levelRegenPause += dt.asSeconds();
-			//Wait time for level regeneration
-			if (levelRegenPause >= 5)
+			/* Set view so that text is centered */
+			sf::View view(sf::FloatRect(0, 0, window->getSize().x, window->getSize().y));
+			window->setView(view);
+
+			sf::Text text;
+			text.setFont(font);
+			text.setString("Level " + std::to_string(levelNumber));
+			/* Set text to center */
+			text.setOrigin(sf::Vector2f(text.getLocalBounds().width/2,
+				text.getLocalBounds().height / 2));
+			/* Set text to middle of window */
+			text.setPosition(window->getSize().x / 2, window->getSize().y / 2);
+			window->draw(text);
+
+			if (levelScreenClock.getElapsedTime().asSeconds() >= 5)
 			{
-				levelRegenPause = 0;
+				if (player.completedDeathAnim())
+				{
+					player.reset();
+					levelNumber = 1;
+				}
+				else if (level.isLevelCleared())
+				{
+					levelNumber++;
+					player.getSprite().setPosition(0, 100); // Set player to (1, 1) in tile coords
+				}
+
 				level.generate(levelNumber, &player);
-				player.reset();
+				
+				player.keyReleased(sf::Keyboard::Up);
+				player.keyReleased(sf::Keyboard::Down);
+				player.keyReleased(sf::Keyboard::Right);
+				player.keyReleased(sf::Keyboard::Left);
 			}
 		}
 	}

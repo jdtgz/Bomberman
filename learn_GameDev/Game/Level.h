@@ -19,7 +19,7 @@ public:
 
 	void generate(const int& levelNum, const Player* plrPtr);
 	void loadLevel(int levelNum, int totalAirCount, const Player* plrPtr);
-	void end();
+	bool isLevelCleared() const;
 	void draw(sf::RenderWindow& window) const;
 	int getLength() const;
 	int getHeight() const;
@@ -47,4 +47,6 @@ private:
 	bool bombManager[10] = { false };
 
 	void setPowerup(const int&, const int&);
+
+	bool levelCleared;
 };

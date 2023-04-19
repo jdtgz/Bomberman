@@ -46,5 +46,13 @@ class Game
 		//Start Menu
 		StartMenu startMenu;
 
-		float levelRegenPause;
+		//Font for text
+		sf::Font font;
+
+		/* Needed for how long to keep the level */
+		/* number to display on screen */
+		sf::Clock levelScreenClock;
+
+		/* Whether the level has been regenerated */
+		bool levelRegenerated;
 };
