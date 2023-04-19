@@ -358,7 +358,8 @@ void Level::collisions(Player& plr)
 						case tileType::DOOR_OPEN:
 							tilemap[x][y]->collision(plr);
 
-							levelCleared = true;
+							if (enemies.size() == 0)
+								levelCleared = true;
 							break;
 						}
 					}
