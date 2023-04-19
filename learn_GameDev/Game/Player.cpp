@@ -146,6 +146,11 @@ void Player::update(const float& dt)
 {
 	if (alive)
 	{
+		if (invincible > 0)
+			invincible -= dt;
+		else
+			invincible = 0;
+
 		if (movement[direction::NORTH] || movement[direction::SOUTH]
 			|| movement[direction::WEST] || movement[direction::EAST])
 		{
@@ -339,11 +344,11 @@ void Player::enableFlamePass()
 
 bool Player::isInvincible() const
 {
-	return invincible; 
+	return invincible > 0; 
 }
 
 
 void Player::enableInvincible()
 {
-	invincible = true;
+	invincible = 30;
 }

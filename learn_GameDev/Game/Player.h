@@ -90,7 +90,7 @@ class Player : public Collidable
 		bool detonator; 
 		bool bombPass;
 		bool flamePass; 
-		bool invincible;
+		float invincible; /* if number is more than 0, invincibility is active */
 
 		//Is the player alive
 		bool alive;
