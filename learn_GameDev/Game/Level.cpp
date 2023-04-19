@@ -1,8 +1,5 @@
 #include "Level.h"
-#include "../Enemies/Valcom.h"
-#include "../Enemies/ONeal.h"
-#include "../Enemies/Dahl.h"
-#include "../Enemies/Minvo.h"
+#include "../Enemies/Enemy.h"
 #include <math.h>
 
 
@@ -184,9 +181,6 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 	tilemap[0][0]->setTile(tileType::TILE);
 
 	levelCleared = false;
-
-	enemies.push_back(new Dahl(plrPtr, sf::Vector2i(10, 1)));
-	enemies.push_back(new Minvo(plrPtr, sf::Vector2i(10, 3)));
 }
 
 
@@ -238,10 +232,10 @@ void Level::loadLevel(int levelNum, int totalAirCount, const Player* plrPtr)
 						switch (enemyIDList[enemyCount]) //CHANGE TO PERCENTS
 						{
 						case 0:
-							enemies.push_back(new Valcom(plrPtr, sf::Vector2i(x, y)));
+							enemies.push_back(new Enemy(plrPtr, enemyType::VALCOM, sf::Vector2i(x, y)));
 							break;
 						case 1:
-							enemies.push_back(new ONeal(plrPtr, sf::Vector2i(x, y)));
+							enemies.push_back(new Enemy(plrPtr, enemyType::ONEAL, sf::Vector2i(x, y)));
 							break;
 						}
 

@@ -6,6 +6,8 @@ const bool DEBUG = false;
 //Cardinal directions
 enum direction { NORTH = 0, EAST, SOUTH, WEST, COUNT };
 
+enum enemyType { VALCOM = 0, ONEAL, DAHL, MINVO, OVAPE, DORIA, PASS, PONTAN };
+
 namespace tileType
 {
 	/*

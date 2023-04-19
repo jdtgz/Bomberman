@@ -9,13 +9,21 @@
 class Enemy : public Collidable
 {
 public:
-	Enemy(const Player*);
+	Enemy(const Player*, const enemyType&);
+	Enemy(const Player*, const enemyType&,
+		const sf::Vector2i&);
+	Enemy(const Player*, const enemyType&,
+		const sf::Vector2i&, const direction&);
+
+	~Enemy();
 
 	void update(const float& dt);
 
-	virtual void move(Tile* tilemap[33][15]) = 0;
+	virtual void move(Tile* tilemap[33][15]);
 
 	void draw(sf::RenderWindow&) const;
+
+	int getPointValue() const;
 
 	void die();
 	bool isAlive() const;
@@ -24,9 +32,7 @@ public:
 	sf::Vector2f getPosition() const;
 	sf::Vector2i getTilePosition() const;
 	sf::FloatRect getBoundingBox() const;
-
-	~Enemy();
-protected:
+private:
 	//Animation & Visuals
 	enum animIndex
 	{
@@ -42,40 +48,42 @@ protected:
 	//Enemy is alive
 	bool alive;
 
+	//Death animation is over
+	bool deathEnded;
+
+	int pointValue;
+
+	enemyType type;
+
 	direction heading;
 	float moveSpeed;
 
-	void setHeading(const direction&);
+	//Similar to player wallpass, allows for enemy to move through bricks
+	bool wallpass;
 
 	//The distance the enemy sprite can clip into walls
 	//Higher numbers result in more random ai, but more visual clipping
 	float clippingMargin;
 
-	//Similar to player wallpass, allows for enemy to move through bricks
-	bool wallpass;
+	const Player* playerRef; //Reference to the player for chasing
+
+	//The current path found by pathfind
+	std::vector<sf::Vector2i> path;
+
+	int movementDebounce, pathfindingDebounce;
+	bool chasePlayer;
+
+	void init(const Player*, const enemyType&,
+		const sf::Vector2i&, const direction&);
+
+	void setHeading(const direction&);
+	float distanceToPlayer() const;
 
 	bool moveForward(Tile* [33][15]);
 	void bounce();
 	void randomHeading(Tile* [33][15]);
-	bool atTile(Tile* [33][15]);
 	bool pathfindingHeading(Tile* [33][15]);
-	float distanceToPlayer() const;
-
-private:
-	//Death animation is over
-	bool deathEnded;
-
-	const Player* playerRef; //Reference to the player for chasing
-
-	//Counter to prevent the mass-calling of pathfinding,
-	//at least for while it is very laggy
-	int pathfindingDebounce;
-
-	//Max for pathfindingDebounce
-	const int PATHFINDING_DEBOUNCE_MAX = 300;
-
-	//The current path found by pathfind
-	std::vector<sf::Vector2i> path;
+	bool atTile(Tile* [33][15]);
 
 	//Creates a path between this enemy and the player
 	std::vector<sf::Vector2i> pathfind(Tile* [33][15]);

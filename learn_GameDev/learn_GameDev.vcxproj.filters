@@ -5,12 +5,6 @@
     <ClCompile Include="Enemies\Enemy.cpp">
       <Filter>Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="Enemies\ONeal.cpp">
-      <Filter>Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemies\Valcom.cpp">
-      <Filter>Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\TextureHolder.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -41,22 +35,10 @@
     <ClCompile Include="Tile\Bomb.cpp">
       <Filter>Tiles</Filter>
     </ClCompile>
-    <ClCompile Include="Enemies\Dahl.cpp">
-      <Filter>Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemies\Minvo.cpp">
-      <Filter>Enemies</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Enemies\Enemy.h">
-      <Filter>Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemies\ONeal.h">
-      <Filter>Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemies\Valcom.h">
       <Filter>Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\TextureHolder.h">
@@ -88,12 +70,6 @@
     </ClInclude>
     <ClInclude Include="Tile\Bomb.h">
       <Filter>Tiles</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemies\Dahl.h">
-      <Filter>Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemies\Minvo.h">
-      <Filter>Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

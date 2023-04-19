@@ -1,24 +1,93 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy(const Player* plrPtr)
+Enemy::Enemy(const Player* plrPtr, const enemyType& t)
 {
-	//Default enemy values
-	setHeading(direction::NORTH);
-	curAnim = animIndex::RIGHT;
-	anims[animIndex::DEATH].showOnce();
-	moveSpeed = 1.f;
-	clippingMargin = 1.f;
-	pathfindingDebounce = PATHFINDING_DEBOUNCE_MAX;
-	alive = true;
-	deathEnded = false;
-	wallpass = false;
-	playerRef = plrPtr;
+	init(plrPtr, t, { 1, 1 }, direction::NORTH);
+}
+
+
+Enemy::Enemy(const Player* plrPtr, const enemyType& t,
+	const sf::Vector2i& tPos)
+{
+	init(plrPtr, t, tPos, direction::NORTH);
+}
+
+
+Enemy::Enemy(const Player* plrPtr, const enemyType& t,
+	const sf::Vector2i & tPos, const direction& d)
+{
+	init(plrPtr, t, tPos, d);
 }
 
 
 Enemy::~Enemy()
 {
+}
+
+
+void Enemy::init(const Player* plrPtr, const enemyType& typ,
+	const sf::Vector2i& tPos, const direction& dir)
+{
+	setHeading(dir);
+	type = typ;
+	sf::Texture* t = &TextureHolder::get(textures::ENEMIES);
+	anims[int(animIndex::RIGHT)].setUp(*t, 0, 16 * (typ * 3), 16, 16, 3);
+	anims[int(animIndex::LEFT)].setUp(*t, 0, 16 * (typ * 3 + 1), 16, 16, 3);
+	anims[int(animIndex::DEATH)].setUp(*t, 0, 16 * (typ * 3 + 2), 16, 16, 5);
+	anims[animIndex::DEATH].showOnce();
+	anims[int(curAnim)].applyToSprite(sprite);
+	alive = true;
+	deathEnded = false;
+	wallpass = false;
+	chasePlayer = false;
+	playerRef = plrPtr;
+	sprite.setPosition(48 * (tPos.x - 1), 100 + 48 * (tPos.y - 1));
+	switch (typ)
+	{
+	case enemyType::VALCOM:
+		moveSpeed = 1.f;
+		clippingMargin = 0.25f;
+		pointValue = 100;
+		break;
+	case enemyType::ONEAL:
+		moveSpeed = 1.5f;
+		clippingMargin = 1.25f;
+		pointValue = 200;
+		break;
+	case enemyType::DAHL:
+		moveSpeed = 1.75f;
+		clippingMargin = 1.5f;
+		pointValue = 400;
+		break;
+	case enemyType::MINVO:
+		moveSpeed = 2.25f;
+		clippingMargin = 2.f;
+		pointValue = 800;
+		break;
+	case enemyType::OVAPE:
+		moveSpeed = 1.25f;
+		clippingMargin = 1.f;
+		pointValue = 1000;
+		wallpass = true;
+		break;
+	case enemyType::DORIA:
+		moveSpeed = 0.8f;
+		clippingMargin = 1.f;
+		pointValue = 2000;
+		wallpass = true;
+		break;
+	case enemyType::PASS:
+		moveSpeed = 2.66f;
+		clippingMargin = 2.25f;
+		pointValue = 4000;
+		break;
+	case enemyType::PONTAN:
+		moveSpeed = 3.f;
+		clippingMargin = 2.5f;
+		pointValue = 8000;
+		wallpass = true;
+	}
 }
 
 
@@ -37,6 +106,148 @@ void Enemy::update(const float& dt)
 	{
 		deathEnded = true;
 	}
+}
+
+
+void Enemy::move(Tile* tilemap[33][15])
+{
+	switch (type)
+	{
+	//Aimless movement
+	case enemyType::VALCOM:
+	case enemyType::OVAPE:
+	case enemyType::PONTAN:
+		//If no movement occurred (wall in front)
+		if (!moveForward(tilemap))
+			//Bounce off of the wall
+			bounce();
+
+		//If at a tile and the debounce is valid (more likely to when player is close)
+		if ((++movementDebounce >= 10 ||
+			(type == enemyType::VALCOM && distanceToPlayer() < 5 && movementDebounce >= 5)) &&
+			atTile(tilemap))
+		{
+			//Reset debounce counter
+			movementDebounce = 0;
+
+			//Attempt to assign random heading
+			randomHeading(tilemap);
+		}
+		break;
+		//Only chase
+	case enemyType::DORIA:
+		pathfindingHeading(tilemap);
+		moveForward(tilemap);
+		break;
+	//Occassionally chase, otherwise aimless movement
+	case enemyType::ONEAL:
+	case enemyType::DAHL:
+	case enemyType::MINVO:
+	case enemyType::PASS:
+		bool pf = false;
+
+		//If chasing player, then set the heading based on pathfinding
+		if (chasePlayer)
+			pf = pathfindingHeading(tilemap);
+		//If distance between the player and enemy is large enough
+		//then 10% chance to start chasing the player
+		else if (distanceToPlayer() >
+			(type == enemyType::ONEAL || type == enemyType::DAHL || type == enemyType::PASS ? 5 : 3) //type == minvo
+			&& rand() % 10 <
+				(type == enemyType::ONEAL || type == enemyType::DAHL || type == enemyType::PASS ? 4 : 7)) //type == minvo
+			chasePlayer = true;
+
+
+		//If not moving forward (hitting wall)
+		if (!moveForward(tilemap) && !pf)
+		{
+			//Bounce off of the wall
+			bounce();
+
+			//Stop chasing the player
+			chasePlayer = false;
+		}
+
+		//If at a tile and the debounce is valid and not pathfinding
+		if (!pf && atTile(tilemap) && ++movementDebounce >=
+			(type == enemyType::ONEAL || type == enemyType::DAHL || type == enemyType::PASS ? 5 : 3)) //type == minvo
+		{
+			//Reset debounce counter
+			movementDebounce = 0;
+
+			//Attempt to assign random heading
+			randomHeading(tilemap);
+		}
+	}
+}
+
+
+void Enemy::draw(sf::RenderWindow& w) const
+{
+	w.draw(sprite);
+
+	if (DEBUG)
+	{
+		//Display hitbox
+		sf::RectangleShape box;
+		box.setPosition(getBoundingBox().left, getBoundingBox().top);
+		box.setSize(sf::Vector2f(getBoundingBox().width, getBoundingBox().height));
+		box.setFillColor(sf::Color(255, 0, 0, 100));
+		w.draw(box);
+	}
+}
+
+
+int Enemy::getPointValue() const
+{
+	return pointValue;
+}
+
+
+void Enemy::die()
+{
+	alive = false;
+	curAnim = animIndex::DEATH;
+
+	//Prevent collision with dead enemies
+	Collidable::updateRect(sf::FloatRect(0, 0, 0, 0));
+}
+
+
+bool Enemy::isAlive() const
+{
+	return alive;
+}
+
+
+bool Enemy::completedDeathAnim() const
+{
+	return deathEnded;
+}
+
+
+sf::Vector2f Enemy::getPosition() const
+{
+	return sprite.getPosition();
+}
+
+
+sf::Vector2i Enemy::getTilePosition() const
+{
+	//Shift by one to adjust for border
+	return sf::Vector2i(sprite.getPosition().x / 48 + 1,
+		(sprite.getPosition().y - 100) / 48 + 1);
+}
+
+
+sf::FloatRect Enemy::getBoundingBox() const
+{
+	sf::FloatRect alteredBox = sprite.getGlobalBounds();
+	alteredBox.left += 1.5 + moveSpeed;
+	alteredBox.top += 1.5 + moveSpeed;
+	alteredBox.width -= 3 + 2 * moveSpeed;
+	alteredBox.height -= 3 + 2 * moveSpeed;
+	return alteredBox;
 }
 
 
@@ -165,69 +376,6 @@ bool Enemy::atTile(Tile* tilemap[33][15])
 }
 
 
-void Enemy::draw(sf::RenderWindow& w) const
-{
-	w.draw(sprite);
-
-	if (DEBUG)
-	{
-		//Display hitbox
-		sf::RectangleShape box;
-		box.setPosition(getBoundingBox().left, getBoundingBox().top);
-		box.setSize(sf::Vector2f(getBoundingBox().width, getBoundingBox().height));
-		box.setFillColor(sf::Color(255, 0, 0, 100));
-		w.draw(box);
-	}
-}
-
-
-void Enemy::die()
-{
-	alive = false;
-	curAnim = animIndex::DEATH;
-
-	//Prevent collision with dead enemies
-	Collidable::updateRect(sf::FloatRect(0, 0, 0, 0));
-}
-
-
-bool Enemy::isAlive() const
-{
-	return alive;
-}
-
-
-bool Enemy::completedDeathAnim() const
-{
-	return deathEnded;
-}
-
-
-sf::Vector2f Enemy::getPosition() const
-{
-	return sprite.getPosition();
-}
-
-
-sf::Vector2i Enemy::getTilePosition() const
-{
-	//Shift by one to adjust for border
-	return sf::Vector2i(sprite.getPosition().x / 48 + 1,
-		(sprite.getPosition().y - 100) / 48 + 1);
-}
-
-
-sf::FloatRect Enemy::getBoundingBox() const
-{
-	sf::FloatRect alteredBox = sprite.getGlobalBounds();
-	alteredBox.left += 1.5 + moveSpeed;
-	alteredBox.top += 1.5 + moveSpeed;
-	alteredBox.width -= 3 + 2 * moveSpeed;
-	alteredBox.height -= 3 + 2 * moveSpeed;
-	return alteredBox;
-}
-
-
 void Enemy::setHeading(const direction& d)
 {
 	heading = d;
@@ -245,7 +393,7 @@ bool Enemy::pathfindingHeading(Tile* tilemap[33][15])
 	bool pathToFollow = false;
 
 	//Once every number of calls, update the path
-	if (++pathfindingDebounce > PATHFINDING_DEBOUNCE_MAX)
+	if (++pathfindingDebounce > 300 || (path.size() > 0 && getTilePosition() == path.at(0)))
 	{
 		pathfindingDebounce = 0;
 		path = pathfind(tilemap);
@@ -302,6 +450,9 @@ bool Enemy::pathfindingHeading(Tile* tilemap[33][15])
 //Generate a path between this enemy and the player
 std::vector<sf::Vector2i> Enemy::pathfind(Tile* tilemap[33][15])
 {
+	if (DEBUG)
+		std::cout << "CALLING PATHFIND\n";
+
 	const sf::Vector2i start = getTilePosition(), end = playerRef->getTilePosition();
 	std::vector<sf::Vector3i> open, closed;
 	sf::Vector2i current, offset;
