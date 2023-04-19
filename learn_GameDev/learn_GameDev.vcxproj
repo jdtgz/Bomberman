@@ -136,6 +136,7 @@
   <ItemGroup>
     <ClCompile Include="Enemies\Dahl.cpp" />
     <ClCompile Include="Graphics\Animation.cpp" />
+    <ClCompile Include="Enemies\Minvo.cpp" />
     <ClCompile Include="Tile\Bomb.cpp" />
     <ClCompile Include="Game\Collidable.cpp" />
     <ClCompile Include="Enemies\Enemy.cpp" />
@@ -153,6 +154,7 @@
   <ItemGroup>
     <ClInclude Include="Enemies\Dahl.h" />
     <ClInclude Include="Graphics\Animation.h" />
+    <ClInclude Include="Enemies\Minvo.h" />
     <ClInclude Include="Tile\Bomb.h" />
     <ClInclude Include="Game\Collidable.h" />
     <ClInclude Include="Enemies\Enemy.h" />

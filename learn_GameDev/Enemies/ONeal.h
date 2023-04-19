@@ -11,6 +11,8 @@ public:
 	virtual void move(Tile* [33][15]) override;
 
 	~ONeal();
+protected:
+	int distance, chaseChance, debounceMax;
 private:
 	void init(const sf::Vector2i&, const direction&);
 

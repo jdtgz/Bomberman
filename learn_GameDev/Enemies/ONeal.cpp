@@ -1,5 +1,4 @@
 #include "ONeal.h"
-#include <math.h>
 
 
 ONeal::ONeal(const Player* plrPtr)
@@ -31,6 +30,10 @@ void ONeal::init(const sf::Vector2i& tile, const direction& face)
 	clippingMargin = 1.25f;
 	dirDebounce = 0;
 
+	distance = 5;
+	chaseChance = 1;
+	debounceMax = 5;
+
 	sf::Texture* t = &TextureHolder::get(textures::ENEMIES);
 	anims[int(animIndex::RIGHT)].setUp(*t, 0, 16 * 3, 16, 16, 3);
 	anims[int(animIndex::LEFT)].setUp(*t, 0, 16 * 4, 16, 16, 3);
@@ -49,9 +52,9 @@ void ONeal::move(Tile* tilemap[33][15])
 	//If chasing player, then set the heading based on pathfinding
 	if (chasePlayer)
 		pf = pathfindingHeading(tilemap);
-	//If istance between the player and enemy is large enough
+	//If distance between the player and enemy is large enough
 	//then 10% chance to start chasing the player
-	else if (distanceToPlayer() > 5 && rand() % 10 <= 1)
+	else if (distanceToPlayer() > distance && rand() % 10 < chaseChance)
 		chasePlayer = true;
 
 	
@@ -66,7 +69,7 @@ void ONeal::move(Tile* tilemap[33][15])
 	}
 
 	//If at a tile and the debounce is valid and not pathfinding
-	if (!pf && atTile(tilemap) && ++dirDebounce >= 5)
+	if (!pf && atTile(tilemap) && ++dirDebounce >= debounceMax)
 	{
 		//Reset debounce counter
 		dirDebounce = 0;

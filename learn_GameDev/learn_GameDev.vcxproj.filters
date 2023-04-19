@@ -44,6 +44,9 @@
     <ClCompile Include="Enemies\Dahl.cpp">
       <Filter>Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="Enemies\Minvo.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enum.h" />
@@ -87,6 +90,9 @@
       <Filter>Tiles</Filter>
     </ClInclude>
     <ClInclude Include="Enemies\Dahl.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemies\Minvo.h">
       <Filter>Enemies</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,8 @@
 #include "Level.h"
 #include "../Enemies/Valcom.h"
 #include "../Enemies/ONeal.h"
+#include "../Enemies/Dahl.h"
+#include "../Enemies/Minvo.h"
 #include <math.h>
 
 
@@ -182,6 +184,9 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 	tilemap[0][0]->setTile(tileType::TILE);
 
 	levelCleared = false;
+
+	enemies.push_back(new Dahl(plrPtr, sf::Vector2i(10, 1)));
+	enemies.push_back(new Minvo(plrPtr, sf::Vector2i(10, 3)));
 }
 
 
