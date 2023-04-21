@@ -45,6 +45,8 @@ void Valcom::init(const sf::Vector2i& tile, const direction& face)
 
 	//Adjust tile position to world position
 	sprite.setPosition(48 * (tile.x - 1), 100 + 48 * (tile.y - 1));
+
+	Enemy::setPointValue(100);
 }
 
 
