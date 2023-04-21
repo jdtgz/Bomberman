@@ -24,6 +24,7 @@ public:
 	sf::Vector2f getPosition() const;
 	sf::Vector2i getTilePosition() const;
 	sf::FloatRect getBoundingBox() const;
+	const int& getPointValue() const { return points; }
 
 	~Enemy();
 protected:
@@ -56,7 +57,12 @@ protected:
 	bool pathfindingHeading(Tile* [33][15]);
 	float distanceToPlayer() const;
 
+	void setPointValue(const int& pointValue) { points = pointValue; }
+
 private:
+	/* Point value of the enemy */
+	int points;
+
 	//Death animation is over
 	bool deathEnded;
 
