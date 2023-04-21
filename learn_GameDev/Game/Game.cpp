@@ -129,16 +129,6 @@ void Game::render(const sf::Time& dt)
 			sf::View view(sf::FloatRect(0, 0, window->getSize().x, window->getSize().y));
 			window->setView(view);
 
-			sf::Text text;
-			text.setFont(font);
-			text.setString("Level " + std::to_string(levelNumber));
-			/* Set text to center */
-			text.setOrigin(sf::Vector2f(text.getLocalBounds().width/2,
-				text.getLocalBounds().height / 2));
-			/* Set text to middle of window */
-			text.setPosition(window->getSize().x / 2, window->getSize().y / 2);
-			window->draw(text);
-
 			if (levelScreenClock.getElapsedTime().asSeconds() >= 5)
 			{
 				if (player.completedDeathAnim())
@@ -159,6 +149,16 @@ void Game::render(const sf::Time& dt)
 				player.keyReleased(sf::Keyboard::Right);
 				player.keyReleased(sf::Keyboard::Left);
 			}
+
+			sf::Text text;
+			text.setFont(font);
+			text.setString("Level " + std::to_string(levelNumber));
+			/* Set text to center */
+			text.setOrigin(sf::Vector2f(text.getLocalBounds().width/2,
+				text.getLocalBounds().height / 2));
+			/* Set text to middle of window */
+			text.setPosition(window->getSize().x / 2, window->getSize().y / 2);
+			window->draw(text);
 		}
 	}
 	else

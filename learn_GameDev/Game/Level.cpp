@@ -141,7 +141,7 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 		delete enemies[i];
 	enemies = {}; //Empty pointer array after deallocating all memory
 
-	loadLevel(1, totalAirCount, plrPtr);
+	loadLevel(levelNum, totalAirCount, plrPtr);
 
 	//Note: Figure out why this needs to be called here
 	tilemap[0][0]->setTile(tileType::TILE);
