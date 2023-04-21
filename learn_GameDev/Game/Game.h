@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Level.h"
 #include "StartMenu.h"
+#include "Scoreboard.h"
 #include "../Tile/Bomb.h"
 
 
@@ -45,6 +46,8 @@ class Game
 
 		//Start Menu
 		StartMenu startMenu;
+
+		Scoreboard scoreboard;
 
 		//Font for text
 		sf::Font font;

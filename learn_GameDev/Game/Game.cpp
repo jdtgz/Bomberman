@@ -5,13 +5,17 @@ Game::Game() : startMenu(true)
 {
 	srand(time(NULL));
 
-	window = new sf::RenderWindow(sf::VideoMode(750, 750), "Bomberman", sf::Style::Titlebar | sf::Style::Close);
+	window = new sf::RenderWindow(sf::VideoMode(750, 800), "Bomberman", sf::Style::Titlebar | sf::Style::Close);
 	window->setFramerateLimit(144);
 	view.setSize(sf::Vector2f(window->getSize()));
 
 	//Generate the level
 	levelNumber = 1;
 	level.generate(levelNumber, &player);
+
+	scoreboard.setEnemies(0);
+	scoreboard.setTime(0);
+	scoreboard.setScore(0);
 
 	font.loadFromFile("Textures/font.TTF");
 }
@@ -93,6 +97,10 @@ void Game::update(const sf::Time& dt)
 			player.update(dt.asSeconds());
 			updateView();
 			level.update(dt.asSeconds(), player);
+
+			//Update Scoreboard numbers & move
+			scoreboard.move(view.getCenter().x);
+			scoreboard.update();
 		}
 	}
 	// Else, update the menu
@@ -119,6 +127,7 @@ void Game::render(const sf::Time& dt)
 		{
 			level.draw(*window);
 			player.draw(*window);
+			scoreboard.draw(*window);
 
 			levelScreenClock.restart();
 		}
@@ -179,16 +188,16 @@ void Game::updateView()
 	if (plr.x > (view.getSize().x / 2) - 48 && plr.x < (31 * 48) - (view.getSize().x / 3))
 	{
 		view.setCenter(sf::Vector2f(player.getSprite().getPosition().x,
-			window->getSize().y / 2 + 48));
+			window->getSize().y / 2 -52));
 	}
 	else if (plr.x < (view.getSize().x / 2) - 48)
 	{
 		view.setCenter(sf::Vector2f((view.getSize().x / 2) - 48,
-			window->getSize().y / 2 + 48));
+			window->getSize().y / 2 - 52));
 	}
 	else if (plr.x > (31 * 48) - (view.getSize().x / 3))
 	{
 		view.setCenter(sf::Vector2f((31 * 48) - (view.getSize().x / 3),
-			window->getSize().y / 2 + 48));
+			window->getSize().y / 2 - 52));
 	}
 }
