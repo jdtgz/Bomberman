@@ -33,6 +33,8 @@ Level::Level()
 		xPos += 48;
 		yPos = 52;
 	}
+
+	scoreboardPtr = nullptr;
 }
 
 
@@ -293,6 +295,11 @@ void Level::setMap(sf::Vector2i pos, int type)
 	datamap[pos.x][pos.y] = type;
 }
 
+void Level::setScoreboardPtr(Scoreboard* ptr)
+{
+	scoreboardPtr = ptr;
+}
+
 
 //Create a hidden Power-Up at a set x,y cordinate
 void Level::setPowerup(const int& x, const int& y)
@@ -424,6 +431,10 @@ void Level::update(const float& dt, Player& plr)
 			Enemy* temp = enemies.at(i);
 			enemies.at(i) = enemies.at(enemies.size() - 1);
 			enemies.at(enemies.size() - 1) = temp;
+
+			/* Add points to scoreboard */
+			scoreboardPtr->setScore(scoreboardPtr->getScore() + temp->getPointValue());
+
 			delete enemies.at(enemies.size() - 1);
 			enemies.pop_back();
 		}
@@ -501,4 +512,7 @@ void Level::update(const float& dt, Player& plr)
 				tilemap[position.x][position.y]->setTile(tileType::SOLID_AIR);
 		}
 	}
+
+	/* Set scoreboards enemy alive count */
+	scoreboardPtr->setEnemies(enemies.size());
 }

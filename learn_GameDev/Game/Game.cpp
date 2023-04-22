@@ -18,6 +18,8 @@ Game::Game() : startMenu(true)
 	scoreboard.setScore(0);
 
 	font.loadFromFile("Textures/font.TTF");
+
+	level.setScoreboardPtr(&scoreboard);
 }
 
 
@@ -144,6 +146,7 @@ void Game::render(const sf::Time& dt)
 				{
 					player.reset();
 					levelNumber = 1;
+					scoreboard.setScore(0);
 				}
 				else if (level.isLevelCleared())
 				{

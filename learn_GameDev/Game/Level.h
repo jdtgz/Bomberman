@@ -9,6 +9,7 @@
 #include "../Tile/Tile.h"
 #include "../Tile/PowerUp.h"
 #include "../Enum.h"
+#include "Scoreboard.h"
 
 
 class Level
@@ -30,6 +31,8 @@ public:
 	//Set Datamap
 	void setMap(sf::Vector2i pos, int type);
 
+	void setScoreboardPtr(Scoreboard* ptr);
+
 	void collisions(Player& plr);
 	bool deathCheck(std::vector<int> range, sf::Vector2i bombPos, const sf::FloatRect& bounds);
 
@@ -49,4 +52,6 @@ private:
 	void setPowerup(const int&, const int&);
 
 	bool levelCleared;
+
+	Scoreboard* scoreboardPtr;
 };
