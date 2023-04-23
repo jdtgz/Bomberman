@@ -8,7 +8,8 @@ public:
 
 	bool isActive() const;
 
-	void update();
+	void setActive(const bool isActive) { active = isActive; }
+
 	void draw(sf::RenderWindow& window);
 private:
 	//Logo

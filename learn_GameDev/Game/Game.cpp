@@ -77,6 +77,92 @@ void Game::processEvents()
 					// manage the player's movement inputs
 					player.keyReleased(evnt.key.code);
 					break;
+				case sf::Event::JoystickButtonPressed: /* Player bombs with joystick */
+					std::cout << evnt.joystickButton.button << "\n";
+
+					/* Joystick button
+					* A = 0
+					* B = 1
+					*/
+
+					sf::Keyboard::Key button;
+
+					if (evnt.joystickButton.button == 0)
+						button = sf::Keyboard::A;
+					else if (evnt.joystickButton.button == 1)
+						button = sf::Keyboard::B;
+					else
+						button = sf::Keyboard::Unknown;
+
+					level.keyPressed(button, player);
+
+					break;
+				case sf::Event::JoystickMoved: /* Players movement with joystick*/
+					float x = sf::Joystick::getAxisPosition(evnt.joystickMove.joystickId, sf::Joystick::X);
+					float y = sf::Joystick::getAxisPosition(evnt.joystickMove.joystickId, sf::Joystick::Y);
+
+					//Set threshold of more than 50
+					if (abs(x) > 50 || abs(y) > 50)
+					{
+						std::cout << x << " - " << y << "\n";
+
+						//Moving Left
+						if (x < -50)
+						{
+							player.keyReleased(sf::Keyboard::Right);
+							player.keyPressed(sf::Keyboard::Left);
+						}
+
+						//Moving Right
+						if (x > 50)
+						{
+							player.keyReleased(sf::Keyboard::Left);
+							player.keyPressed(sf::Keyboard::Right);
+						}
+
+						//Moving up
+						if (y < -50)
+						{
+							player.keyReleased(sf::Keyboard::Down);
+							player.keyPressed(sf::Keyboard::Up);
+						}
+
+						//Moving Down
+						else if (y > 50)
+						{
+							player.keyReleased(sf::Keyboard::Up);
+							player.keyPressed(sf::Keyboard::Down);
+						}
+					}
+
+					//stop movement if below threshold
+					if (abs(x) < 50)
+					{
+						player.keyReleased(sf::Keyboard::Left);
+						player.keyReleased(sf::Keyboard::Right);
+					}
+					if (abs(y) < 50)
+					{
+						player.keyReleased(sf::Keyboard::Up);
+						player.keyReleased(sf::Keyboard::Down);
+					}
+					
+					break;
+			}
+		}
+
+		else if (startMenu.isActive())
+		{
+			/* Set start menu active when button A on joystick or keyboard is pressed */
+			if (evnt.type == sf::Event::JoystickButtonPressed)
+			{
+				if (evnt.joystickButton.button == 0 /* A */)
+					startMenu.setActive(false);
+			}
+			else if (evnt.type == sf::Event::KeyPressed)
+			{
+				if (evnt.key.code == sf::Keyboard::A)
+					startMenu.setActive(false);
 			}
 		}
 		
@@ -104,11 +190,6 @@ void Game::update(const sf::Time& dt)
 			scoreboard.move(view.getCenter().x);
 			scoreboard.update();
 		}
-	}
-	// Else, update the menu
-	else
-	{
-		startMenu.update();
 	}
 }
 

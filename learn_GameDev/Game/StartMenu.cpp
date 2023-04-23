@@ -17,16 +17,10 @@ StartMenu::StartMenu(const bool& actv)
 	active = actv;
 }
 
+
 bool StartMenu::isActive() const 
 { 
 	return active; 
-}
-
-
-void StartMenu::update()
-{
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		active = false;
 }
 
 
