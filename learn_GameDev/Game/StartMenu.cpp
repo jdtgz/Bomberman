@@ -10,7 +10,7 @@ StartMenu::StartMenu(const bool& actv)
 
 	font.loadFromFile("Textures/font.TTF");
 
-	startButton.setString("Start");
+	startButton.setString("Press A to Start");
 	startButton.setFont(font);
 	startButton.setOrigin(startButton.getLocalBounds().width / 2, 0);
 
