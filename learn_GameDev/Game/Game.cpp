@@ -78,8 +78,6 @@ void Game::processEvents()
 					player.keyReleased(evnt.key.code);
 					break;
 				case sf::Event::JoystickButtonPressed: /* Player bombs with joystick */
-					std::cout << evnt.joystickButton.button << "\n";
-
 					/* Joystick button
 					* A = 0
 					* B = 1
@@ -104,8 +102,6 @@ void Game::processEvents()
 					//Set threshold of more than 50
 					if (abs(x) > 50 || abs(y) > 50)
 					{
-						std::cout << x << " - " << y << "\n";
-
 						//Moving Left
 						if (x < -50)
 						{
