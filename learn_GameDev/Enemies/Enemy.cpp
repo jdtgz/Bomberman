@@ -122,8 +122,8 @@ void Enemy::move(Tile* tilemap[33][15])
 			//Bounce off of the wall
 			bounce();
 
-		//If at a tile and the debounce is valid (more likely to when player is close)
-		if ((++movementDebounce >= 10 ||
+		//If at a tile and the debounce is valid
+		if ((++movementDebounce >= (type == enemyType::VALCOM ? 10 : 6) ||
 			(type == enemyType::VALCOM && distanceToPlayer() < 5 && movementDebounce >= 5)) &&
 			atTile(tilemap))
 		{
@@ -152,9 +152,9 @@ void Enemy::move(Tile* tilemap[33][15])
 		//If distance between the player and enemy is large enough
 		//then 10% chance to start chasing the player
 		else if (distanceToPlayer() >
-			(type == enemyType::ONEAL || type == enemyType::DAHL || type == enemyType::PASS ? 5 : 3) //type == minvo
+			(type == enemyType::MINVO ? 3 : 5)
 			&& rand() % 10 <
-				(type == enemyType::ONEAL || type == enemyType::DAHL || type == enemyType::PASS ? 4 : 7)) //type == minvo
+				(type == enemyType::MINVO ? 7 : 4))
 			chasePlayer = true;
 
 
@@ -170,7 +170,7 @@ void Enemy::move(Tile* tilemap[33][15])
 
 		//If at a tile and the debounce is valid and not pathfinding
 		if (!pf && atTile(tilemap) && ++movementDebounce >=
-			(type == enemyType::ONEAL || type == enemyType::DAHL || type == enemyType::PASS ? 5 : 3)) //type == minvo
+			(type == enemyType::MINVO ? 3 : 5))
 		{
 			//Reset debounce counter
 			movementDebounce = 0;
