@@ -1,6 +1,5 @@
 #include "Level.h"
-#include "../Enemies/Valcom.h"
-#include "../Enemies/ONeal.h"
+#include "../Enemies/Enemy.h"
 #include <math.h>
 
 
@@ -196,9 +195,9 @@ void Level::loadLevel(int levelNum, int totalAirCount, const Player* plrPtr)
 					if (targetAir == i) //At randomly picked air tile
 					{
 						if(tempRand < enemyOddList[0])
-							enemies.push_back(new Valcom(plrPtr, sf::Vector2i(x, y)));
+							enemies.push_back(new Enemy(plrPtr, enemyType::VALCOM, sf::Vector2i(x, y)));
 						else if (tempRand < enemyOddList[1] + enemyOddList[0])
-							enemies.push_back(new ONeal(plrPtr, sf::Vector2i(x, y)));
+							enemies.push_back(new Enemy(plrPtr, enemyType::ONEAL, sf::Vector2i(x, y)));
 
 						//Increment nmber of enemies on screen
 						enemyCount++;
