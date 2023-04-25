@@ -41,6 +41,8 @@ class Game
 		// Player 
 		Player player;
 
+		int playerLives;
+
 		// Level Number
 		int levelNumber;
 

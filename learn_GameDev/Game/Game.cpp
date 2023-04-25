@@ -13,6 +13,8 @@ Game::Game() : startMenu(true)
 	levelNumber = 1;
 	level.generate(levelNumber, &player);
 
+	playerLives = 3;
+
 	scoreboard.setEnemies(0);
 	scoreboard.setTime(0);
 	scoreboard.setScore(0);
@@ -221,9 +223,15 @@ void Game::render(const sf::Time& dt)
 			{
 				if (player.completedDeathAnim())
 				{
+					playerLives--;
 					player.reset();
-					levelNumber = 1;
 					scoreboard.setScore(0);
+
+					if (playerLives == 0)
+					{
+						playerLives = 3;
+						levelNumber = 1;
+					}
 				}
 				else if (level.isLevelCleared())
 				{
