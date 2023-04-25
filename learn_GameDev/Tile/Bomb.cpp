@@ -82,7 +82,7 @@ void Bomb::draw(sf::RenderWindow& target, std::vector<std::vector<int>> datamap)
 			// Check right
 			for (int i = 1; i <= m_range; i++)
 			{
-				if (m_position.x + i < 31)
+				if (m_position.x + i < 32)
 					updateRange(1, 0, 1, i);
 				else
 				{
