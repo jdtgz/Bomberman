@@ -6,6 +6,8 @@
 #include "Collidable.h"
 #include "../Enum.h"
 
+#include <SFML/Audio.hpp>
+
 
 class Player : public Collidable
 {
