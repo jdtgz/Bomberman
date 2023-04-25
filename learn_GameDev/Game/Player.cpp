@@ -38,7 +38,6 @@ void Player::hardReset()
 	flameRange = 1;
 	speed = 3.f;
 	wallPass = false;
-	detonator = false;
 	bombPass = false;
 	flamePass = false;
 	invincible = false;
@@ -57,6 +56,8 @@ void Player::reset()
 
 	alive = true;
 	dead = false;
+
+	detonator = false;
 
 	sprite.setPosition(0, 100);
 }
