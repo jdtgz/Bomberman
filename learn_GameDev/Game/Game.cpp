@@ -224,14 +224,16 @@ void Game::render(const sf::Time& dt)
 				if (player.completedDeathAnim())
 				{
 					playerLives--;
-					player.reset();
 					scoreboard.setScore(0);
 
 					if (playerLives < 0)
 					{
+						player.hardReset();
 						playerLives = 2;
 						levelNumber = 1;
 					}
+					else
+						player.reset();
 				}
 				else if (level.isLevelCleared())
 				{

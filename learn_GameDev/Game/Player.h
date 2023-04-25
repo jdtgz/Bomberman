@@ -13,6 +13,7 @@ class Player : public Collidable
 		Player();
 		~Player();
 
+		void hardReset();
 		void reset();
 
 		bool isAlive() const;

@@ -12,7 +12,7 @@ Player::Player()
 	animations[int(animIndex::WALKING_UP)].setUp(*t, 0, 16 * 3, 12, 16, 3);
 	animations[int(animIndex::DEATH)].setUp(*t, 0, 16 * 4, 16, 16, 7);
 
-	reset();
+	hardReset();
 }
 
 
@@ -22,7 +22,7 @@ Player::~Player()
 
 
 //Set all atributes of the Player back to their base state
-void Player::reset()
+void Player::hardReset()
 {
 	animations[int(animIndex::WALKING_LEFT)].setFrame(0);
 	animations[int(animIndex::WALKING_RIGHT)].setFrame(0);
@@ -34,14 +34,6 @@ void Player::reset()
 	curAnimation = animIndex::WALKING_RIGHT;
 	animations[int(curAnimation)].applyToSprite(sprite);
 
-
-	for (int i = 0; i < direction::COUNT; i++)
-	{
-		movement[i] = false;
-		canMove[i] = true;
-	}
-
-
 	bombCount = 1;
 	flameRange = 1;
 	speed = 3.f;
@@ -50,6 +42,18 @@ void Player::reset()
 	bombPass = false;
 	flamePass = false;
 	invincible = false;
+
+	reset();
+}
+
+
+void Player::reset()
+{
+	for (int i = 0; i < direction::COUNT; i++)
+	{
+		movement[i] = false;
+		canMove[i] = true;
+	}
 
 	alive = true;
 	dead = false;
