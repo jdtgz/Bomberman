@@ -14,7 +14,9 @@ Player::Player()
 
 	hardReset();
 
-	
+	walk_horizontal_buffer.loadFromFile("Sound/Horizontal Step.wav");
+	walk_vertical_buffer.loadFromFile("Sound/Vertical Step.wav");
+	//walk_sound.setBuffer(walk_horizontal_buffer);
 }
 
 
@@ -163,6 +165,17 @@ void Player::update(const float& dt)
 		{
 			animations[int(curAnimation)].update(dt);
 			animations[int(curAnimation)].applyToSprite(sprite);
+
+			if (walk_sound_timer.getElapsedTime().asSeconds() > 0.2)
+			{
+				if (movement[direction::WEST] || movement[direction::EAST])
+					walk_sound.setBuffer(walk_horizontal_buffer);
+				else
+					walk_sound.setBuffer(walk_vertical_buffer);
+
+				walk_sound.play();
+				walk_sound_timer.restart();
+			}
 		}
 
 

@@ -101,7 +101,7 @@ class Player : public Collidable
 		//Has the player death animation ended
 		bool dead;
 
-		sf::Clock walk_timer;
+		sf::Clock walk_sound_timer;
 		sf::Sound walk_sound;
-		sf::SoundBuffer walk_sound_buffer;
+		sf::SoundBuffer walk_horizontal_buffer, walk_vertical_buffer;
 };
