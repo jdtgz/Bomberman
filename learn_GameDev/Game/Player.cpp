@@ -13,6 +13,8 @@ Player::Player()
 	animations[int(animIndex::DEATH)].setUp(*t, 0, 16 * 4, 16, 16, 7);
 
 	hardReset();
+
+	
 }
 
 
