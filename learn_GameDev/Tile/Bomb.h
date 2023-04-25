@@ -1,6 +1,7 @@
 #pragma once
 #include "../Graphics/TextureHolder.h"
 #include "../Graphics/Animation.h"
+#include <SFML/Audio.hpp>
 
 /* The bomb is able to explode and destroy tiles
 that are in the range of the explosion */
@@ -82,4 +83,7 @@ private:
 	/* This is only for updating the range in the draw method.*/
 	/* Makes it so that a piece of code is only called once */
 	bool m_exploded_update;
+
+	sf::Sound m_explosion_sound, m_place_sound;
+	sf::SoundBuffer m_explosion_buffer, m_place_buffer;
 };

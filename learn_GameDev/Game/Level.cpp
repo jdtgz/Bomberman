@@ -277,11 +277,13 @@ void Level::keyPressed(const sf::Keyboard::Key& key, Player& plr)
 		}
 		break;
 	case sf::Keyboard::B:
-		for (int i = 0; i < bombs.size(); i++)
-		{
-			if (bombManager[i] == true && plr.hasDetonator() == true)
-				bombs[i]->explode();
-		}
+		if (plr.hasDetonator() && bombs.size() > 0)
+			for (int i = 0; i < 10; i++)
+				if (bombManager[i])
+				{
+					if (!bombs[0]->getExploding())
+						bombs[0]->explode();
+				}
 		break;
 	}
 }

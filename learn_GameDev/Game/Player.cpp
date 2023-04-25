@@ -165,7 +165,8 @@ void Player::update(const float& dt)
 		{
 			animations[int(curAnimation)].update(dt);
 			animations[int(curAnimation)].applyToSprite(sprite);
-
+			
+			/* Play walk sound */
 			if (walk_sound_timer.getElapsedTime().asSeconds() > 0.2)
 			{
 				if (movement[direction::WEST] || movement[direction::EAST])

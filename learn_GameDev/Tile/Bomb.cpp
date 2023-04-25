@@ -26,6 +26,13 @@ Bomb::Bomb(int x, int y, int range, bool has_timer)
 	m_position = sf::Vector2i(x, y);
 
 	initAnimation();
+
+	m_explosion_buffer.loadFromFile("Sound/Bomb Explode.wav");
+	m_explosion_sound.setBuffer(m_explosion_buffer);
+
+	m_place_buffer.loadFromFile("Sound/Bomb Place.wav");
+	m_place_sound.setBuffer(m_place_buffer);
+	m_place_sound.play();
 }
 
 
@@ -215,6 +222,7 @@ void Bomb::update(float dt)
 void Bomb::explode()
 {
 	m_exploded = true;
+	m_explosion_sound.play();
 }
 
 
