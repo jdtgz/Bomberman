@@ -33,8 +33,12 @@ void Enemy::init(const Player* plrPtr, const enemyType& typ,
 	type = typ;
 	sf::Texture* t = &TextureHolder::get(textures::ENEMIES);
 	anims[int(animIndex::RIGHT)].setUp(*t, 0, 16 * (typ * 3), 16, 16, 3);
-	anims[int(animIndex::LEFT)].setUp(*t, 0, 16 * (typ * 3 + 1), 16, 16, 3);
-	anims[int(animIndex::DEATH)].setUp(*t, 0, 16 * (typ * 3 + 2), 16, 16, 5);
+	anims[int(animIndex::LEFT)].setUp(*t, 0, 16 *
+		(typ == enemyType::PONTAN ? typ * 3 : typ * 3 + 1),
+		16, 16, 3);
+	anims[int(animIndex::DEATH)].setUp(*t, 0, 16 *
+		(typ == enemyType::PONTAN ? typ * 3 + 1 : typ * 3 + 2),
+		16, 16, 5);
 	anims[animIndex::DEATH].showOnce();
 	anims[int(curAnim)].applyToSprite(sprite);
 	alive = true;

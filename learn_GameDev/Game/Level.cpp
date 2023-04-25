@@ -161,7 +161,7 @@ void Level::loadLevel(int levelNum, int totalAirCount, const Player* plrPtr)
 
 	fileHandle.open("LevelData.txt");
 
-	enemyOddList.resize(2);
+	enemyOddList.resize(enemyType::PONTAN + 1);
 
 	//Take the string of numbers and stor them in the enemy ID array
 	if (fileHandle.is_open())
@@ -173,7 +173,10 @@ void Level::loadLevel(int levelNum, int totalAirCount, const Player* plrPtr)
 		while (std::getline(fileHandle, line) && lineNum < levelNum)
 		{
 			std::istringstream ss(line);
-			ss >> enemyOddList[0] >> enemyOddList[1]; // >> enemyOddList[2] >> enemyOddList[3] >> enemyOddList[4] >> enemyOddList[5];
+			ss >> enemyOddList[enemyType::VALCOM] >> enemyOddList[enemyType::ONEAL] >>
+				enemyOddList[enemyType::DAHL] >> enemyOddList[enemyType::MINVO] >>
+				enemyOddList[enemyType::DORIA] >> enemyOddList[enemyType::OVAPE] >>
+				enemyOddList[enemyType::PASS] >> enemyOddList[enemyType::PONTAN];
 			lineNum++;
 		}
 
@@ -194,22 +197,32 @@ void Level::loadLevel(int levelNum, int totalAirCount, const Player* plrPtr)
 					i++;
 					if (targetAir == i) //At randomly picked air tile
 					{
-						if(tempRand < enemyOddList[0])
-							enemies.push_back(new Enemy(plrPtr, enemyType::VALCOM, sf::Vector2i(x, y)));
-						else if (tempRand < enemyOddList[1] + enemyOddList[0])
-							enemies.push_back(new Enemy(plrPtr, enemyType::ONEAL, sf::Vector2i(x, y)));
 
-						//Increment nmber of enemies on screen
-						enemyCount++;
+						int eType = enemyType::VALCOM;
+						while (tempRand > 0 && eType < 8)
+						{
+							tempRand -= enemyOddList[eType];
+							eType++;
+						}
 
-						if (DEBUG)
-							std::cout << "ENEMY: " << x << ", " << y << '\n';
+						//An enemy type was randomly chosen
+						if (tempRand <= 0)
+						{
+							enemies.push_back(new Enemy(plrPtr, (enemyType)(eType - 1), { x, y }));
+
+							//Increment nmber of enemies on screen
+							enemyCount++;
+
+							if (DEBUG)
+								std::cout << "ENEMY: " << x << ", " << y << '\n';
+						}
 					}
 				}
 			}
 		}
 	}
 }
+
 
 bool Level::isLevelCleared() const
 {
