@@ -102,6 +102,6 @@ class Player : public Collidable
 		bool dead;
 
 		sf::Clock walk_sound_timer;
-		sf::Sound walk_sound;
-		sf::SoundBuffer walk_horizontal_buffer, walk_vertical_buffer;
+		sf::Sound walk_sound, death_sound;
+		sf::SoundBuffer walk_horizontal_buffer, walk_vertical_buffer, death_buffer;
 };

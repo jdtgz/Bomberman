@@ -17,6 +17,10 @@ Player::Player()
 	walk_horizontal_buffer.loadFromFile("Sound/Horizontal Step.wav");
 	walk_vertical_buffer.loadFromFile("Sound/Vertical Step.wav");
 	//walk_sound.setBuffer(walk_horizontal_buffer);
+
+	//No death file
+	//death_buffer.loadFromFile("");
+	death_sound.setBuffer(death_buffer);
 }
 
 
@@ -81,13 +85,15 @@ bool Player::completedDeathAnim() const
 
 void Player::die()
 {
-	if (!invincible)
+	if (!invincible && alive)
 	{
 		if (DEBUG)
 			std::cout << "PLAYER DEAD\n";
 
 		alive = false;
 		curAnimation = animIndex::DEATH;
+
+		death_sound.play();
 
 		//Prevent collision with enemies
 		Collidable::updateRect(sf::FloatRect(0, 0, 0, 0));
