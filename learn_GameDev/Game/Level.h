@@ -55,7 +55,7 @@ private:
 
 	Scoreboard* scoreboardPtr;
 
-	sf::Sound levelCompleteSound;
-	sf::SoundBuffer levelCompleteBuffer;
+	sf::Sound levelCompleteSound, powerupPickupSound;
+	sf::SoundBuffer levelCompleteBuffer, powerupPickupBuffer;
 	bool levelCompletePlayed;
 };

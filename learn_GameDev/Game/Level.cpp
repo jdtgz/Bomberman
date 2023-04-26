@@ -37,6 +37,9 @@ Level::Level()
 
 	levelCompleteBuffer.loadFromFile("Sound/Level Complete.wav");
 	levelCompleteSound.setBuffer(levelCompleteBuffer);
+
+	powerupPickupBuffer.loadFromFile("Sound/Powerup Pickup.wav");
+	powerupPickupSound.setBuffer(powerupPickupBuffer);
 }
 
 
@@ -382,6 +385,7 @@ void Level::collisions(Player& plr)
 						{
 						case tileType::POWERUP_REVEALED:
 							((PowerUp*)tilemap[x][y])->collision(plr);
+							powerupPickupSound.play();
 
 							break;
 						case tileType::DOOR_OPEN:
