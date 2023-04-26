@@ -187,7 +187,7 @@ void Level::loadLevel(int levelNum, int totalAirCount, const Player* plrPtr)
 		fileHandle.close();
 	}
 
-	while (enemyCount < 0)
+	while (enemyCount < 6)
 	{
 		i = 0;
 		targetAir = rand() % totalAirCount + 1;
