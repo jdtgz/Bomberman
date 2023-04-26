@@ -211,10 +211,14 @@ void Game::update(const sf::Time& dt)
 			scoreboard.move(view.getCenter().x);
 			scoreboard.update();
 
+			/* Play levelmusic when the New Level sound stops playings*/
 			if (levelMusic.getStatus() != sf::Sound::Playing &&
-				newLevelSound.getStatus() != sf::Sound::Playing)
+				newLevelSound.getStatus() != sf::Sound::Playing) 
 				levelMusic.play();
-			else if (!player.isAlive() && levelMusic.getStatus() == sf::Sound::Playing)
+			/* Stop levelmusic when the player is dead and if the levelmusic is playing, or
+			*  when the new level sound is playing */
+			else if ((!player.isAlive() && levelMusic.getStatus() == sf::Sound::Playing) ||
+				newLevelSound.getStatus() == sf::Sound::Playing)
 				levelMusic.stop();
 		}
 		else
