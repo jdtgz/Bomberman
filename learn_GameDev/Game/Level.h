@@ -54,4 +54,8 @@ private:
 	bool levelCleared;
 
 	Scoreboard* scoreboardPtr;
+
+	sf::Sound levelCompleteSound;
+	sf::SoundBuffer levelCompleteBuffer;
+	bool levelCompletePlayed;
 };

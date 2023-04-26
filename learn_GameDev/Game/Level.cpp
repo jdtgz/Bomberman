@@ -34,6 +34,9 @@ Level::Level()
 	}
 
 	scoreboardPtr = nullptr;
+
+	levelCompleteBuffer.loadFromFile("Sound/Level Complete.wav");
+	levelCompleteSound.setBuffer(levelCompleteBuffer);
 }
 
 
@@ -148,6 +151,7 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 	tilemap[0][0]->setTile(tileType::TILE);
 
 	levelCleared = false;
+	levelCompletePlayed = false;
 }
 
 
@@ -183,7 +187,7 @@ void Level::loadLevel(int levelNum, int totalAirCount, const Player* plrPtr)
 		fileHandle.close();
 	}
 
-	while (enemyCount < 6)
+	while (enemyCount < 0)
 	{
 		i = 0;
 		targetAir = rand() % totalAirCount + 1;
@@ -380,7 +384,15 @@ void Level::collisions(Player& plr)
 							tilemap[x][y]->collision(plr);
 
 							if (enemies.size() == 0)
+							{
 								levelCleared = true;
+								if (!levelCompletePlayed)
+								{
+									levelCompleteSound.play();
+									levelCompletePlayed = true;
+								}
+							}
+
 							break;
 						}
 					}

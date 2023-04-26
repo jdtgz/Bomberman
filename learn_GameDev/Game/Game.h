@@ -57,4 +57,11 @@ class Game
 		/* Needed for how long to keep the level */
 		/* number to display on screen */
 		sf::Clock levelScreenClock;
+
+
+		sf::Music levelMusic;
+		sf::Music startMenuMusic;
+
+		sf::Sound newLevelSound;
+		sf::SoundBuffer newLevelBuffer;
 };

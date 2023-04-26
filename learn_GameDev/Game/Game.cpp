@@ -22,6 +22,15 @@ Game::Game() : startMenu(true)
 	font.loadFromFile("Textures/font.TTF");
 
 	level.setScoreboardPtr(&scoreboard);
+
+	newLevelBuffer.loadFromFile("Sound/Level Start.wav");
+	newLevelSound.setBuffer(newLevelBuffer);
+
+	levelMusic.openFromFile("Sound/Stage Theme.wav");
+	levelMusic.setLoop(true);
+
+	startMenuMusic.openFromFile("Sound/Title Screen.wav");
+	startMenuMusic.setLoop(true);
 }
 
 
@@ -162,6 +171,9 @@ void Game::processEvents()
 				if (evnt.key.code == sf::Keyboard::A)
 					startMenu.setActive(false);
 			}
+
+			if (!startMenu.isActive())
+				newLevelSound.play();
 		}
 		
 		// Closes window
@@ -178,6 +190,9 @@ void Game::update(const sf::Time& dt)
 	// If start menu is active, dont update game
 	if (!startMenu.isActive())
 	{
+		if (startMenuMusic.getStatus() == sf::Sound::Playing)
+			startMenuMusic.stop();
+
 		if (!level.isLevelCleared())
 		{
 			player.update(dt.asSeconds());
@@ -187,7 +202,20 @@ void Game::update(const sf::Time& dt)
 			//Update Scoreboard numbers & move
 			scoreboard.move(view.getCenter().x);
 			scoreboard.update();
+
+			if (levelMusic.getStatus() != sf::Sound::Playing)
+				levelMusic.play();
 		}
+		else
+		{
+			if (levelMusic.getStatus() == sf::Sound::Playing)
+				levelMusic.stop();
+		}
+	}
+	else
+	{
+		if (startMenuMusic.getStatus() != sf::Sound::Playing)
+			startMenuMusic.play();
 	}
 }
 
@@ -247,6 +275,8 @@ void Game::render(const sf::Time& dt)
 				player.keyReleased(sf::Keyboard::Down);
 				player.keyReleased(sf::Keyboard::Right);
 				player.keyReleased(sf::Keyboard::Left);
+
+				newLevelSound.play();
 			}
 
 			sf::Text text;
