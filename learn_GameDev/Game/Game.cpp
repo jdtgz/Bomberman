@@ -58,7 +58,9 @@ void Game::run()
 		{
 			timeSinceLastTick -= timePerFrame;
 			processEvents();
-			level.collisions(player);
+			/* This is to stop the player from dying before a new level starts */
+			if (!level.isLevelCleared() && player.isAlive())
+				level.collisions(player);
 			update(timePerFrame); 
 		}
 		render(timePerFrame);
@@ -96,12 +98,18 @@ void Game::processEvents()
 
 					sf::Keyboard::Key button;
 
-					if (evnt.joystickButton.button == 0)
+					switch (evnt.joystickButton.button)
+					{
+					case 0:
 						button = sf::Keyboard::A;
-					else if (evnt.joystickButton.button == 1)
+						break;
+					case 1:
 						button = sf::Keyboard::B;
-					else
+						break;
+					default:
 						button = sf::Keyboard::Unknown;
+						break;
+					}
 
 					level.keyPressed(button, player);
 

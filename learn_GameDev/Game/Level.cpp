@@ -198,27 +198,31 @@ void Level::loadLevel(int levelNum, int totalAirCount, const Player* plrPtr)
 			{
 				if (datamap[x][y] == tileType::AIR && (x + y) > 1)
 				{
-					i++;
-					if (targetAir == i) //At randomly picked air tile
+					/* Make enemies not spawn right next to the player */
+					if (x > 5 || y > 5)
 					{
-
-						int eType = enemyType::VALCOM;
-						while (tempRand > 0 && eType < 8)
+						i++;
+						if (targetAir == i) //At randomly picked air tile
 						{
-							tempRand -= enemyOddList[eType];
-							eType++;
-						}
 
-						//An enemy type was randomly chosen
-						if (tempRand <= 0)
-						{
-							enemies.push_back(new Enemy(plrPtr, (enemyType)(eType - 1), { x, y }));
+							int eType = enemyType::VALCOM;
+							while (tempRand > 0 && eType < 8)
+							{
+								tempRand -= enemyOddList[eType];
+								eType++;
+							}
 
-							//Increment nmber of enemies on screen
-							enemyCount++;
+							//An enemy type was randomly chosen
+							if (tempRand <= 0)
+							{
+								enemies.push_back(new Enemy(plrPtr, (enemyType)(eType - 1), { x, y }));
 
-							if (DEBUG)
-								std::cout << "ENEMY: " << x << ", " << y << '\n';
+								//Increment nmber of enemies on screen
+								enemyCount++;
+
+								if (DEBUG)
+									std::cout << "ENEMY: " << x << ", " << y << '\n';
+							}
 						}
 					}
 				}
