@@ -41,7 +41,7 @@ void Player::hardReset()
 	bombCount = 1;
 	flameRange = 1;
 	speed = 3.f;
-	wallPass = true;
+	wallPass = false;
 	bombPass = false;
 	flamePass = false;
 	invincible = 0;

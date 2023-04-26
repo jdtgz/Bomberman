@@ -1,7 +1,7 @@
 #pragma once
 
 //global debug variable
-const bool DEBUG = true;
+const bool DEBUG = false;
 
 //Cardinal directions
 enum direction { NORTH = 0, EAST, SOUTH, WEST, COUNT };
