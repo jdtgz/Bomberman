@@ -59,8 +59,7 @@ class Game
 		sf::Clock levelScreenClock;
 
 
-		sf::Music levelMusic;
-		sf::Music startMenuMusic;
+		sf::Music levelMusic, invincibilityMusic, startMenuMusic;
 
 		sf::Sound newLevelSound;
 		sf::SoundBuffer newLevelBuffer;

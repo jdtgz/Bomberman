@@ -29,6 +29,9 @@ Game::Game() : startMenu(true)
 	levelMusic.openFromFile("Sound/Stage Theme.wav");
 	levelMusic.setLoop(true);
 
+	invincibilityMusic.openFromFile("Sound/Invincibility Theme.wav");
+	invincibilityMusic.setLoop(true);
+
 	startMenuMusic.openFromFile("Sound/Title Screen.wav");
 	startMenuMusic.setLoop(true);
 }
@@ -211,14 +214,26 @@ void Game::update(const sf::Time& dt)
 			scoreboard.move(view.getCenter().x);
 			scoreboard.update();
 
-			/* Play levelmusic when the New Level sound stops playings*/
-			if (levelMusic.getStatus() != sf::Sound::Playing &&
-				newLevelSound.getStatus() != sf::Sound::Playing) 
+			bool invincibleThemePlaying = invincibilityMusic.getStatus() == sf::Sound::Playing;
+			bool stageThemePlaying = levelMusic.getStatus() == sf::Sound::Playing;
+			bool newLevelPlaying = newLevelSound.getStatus() == sf::Sound::Playing;
+
+			/* If player is invincible and the invincibility theme isnt playing,
+			*  Play the invincibility theme and stop the main music theme*/
+			if (player.isInvincible() && !invincibleThemePlaying)
+			{
+				levelMusic.stop();
+				invincibilityMusic.play();
+			}
+			/* stops the invincibility theme from playing when player isnt invincible anymore */
+			else if (!player.isInvincible() && invincibleThemePlaying)
+				invincibilityMusic.stop();
+			/* Play levelmusic when the New Level sound and invincibility theme isnt playing */
+			else if (!stageThemePlaying && !newLevelPlaying && !invincibleThemePlaying) 
 				levelMusic.play();
 			/* Stop levelmusic when the player is dead and if the levelmusic is playing, or
 			*  when the new level sound is playing */
-			else if ((!player.isAlive() && levelMusic.getStatus() == sf::Sound::Playing) ||
-				newLevelSound.getStatus() == sf::Sound::Playing)
+			else if ((!player.isAlive() && stageThemePlaying) || newLevelPlaying)
 				levelMusic.stop();
 		}
 		else
