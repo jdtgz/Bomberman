@@ -18,9 +18,13 @@ Player::Player()
 	walk_vertical_buffer.loadFromFile("Sound/Vertical Step.wav");
 	//walk_sound.setBuffer(walk_horizontal_buffer);
 
-	//No death file
-	//death_buffer.loadFromFile("");
+	//Death sound isnt from the NES game since i couldnt find the sound
+	//Its the cannon sound effect from SNES - Super Bomberman 2
+	death_buffer.loadFromFile("Sound/Bomberman Death.wav");
 	death_sound.setBuffer(death_buffer);
+
+	just_died_buffer.loadFromFile("Sound/Just Died.wav");
+	just_died_sound.setBuffer(just_died_buffer);
 }
 
 
@@ -94,6 +98,7 @@ void Player::die()
 		curAnimation = animIndex::DEATH;
 
 		death_sound.play();
+		justDiedPlayed = false;
 
 		//Prevent collision with enemies
 		Collidable::updateRect(sf::FloatRect(0, 0, 0, 0));
@@ -206,6 +211,14 @@ void Player::update(const float& dt)
 		//Play death animation
 		animations[int(curAnimation)].update(dt);
 		animations[int(curAnimation)].applyToSprite(sprite);
+
+		if (death_sound.getStatus() != sf::Sound::Playing && 
+			just_died_sound.getStatus() != sf::Sound::Playing &&
+			!justDiedPlayed)
+		{
+			just_died_sound.play();
+			justDiedPlayed = true;
+		}
 	}
 	
 	//Death animation completed

@@ -101,7 +101,14 @@ class Player : public Collidable
 		//Has the player death animation ended
 		bool dead;
 
+
+
 		sf::Clock walk_sound_timer;
-		sf::Sound walk_sound, death_sound;
-		sf::SoundBuffer walk_horizontal_buffer, walk_vertical_buffer, death_buffer;
+		//The difference between death_sound and just_died_sound
+		//is that one (just_died_sound) is a short tune thats played after the player dies
+		//and the other (death_sound) is the players death sound
+		sf::Sound walk_sound, death_sound, just_died_sound;
+		sf::SoundBuffer walk_horizontal_buffer, walk_vertical_buffer, death_buffer,
+						just_died_buffer;
+		bool justDiedPlayed; //So that the just_died_sound doesnt repeatedly play itself
 };
