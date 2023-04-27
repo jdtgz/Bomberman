@@ -14,7 +14,8 @@ public:
 
 	void setEnemies(int);
 
-	void setTime(int);
+	void decrementTime(const float&);
+	void setTime(const int&);
 	int getTime();
 
 	//Move Position of scoreboard
@@ -25,8 +26,8 @@ public:
 	void draw(sf::RenderWindow& w);
 
 private:
-
-	int time, score, enemies;
+	float time;
+	int score, enemies;
 	sf::Text timeTxt, scoreTxt, enemiesTxt;
 	sf::RectangleShape background;
 	sf::Font font;

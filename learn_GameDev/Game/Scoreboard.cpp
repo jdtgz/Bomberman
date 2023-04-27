@@ -42,9 +42,15 @@ void Scoreboard::setEnemies(int newNum)
 }
 
 
-void Scoreboard::setTime(int newNum)
+void Scoreboard::decrementTime(const float& dt)
 {
-	time = newNum;
+	time -= dt;
+}
+
+
+void Scoreboard::setTime(const int& nTime)
+{
+	time = nTime;
 }
 
 
@@ -67,7 +73,7 @@ void Scoreboard::move(int newPos)
  //update data
 void Scoreboard::update()
 {
-	timeTxt.setString(std::to_string(time));
+	timeTxt.setString(std::to_string((time > 0 ? (int)time : 0)));
 	scoreTxt.setString(std::to_string(score));
 	enemiesTxt.setString("LEFT: " + std::to_string(enemies));
 

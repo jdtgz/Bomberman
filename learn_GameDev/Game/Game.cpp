@@ -9,13 +9,6 @@ Game::Game() : startMenu(true)
 	window->setFramerateLimit(144);
 	view.setSize(sf::Vector2f(window->getSize()));
 
-	//Generate the level
-	levelNumber = 1;
-	level.generate(levelNumber, &player);
-	incrementedLevel = false;
-
-	playerLives = 2;
-
 	scoreboard.setEnemies(0);
 	scoreboard.setTime(0);
 	scoreboard.setScore(0);
@@ -35,6 +28,13 @@ Game::Game() : startMenu(true)
 
 	startMenuMusic.openFromFile("Sound/Title Screen.wav");
 	startMenuMusic.setLoop(true);
+
+	playerLives = 2;
+
+	//Generate the level
+	levelNumber = 1;
+	level.generate(levelNumber, &player);
+	incrementedLevel = false;
 }
 
 
@@ -65,7 +65,7 @@ void Game::run()
 			/* This is to stop the player from dying before a new level starts */
 			if (!level.isLevelCleared() && player.isAlive())
 				level.collisions(player);
-			update(timePerFrame); 
+			update(timePerFrame);
 		}
 		render(timePerFrame);
 	}

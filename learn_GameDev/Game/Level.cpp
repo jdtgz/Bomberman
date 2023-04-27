@@ -155,6 +155,8 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 
 	levelCleared = false;
 	levelCompletePlayed = false;
+
+	scoreboardPtr->setTime(201);
 }
 
 
@@ -549,4 +551,5 @@ void Level::update(const float& dt, Player& plr)
 
 	/* Set scoreboards enemy alive count */
 	scoreboardPtr->setEnemies(enemies.size());
+	scoreboardPtr->decrementTime(dt);
 }
