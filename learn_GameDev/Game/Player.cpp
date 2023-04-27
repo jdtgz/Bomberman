@@ -42,10 +42,6 @@ void Player::hardReset()
 	animations[int(animIndex::WALKING_UP)].setFrame(0);
 	animations[int(animIndex::DEATH)].setFrame(0);
 
-	// set the starting animation
-	curAnimation = animIndex::WALKING_RIGHT;
-	animations[int(curAnimation)].applyToSprite(sprite);
-
 	bombCount = 1;
 	flameRange = 1;
 	speed = 3.f;
@@ -65,6 +61,9 @@ void Player::reset()
 		movement[i] = false;
 		canMove[i] = true;
 	}
+
+	curAnimation = animIndex::WALKING_RIGHT;
+	animations[int(curAnimation)].applyToSprite(sprite);
 
 	alive = true;
 	dead = false;
