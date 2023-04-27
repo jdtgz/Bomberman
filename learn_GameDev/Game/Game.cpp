@@ -229,7 +229,8 @@ void Game::update(const sf::Time& dt)
 			else if (!player.isInvincible() && invincibleThemePlaying)
 				invincibilityMusic.stop();
 			/* Play levelmusic when the New Level sound and invincibility theme isnt playing */
-			else if (!stageThemePlaying && !newLevelPlaying && !invincibleThemePlaying) 
+			else if (!stageThemePlaying && !newLevelPlaying && 
+				!invincibleThemePlaying && player.isAlive())
 				levelMusic.play();
 			/* Stop levelmusic when the player is dead and if the levelmusic is playing, or
 			*  when the new level sound is playing */
