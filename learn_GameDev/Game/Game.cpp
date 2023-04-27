@@ -9,7 +9,8 @@ Game::Game() : startMenu(true)
 	window->setFramerateLimit(144);
 	view.setSize(sf::Vector2f(window->getSize()));
 
-	scoreboard.setEnemies(0);
+	playerLives = 2;
+	scoreboard.setLives(playerLives);
 	scoreboard.setTime(0);
 	scoreboard.setScore(0);
 
@@ -28,8 +29,6 @@ Game::Game() : startMenu(true)
 
 	startMenuMusic.openFromFile("Sound/Title Screen.wav");
 	startMenuMusic.setLoop(true);
-
-	playerLives = 2;
 
 	//Generate the level
 	levelNumber = 1;
@@ -299,6 +298,8 @@ void Game::render(const sf::Time& dt)
 					}
 					else
 						player.reset();
+
+					scoreboard.setLives(playerLives);
 				}
 				else if (level.isLevelCleared())
 				{

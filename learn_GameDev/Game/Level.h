@@ -51,7 +51,7 @@ private:
 
 	void setPowerup(const int&, const int&);
 
-	bool levelCleared;
+	bool levelCleared, outOfTime;
 
 	Scoreboard* scoreboardPtr;
 

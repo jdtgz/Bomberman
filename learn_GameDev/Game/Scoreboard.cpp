@@ -2,6 +2,10 @@
 
 Scoreboard::Scoreboard()
 {
+	score = 0;
+	lives = 0;
+	time = 0.f;
+
 	font.loadFromFile("Textures/font.TTF");
 
 	background.setSize(sf::Vector2f(750, 150));
@@ -10,11 +14,11 @@ Scoreboard::Scoreboard()
 	background.setPosition(sf::Vector2f(-50, -100));
 	timeTxt.setPosition(sf::Vector2f(100, 0));
 	scoreTxt.setPosition(sf::Vector2f(500, 0));
-	enemiesTxt.setPosition(sf::Vector2f(600, 0));
+	livesTxt.setPosition(sf::Vector2f(600, 0));
 	scoreTxt.setOrigin(scoreTxt.getLocalBounds().width, 0);
 	timeTxt.setFont(font);
 	scoreTxt.setFont(font);
-	enemiesTxt.setFont(font);
+	livesTxt.setFont(font);
 }
 
 
@@ -24,21 +28,27 @@ Scoreboard::~Scoreboard()
 }
 
 
-void Scoreboard::setScore(int newNum)
+void Scoreboard::setScore(const int& nScore)
 {
-	score = newNum;
+	score = nScore;
 }
 
 
-int Scoreboard::getScore()
+int Scoreboard::getScore() const
 {
 	return score;
 }
 
 
-void Scoreboard::setEnemies(int newNum)
+void Scoreboard::setLives(const int& nLives)
 {
-	enemies = newNum;
+	lives = nLives;
+}
+
+
+int Scoreboard::getLives() const
+{
+	return 0;
 }
 
 
@@ -54,19 +64,19 @@ void Scoreboard::setTime(const int& nTime)
 }
 
 
-int Scoreboard::getTime()
+int Scoreboard::getTime() const
 {
 	return time;
 }
 
 
 //Move Position of scoreboard
-void Scoreboard::move(int newPos)
+void Scoreboard::move(const int& newPos)
 {
 	background.setPosition(sf::Vector2f(newPos - 375, -100));
 	timeTxt.setPosition(sf::Vector2f(newPos - 275, 0));
 	scoreTxt.setPosition(sf::Vector2f(newPos + 125, 0));
-	enemiesTxt.setPosition(sf::Vector2f(newPos + 225, 0));
+	livesTxt.setPosition(sf::Vector2f(newPos + 225, 0));
 }
 
 
@@ -75,10 +85,11 @@ void Scoreboard::update()
 {
 	timeTxt.setString(std::to_string((time > 0 ? (int)time : 0)));
 	scoreTxt.setString(std::to_string(score));
-	enemiesTxt.setString("LEFT: " + std::to_string(enemies));
+	livesTxt.setString("LEFT " + std::to_string(lives));
 
 	scoreTxt.setOrigin(scoreTxt.getLocalBounds().width, 0);
 }
+
 
 //Draw scoreboard 
 void Scoreboard::draw(sf::RenderWindow& w)
@@ -86,5 +97,5 @@ void Scoreboard::draw(sf::RenderWindow& w)
 	w.draw(background);
 	w.draw(timeTxt);
 	w.draw(scoreTxt);
-	w.draw(enemiesTxt);
+	w.draw(livesTxt);
 }

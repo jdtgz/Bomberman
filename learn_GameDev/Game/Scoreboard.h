@@ -9,17 +9,18 @@ public:
 	Scoreboard();
 	~Scoreboard();
 
-	void setScore(int);
-	int getScore();
+	void setScore(const int&);
+	int getScore() const;
 
-	void setEnemies(int);
+	void setLives(const int&);
+	int getLives() const;
 
 	void decrementTime(const float&);
 	void setTime(const int&);
-	int getTime();
+	int getTime() const;
 
 	//Move Position of scoreboard
-	void move(int);
+	void move(const int&);
 
 	//Draw scoreboard & update data
 	void update();
@@ -27,8 +28,8 @@ public:
 
 private:
 	float time;
-	int score, enemies;
-	sf::Text timeTxt, scoreTxt, enemiesTxt;
+	int score, lives;
+	sf::Text timeTxt, scoreTxt, livesTxt;
 	sf::RectangleShape background;
 	sf::Font font;
 

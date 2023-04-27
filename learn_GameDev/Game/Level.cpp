@@ -154,6 +154,7 @@ void Level::generate(const int& levelNum, const Player* plrPtr)
 	tilemap[0][0]->setTile(tileType::TILE);
 
 	levelCleared = false;
+	outOfTime = false;
 	levelCompletePlayed = false;
 
 	scoreboardPtr->setTime(201);
@@ -549,7 +550,12 @@ void Level::update(const float& dt, Player& plr)
 		}
 	}
 
-	/* Set scoreboards enemy alive count */
-	scoreboardPtr->setEnemies(enemies.size());
 	scoreboardPtr->decrementTime(dt);
+
+	if (scoreboardPtr->getTime() == 0 && !outOfTime)
+	{
+		outOfTime = true;
+
+		//spawn enemies
+	}
 }
