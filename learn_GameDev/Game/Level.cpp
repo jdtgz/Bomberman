@@ -280,6 +280,7 @@ void Level::keyPressed(const sf::Keyboard::Key& key, Player& plr)
 					}
 					bombManager[i] = true;
 
+					//Set to a "bomb" tile type - Player can walk through but enemy cannot
 					if (!plr.hasDetonator())
 						bombs.push_back(new Bomb((int)plr.getPosition().x, (int)plr.getPosition().y, plr.getFlameRange(), true));
 					else
