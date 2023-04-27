@@ -253,6 +253,11 @@ void Player::setCanMove(const int& dir, const bool& v)
 	return;
 }
 
+void Player::setPosition(const float& x, const float& y)
+{
+	sprite.setPosition(x, y);
+}
+
 void Player::updateMoves(int dir)
 {
 	movement[dir] = true;

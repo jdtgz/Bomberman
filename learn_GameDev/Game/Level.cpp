@@ -384,6 +384,21 @@ void Level::collisions(Player& plr)
 				if (sqrt(pow(center_other.x - center_tile.x, 2) +
 					pow(center_other.y - center_tile.y, 2)) < 48 * 2)
 				{
+					/* Snapping attempt */
+					////North & South
+					////Snap player on the Y axis
+					//if (plr.getCanMove()[0] || plr.getCanMove()[2]) {
+					//	plr.setPosition(plr.getSprite().getPosition().x, plr.getTilePosition().y * 48);
+					//}
+					////East & West
+					////Snap player on the X axis
+					//if (plr.getCanMove()[1] || plr.getCanMove()[3]) {
+					//	plr.setPosition(plr.getTilePosition().x * 48, plr.getSprite().getPosition().y);
+					//}
+					//
+					//std::cout << plr.getTilePosition().x << ", " << plr.getTilePosition().y;
+					//std::cout << "\n";
+
 					if (plr.check(*tilemap[x][y], offset))
 					{
 						switch (tilemap[x][y]->getType())
