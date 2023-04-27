@@ -12,7 +12,7 @@ Scoreboard::Scoreboard()
 	background.setFillColor(sf::Color(125, 18, 255));
 
 	background.setPosition(sf::Vector2f(-50, -100));
-	timeTxt.setPosition(sf::Vector2f(100, 0));
+	timeTxt.setPosition(sf::Vector2f(0, 0));
 	scoreTxt.setPosition(sf::Vector2f(500, 0));
 	livesTxt.setPosition(sf::Vector2f(600, 0));
 	scoreTxt.setOrigin(scoreTxt.getLocalBounds().width, 0);
@@ -74,7 +74,7 @@ int Scoreboard::getTime() const
 void Scoreboard::move(const int& newPos)
 {
 	background.setPosition(sf::Vector2f(newPos - 375, -100));
-	timeTxt.setPosition(sf::Vector2f(newPos - 275, 0));
+	timeTxt.setPosition(sf::Vector2f(newPos - 325, 0));
 	scoreTxt.setPosition(sf::Vector2f(newPos + 125, 0));
 	livesTxt.setPosition(sf::Vector2f(newPos + 225, 0));
 }
@@ -83,7 +83,7 @@ void Scoreboard::move(const int& newPos)
  //update data
 void Scoreboard::update()
 {
-	timeTxt.setString(std::to_string((time > 0 ? (int)time : 0)));
+	timeTxt.setString("TIME\t" + std::to_string((time > 0 ? (int)time : 0)));
 	scoreTxt.setString(std::to_string(score));
 	livesTxt.setString("LEFT " + std::to_string(lives));
 

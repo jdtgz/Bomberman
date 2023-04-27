@@ -323,6 +323,7 @@ void Level::setMap(sf::Vector2i pos, int type)
 	datamap[pos.x][pos.y] = type;
 }
 
+
 void Level::setScoreboardPtr(Scoreboard* ptr)
 {
 	scoreboardPtr = ptr;
@@ -380,10 +381,8 @@ void Level::collisions(Player& plr)
 					plr.getBounds().top + (plr.getBounds().height / 2)
 				};
 
-				float distance = sqrt(pow(center_other.x - center_tile.x, 2) +
-					pow(center_other.y - center_tile.y, 2));
-
-				if (distance < 48 * 2)
+				if (sqrt(pow(center_other.x - center_tile.x, 2) +
+					pow(center_other.y - center_tile.y, 2)) < 48 * 2)
 				{
 					if (plr.check(*tilemap[x][y], offset))
 					{
@@ -555,10 +554,34 @@ void Level::update(const float& dt, Player& plr)
 
 	scoreboardPtr->decrementTime(dt);
 
-	if (scoreboardPtr->getTime() == 0 && !outOfTime)
+	//Timer runs out
+	if (scoreboardPtr->getTime() <= 0 && !outOfTime)
 	{
 		outOfTime = true;
 
-		//spawn enemies
+		//Remove all enemies
+		for (int e = 0; e < enemies.size(); e++)
+		{
+			delete enemies.at(e);
+		}
+		enemies.clear();
+
+		//Spawn ten pontans
+		for (int pontan = 0; pontan < 10; pontan++)
+		{
+			sf::Vector2i pos = { 0,0 };
+
+			//Prevent them from spawning on non-air tiles
+			//and from spawning too close to the player
+			while (!(tilemap[pos.x][pos.y]->getType() == tileType::AIR &&
+				(abs(pos.x - plr.getTilePosition().x) > 3 ||
+				abs(pos.y - plr.getTilePosition().y) > 3)))
+			{
+				pos = { rand() % 32 + 1, rand() % 14 + 1 };
+			}
+
+			enemies.push_back(new Enemy(&plr, enemyType::PONTAN,
+				pos, (direction)(rand() % 4)));
+		}
 	}
 }

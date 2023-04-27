@@ -281,6 +281,7 @@ void Game::render(const sf::Time& dt)
 			if (!incrementedLevel && level.isLevelCleared())
 			{
 				incrementedLevel = true;
+				playerLives++;
 				levelNumber++;
 			}
 			if (levelScreenClock.getElapsedTime().asSeconds() >= 5)
