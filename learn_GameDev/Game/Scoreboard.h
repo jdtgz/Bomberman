@@ -33,4 +33,5 @@ private:
 	sf::RectangleShape background;
 	sf::Font font;
 
+	const sf::Vector2f DROPSHADOW = { 1.5, 1.5 };
 };

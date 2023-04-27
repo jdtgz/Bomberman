@@ -95,7 +95,28 @@ void Scoreboard::update()
 void Scoreboard::draw(sf::RenderWindow& w)
 {
 	w.draw(background);
+
+	timeTxt.move(DROPSHADOW);
+	timeTxt.setFillColor(sf::Color::Black);
 	w.draw(timeTxt);
+
+	timeTxt.move(-DROPSHADOW);
+	timeTxt.setFillColor(sf::Color::White);
+	w.draw(timeTxt);
+	
+	scoreTxt.move(DROPSHADOW);
+	scoreTxt.setFillColor(sf::Color::Black);
 	w.draw(scoreTxt);
+
+	scoreTxt.move(-DROPSHADOW);
+	scoreTxt.setFillColor(sf::Color::White);
+	w.draw(scoreTxt);
+
+	livesTxt.move(DROPSHADOW);
+	livesTxt.setFillColor(sf::Color::Black);
+	w.draw(livesTxt);
+
+	livesTxt.move(-DROPSHADOW);
+	livesTxt.setFillColor(sf::Color::White);
 	w.draw(livesTxt);
 }
