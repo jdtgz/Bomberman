@@ -247,10 +247,10 @@ sf::Vector2i Enemy::getTilePosition() const
 sf::FloatRect Enemy::getBoundingBox() const
 {
 	sf::FloatRect alteredBox = sprite.getGlobalBounds();
-	alteredBox.left += 1.5 + moveSpeed;
-	alteredBox.top += 1.5 + moveSpeed;
-	alteredBox.width -= 3 + 2 * moveSpeed;
-	alteredBox.height -= 3 + 2 * moveSpeed;
+	alteredBox.left += 3 + moveSpeed;
+	alteredBox.top += 3 + moveSpeed;
+	alteredBox.width -= 6 + 2 * moveSpeed;
+	alteredBox.height -= 6 + 2 * moveSpeed;
 	return alteredBox;
 }
 

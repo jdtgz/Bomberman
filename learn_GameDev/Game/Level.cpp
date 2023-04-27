@@ -356,17 +356,20 @@ void Level::collisions(Player& plr)
 	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			//If the tile is not an air or open door,
+			//If the tile is not an air tile,
 			if (tilemap[x][y]->getType() != tileType::AIR &&
 				//Not solid air that the player is standing on or solid air while the player has bomb pass,
 				!(tilemap[x][y]->getType() == tileType::SOLID_AIR
 					&& (x == plr.getPosition().x && y == plr.getPosition().y || plr.hasBombPass())) &&
-				//Not a brick, closed door, or hidden powerup while the player has wall pass, colide
+				//Not an open door while there are still enemies
+				!(tilemap[x][y]->getType() == tileType::DOOR_OPEN && enemies.size() > 0) &&
+				//Not a brick, closed door, or hidden powerup while the player has wall pass
 				!((tilemap[x][y]->getType() == tileType::BRICK ||
 					tilemap[x][y]->getType() == tileType::DOOR_CLOSED ||
 					tilemap[x][y]->getType() == tileType::POWERUP_HIDDEN) &&
 					plr.hasWallPass()))
 			{
+				//Collide
 				sf::Vector2f center_tile = {
 					tilemap[x][y]->getBounds().left + (tilemap[x][y]->getBounds().width / 2),
 					tilemap[x][y]->getBounds().top + (tilemap[x][y]->getBounds().height / 2)
