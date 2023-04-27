@@ -12,6 +12,7 @@ Game::Game() : startMenu(true)
 	//Generate the level
 	levelNumber = 1;
 	level.generate(levelNumber, &player);
+	incrementedLevel = false;
 
 	playerLives = 2;
 
@@ -278,6 +279,11 @@ void Game::render(const sf::Time& dt)
 			sf::View view(sf::FloatRect(0, 0, window->getSize().x, window->getSize().y));
 			window->setView(view);
 
+			if (!incrementedLevel && level.isLevelCleared())
+			{
+				incrementedLevel = true;
+				levelNumber++;
+			}
 			if (levelScreenClock.getElapsedTime().asSeconds() >= 5)
 			{
 				if (player.completedDeathAnim())
@@ -296,7 +302,7 @@ void Game::render(const sf::Time& dt)
 				}
 				else if (level.isLevelCleared())
 				{
-					levelNumber++;
+					incrementedLevel = false;
 					player.getSprite().setPosition(0, 100); // Set player to (1, 1) in tile coords
 				}
 

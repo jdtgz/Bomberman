@@ -45,6 +45,7 @@ class Game
 
 		// Level Number
 		int levelNumber;
+		bool incrementedLevel;
 
 		//Start Menu
 		StartMenu startMenu;
