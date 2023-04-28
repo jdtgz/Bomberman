@@ -385,19 +385,6 @@ void Level::collisions(Player& plr)
 				if (sqrt(pow(center_other.x - center_tile.x, 2) +
 					pow(center_other.y - center_tile.y, 2)) < 48 * 2)
 				{
-					///* Snapping attempt */
-					////North & South
-					////Snap player on the Y axis
-					//if (plr.getCanMove()[0] || plr.getCanMove()[2]) {
-					//	plr.setPosition(plr.getSprite().getPosition().x, (plr.getTilePosition().y * 48) + 96);
-					//	std::cout << "E";
-					//}
-					////East & West
-					////Snap player on the X axis
-					//if (plr.getCanMove()[1] || plr.getCanMove()[3]) {
-					//	plr.setPosition(plr.getTilePosition().x * 48, plr.getSprite().getPosition().y);
-					//}
-					
 					/* Get the sprites global bounds */
 					const sf::FloatRect& sprite_bounds = plr.getSprite().getGlobalBounds();
 					/* Get tile position by using the center of the 
@@ -412,15 +399,24 @@ void Level::collisions(Player& plr)
 					center_tile.x = (tile_coord.x - 1) * 48;
 					center_tile.y = (tile_coord.y - 1) * 48 + 100;
 
+					auto lerp = [](float a, float b, float t) -> float
+					{
+						return a + t * (b - a);
+					};
+
+					float smooth = 0.05f;
+
 					//North and South movement
 					if (plr.getCanMove()[0] || plr.getCanMove()[2])
 					{
-						plr.setPosition(center_tile.x + (sprite_bounds.width/6), sprite_bounds.top);
+						float x = lerp(sprite_bounds.left, center_tile.x + (sprite_bounds.width / 6), smooth);
+						plr.setPosition(x, sprite_bounds.top);
 					}
 					//East and West movement
 					if (plr.getCanMove()[1] || plr.getCanMove()[3])
 					{
-						plr.setPosition(sprite_bounds.left, center_tile.y);
+						float y = lerp(sprite_bounds.top, center_tile.y, smooth);
+						plr.setPosition(sprite_bounds.left, y);
 					}
 
 					if (plr.check(*tilemap[x][y], offset))
