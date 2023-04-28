@@ -404,16 +404,26 @@ void Level::collisions(Player& plr)
 						return a + t * (b - a);
 					};
 
+					auto isSolidTile = [&](const int& x, const int& y) -> bool
+					{
+						return tilemap[x][y]->getType() != tileType::AIR;
+					};
+
 					float smooth = 0.05f;
 
+					int heading_x = plr.getCanMove()[1] - plr.getCanMove()[3];
+					int heading_y = plr.getCanMove()[2] - plr.getCanMove()[0];
+					bool solidOnX = isSolidTile(tile_coord.x + heading_x, tile_coord.y);
+					bool solidOnY = isSolidTile(tile_coord.x, tile_coord.y + heading_y);
+
 					//North and South movement
-					if (plr.getCanMove()[0] || plr.getCanMove()[2])
+					if ((plr.getCanMove()[0] || plr.getCanMove()[2]) && !solidOnY)
 					{
 						float x = lerp(sprite_bounds.left, center_tile.x + (sprite_bounds.width / 6), smooth);
 						plr.setPosition(x, sprite_bounds.top);
 					}
 					//East and West movement
-					if (plr.getCanMove()[1] || plr.getCanMove()[3])
+					if ((plr.getCanMove()[1] || plr.getCanMove()[3]) && !solidOnX)
 					{
 						float y = lerp(sprite_bounds.top, center_tile.y, smooth);
 						plr.setPosition(sprite_bounds.left, y);
