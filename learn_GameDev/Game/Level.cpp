@@ -398,8 +398,30 @@ void Level::collisions(Player& plr)
 					//	plr.setPosition(plr.getTilePosition().x * 48, plr.getSprite().getPosition().y);
 					//}
 					
-					std::cout << (plr.getTilePosition().x - 1) * 48 << ", " << (plr.getTilePosition().y - 1) * 48 + 100;
-					std::cout << "\n";
+					/* Get the sprites global bounds */
+					const sf::FloatRect& sprite_bounds = plr.getSprite().getGlobalBounds();
+					/* Get tile position by using the center of the 
+					player sprite instead of using the origin */
+					sf::Vector2f center_sprite;
+					center_sprite.x = sprite_bounds.left + (sprite_bounds.width / 2);
+					center_sprite.y = sprite_bounds.top + (sprite_bounds.height / 2);
+					sf::Vector2i tile_coord; //Tile coordinates of the player
+					tile_coord.x = (center_sprite.x / 48) + 1;
+					tile_coord.y = (center_sprite.y / 48) - 1;
+					sf::Vector2i center_tile; //Center of tile in window coordinates
+					center_tile.x = (tile_coord.x - 1) * 48;
+					center_tile.y = (tile_coord.y - 1) * 48 + 100;
+
+					//North and South movement
+					if (plr.getCanMove()[0] || plr.getCanMove()[2])
+					{
+						plr.setPosition(center_tile.x, sprite_bounds.top);
+					}
+					//East and West movement
+					if (plr.getCanMove()[1] || plr.getCanMove()[3])
+					{
+						plr.setPosition(sprite_bounds.left, center_tile.y);
+					}
 
 					if (plr.check(*tilemap[x][y], offset))
 					{
