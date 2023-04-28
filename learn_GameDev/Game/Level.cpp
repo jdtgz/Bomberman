@@ -415,7 +415,7 @@ void Level::collisions(Player& plr)
 					//North and South movement
 					if (plr.getCanMove()[0] || plr.getCanMove()[2])
 					{
-						plr.setPosition(center_tile.x, sprite_bounds.top);
+						plr.setPosition(center_tile.x + (sprite_bounds.width/6), sprite_bounds.top);
 					}
 					//East and West movement
 					if (plr.getCanMove()[1] || plr.getCanMove()[3])
