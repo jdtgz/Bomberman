@@ -283,6 +283,7 @@ void Game::render(const sf::Time& dt)
 				incrementedLevel = true;
 				playerLives++;
 				levelNumber++;
+				scoreboard.setLives(playerLives);
 			}
 			if (levelScreenClock.getElapsedTime().asSeconds() >= 5)
 			{
