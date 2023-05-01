@@ -82,6 +82,7 @@ void Tile::setTile(const tileType::ID& t)
 	{
 		case tileType::AIR:
 		case tileType::SOLID_AIR:
+		case tileType::BOMB:
 			mSprite.setTextureRect({ 16 * 6, 16 * 2, 16, 16 });
 			break;
 		case tileType::BRICK:
