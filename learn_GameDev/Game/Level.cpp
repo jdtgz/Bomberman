@@ -49,6 +49,8 @@ Level::Level()
 
 	powerupPickupBuffer.loadFromFile("Sound/Powerup Pickup.wav");
 	powerupPickupSound.setBuffer(powerupPickupBuffer);
+
+	popupFont.loadFromFile("Textures/font.TTF");
 }
 
 
@@ -325,6 +327,9 @@ void Level::draw(sf::RenderWindow& window) const
 
 	for (int i = 0; i < bombs.size(); i++)
 		bombs[i]->draw(window, datamap);
+
+	for (int i = 0; i < textPopups.size(); i++)
+		window.draw(textPopups.at(i));
 }
 
 
@@ -505,6 +510,16 @@ void Level::update(const float& dt, Player& plr)
 	int offset = 1;
 	bool collided = false;
 
+	for (int i = 0; i < textTimers.size(); i++)
+	{
+		textTimers.at(i) += dt;
+		if (textTimers.at(i) >= 2)
+		{
+			textTimers.pop_back();
+			textPopups.pop_back();
+		}
+	}
+
 	for (int i = 0; i < enemies.size(); i++)
 	{
 		enemies.at(i)->update(dt);
@@ -588,9 +603,26 @@ void Level::update(const float& dt, Player& plr)
 
 					// Check if enemies die
 					for (int e = 0; e < enemies.size(); e++)
+					{
 						if (deathCheck(bombs[0]->getExplodingRange(),
 							bombs[0]->getPosition(), enemies.at(e)->getBoundingBox()))
+						{
 							enemies.at(e)->die();
+
+							sf::Text popup;
+							
+							popup.setFont(popupFont);
+							popup.setString(std::to_string(enemies.at(e)->getPointValue()));
+							popup.setOrigin(popup.getLocalBounds().width / 2.,
+								popup.getLocalBounds().height / 2.);
+							popup.setPosition(enemies.at(e)->getPosition().x + 24,
+								enemies.at(e)->getPosition().y + 24);
+							popup.setScale(.33f, .33f);
+
+							textPopups.insert(textPopups.begin(), popup);
+							textTimers.insert(textTimers.begin(), 0);
+						}
+					}
 
 					delete bombs[0];
 					bombs.erase(bombs.begin());

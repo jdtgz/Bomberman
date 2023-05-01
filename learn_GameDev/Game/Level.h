@@ -44,6 +44,11 @@ private:
 	std::vector<std::vector<int>> datamap;
 	std::vector<Bomb*> bombs;
 	std::vector<Enemy*> enemies;
+
+	sf::Font popupFont;
+	std::vector<sf::Text> textPopups;
+	std::vector<float> textTimers;
+
 	sf::Vector2i powerUp_pos;
 
 	Tile* tilemap[33][15];
