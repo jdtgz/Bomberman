@@ -545,7 +545,7 @@ void Level::update(const float& dt, Player& plr)
 							std::cout << "Additional Enemies Spawned";
 						enemies.push_back(new Enemy(&plr,
 							(enemyType)(((PowerUp*)tilemap[powerUp_pos.x][powerUp_pos.y])->getPowerupType()),
-							{x,y}, (direction)(rand() % 4)));
+							{x,y}, (direction)(directions)));
 					}
 				}
 				if (tilemap[x][y]->getType() == tileType::POWERUP_REVEALED)
