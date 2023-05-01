@@ -295,6 +295,9 @@ void Level::keyPressed(const sf::Keyboard::Key& key, Player& plr)
 					else
 						bombs.push_back(new Bomb((int)plr.getPosition().x, (int)plr.getPosition().y, plr.getFlameRange(), false));
 
+					//Set the tile type to solid air
+					tilemap[(int)plr.getPosition().x][(int)plr.getPosition().y]->setTile(tileType::SOLID_AIR);
+
 					break;
 				}
 			}
@@ -368,9 +371,9 @@ void Level::collisions(Player& plr)
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
 			//If the tile is not an air tile,
-			if (tilemap[x][y]->getType() != tileType::AIR &&
+			if ((tilemap[x][y]->getType() != tileType::AIR && tilemap[x][y]->getType() != tileType::SOLID_AIR) &&
 				//Not solid air that the player is standing on or solid air while the player has bomb pass,
-				!(tilemap[x][y]->getType() == tileType::SOLID_AIR
+				!(tilemap[x][y]->getType() == tileType::BOMB
 					&& (x == plr.getPosition().x && y == plr.getPosition().y || plr.hasBombPass())) &&
 				//Not an open door while there are still enemies
 				!(tilemap[x][y]->getType() == tileType::DOOR_OPEN && enemies.size() > 0) &&
@@ -612,10 +615,10 @@ void Level::update(const float& dt, Player& plr)
 		Bomb* bomb = bombs.at(i);
 		sf::Vector2i position = bomb->getPosition();
 
-		if (tilemap[position.x][position.y]->getType() != tileType::SOLID_AIR)
+		if (tilemap[position.x][position.y]->getType() != tileType::BOMB)
 		{
 			if (!bomb->isEntityColliding(plr.getBoundingBox()))
-				tilemap[position.x][position.y]->setTile(tileType::SOLID_AIR);
+				tilemap[position.x][position.y]->setTile(tileType::BOMB);
 		}
 	}
 
