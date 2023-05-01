@@ -16,17 +16,17 @@ Level::Level()
 	{
 		for (int y = 0; y < MAP_HEIGHT; y++)
 		{
-			//Just from seeing the results of setting the Min and Max
-			//either true or false, if its true, there are no tiles (unbreakable)
-			//if its false, there are tiles
-			bool minXY = (x == 1 || y == 1);
-			bool maxXY = (x == MAP_LENGTH - 2 || y == MAP_HEIGHT - 2);
+			//On the outside border of the playable map
+			bool topLeftEdge = (x == 1 || y == 1);
+			bool bottomRightEdge = (x == MAP_LENGTH - 2 || y == MAP_HEIGHT - 2);
 
-			//Decides whether a tile (unbreakable) is placed
-			bool tilesXY = (x % 2 != 0 || y % 2 != 0);
-			//In map boundary
+			//Is on an alternating line
+			bool gridPattern = (x % 2 != 0 || y % 2 != 0);
+
+			//Is within the map boundary
 			bool inBounds = (x > 0 && y > 0 && x < MAP_LENGTH - 1 && y < MAP_HEIGHT - 1);
-			if ((minXY || maxXY || tilesXY) && inBounds)
+
+			if ((topLeftEdge || bottomRightEdge || gridPattern) && inBounds)
 			{
 				tilemap[x][y] = new Tile(xPos, yPos, tileType::AIR);
 				datamap[x][y] = tileType::AIR;
