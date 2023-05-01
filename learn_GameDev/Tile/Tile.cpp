@@ -62,23 +62,8 @@ void Tile::update(const float& dt)
 }
 
 
-// Ends the game when player is colliding with an open_door AND no enemies
 void Tile::collision(Player& plr)
 {
-	// if the tile is an open_door, evaluate if level should end
-	if (type == tileType::DOOR_OPEN)
-	{
-		// if there are no enemies, end level
-		// Else, do nothing
-	}
-}
-
-
-// Spawns enemies in all directions from the current tile 
-// Tile must be door_open and have collided with an explosion
-void Tile::spawnEnemies()
-{
-
 }
 
 

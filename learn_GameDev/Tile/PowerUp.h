@@ -14,16 +14,17 @@ class PowerUp: public Tile
 		// visual functions 
 		void revealPowerUp();
 
+		int getPowerupType() const;
+
 		// game functions
 		virtual void interact(); 
 		virtual void update(const float& dt); 
 		virtual void collision(Player& plr); 
-		virtual void spawnEnemies(); 
 	private:
 		enum powerups
 		{
-			BOMB_UP = 0, FLAME_UP, SPEED_UP, WALL_PASS, DETONATOR,
-			BOMB_PASS, FLAME_PASS, INVINCIBILITY
+			BOMB_UP = 0, FLAME_UP, SPEED_UP, WALL_PASS, BOMB_PASS,
+			DETONATOR, FLAME_PASS, INVINCIBILITY
 		};
 
 		// ID for type of attributes player should change

@@ -79,20 +79,7 @@ void PowerUp::revealPowerUp()
 // Dictates a tile's behavior when colliding with bomb explosions 
 void PowerUp::interact()
 {
-	// destroy the powerUp
 	destroyed = true;
-
-	/*
-	// If the power up is revealed 
-	if (type == tileType::POWERUP_REVEALED)
-	{
-		// spawn enemies on the screen
-		spawnEnemies();
-
-		// set the block to air AND make the powerUp unaccessable 
-		setTile(tileType::AIR);
-	}
-	*/
 }
 
 
@@ -162,10 +149,7 @@ void PowerUp::collision(Player& plr)
 }
 
 
-// Spawns enemies in all directions from the current PowerUp tile
-// powerUp tile must be revealed and colliding with an explosion
-void PowerUp::spawnEnemies()
+int PowerUp::getPowerupType() const
 {
-	if (DEBUG)
-		std::cout << "POWERUP DESTOYED, ENEMIES\n";
+	return powerUpType;
 }

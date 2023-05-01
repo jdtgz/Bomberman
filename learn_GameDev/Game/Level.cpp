@@ -439,8 +439,6 @@ void Level::collisions(Player& plr)
 
 							break;
 						case tileType::DOOR_OPEN:
-							tilemap[x][y]->collision(plr);
-
 							if (enemies.size() == 0)
 							{
 								levelCleared = true;
@@ -450,8 +448,6 @@ void Level::collisions(Player& plr)
 									levelCompletePlayed = true;
 								}
 							}
-
-							break;
 						}
 					}
 				}
@@ -531,14 +527,31 @@ void Level::update(const float& dt, Player& plr)
 		{
 			if (datamap[x][y] != tilemap[x][y]->getType())
 			{
+				if (tilemap[x][y]->getType() == tileType::POWERUP_REVEALED ||
+					tilemap[x][y]->getType() == tileType::DOOR_OPEN)
+				{
+					for (int directions = 0; directions < direction::COUNT; directions++)
+					{
+						if (DEBUG)
+							std::cout << "Additional Enemies Spawned";
+						enemies.push_back(new Enemy(&plr,
+							(enemyType)(((PowerUp*)tilemap[powerUp_pos.x][powerUp_pos.y])->getPowerupType()),
+							{x,y}, (direction)(rand() % 4)));
+					}
+				}
 				if (tilemap[x][y]->getType() == tileType::POWERUP_REVEALED)
-					datamap[x][y] = tileType::POWERUP_REVEALED;
+					tilemap[x][y]->setTile(tileType::AIR);
 
 				tilemap[x][y]->interact();
 			}
 
 			// Animation update for brick destroy animation
 			tilemap[x][y]->update(dt);
+
+			if (tilemap[x][y]->getType() == tileType::POWERUP_REVEALED)
+				datamap[x][y] = tileType::POWERUP_REVEALED;
+			else if (tilemap[x][y]->getType() == tileType::DOOR_OPEN)
+				datamap[x][y] = tileType::DOOR_OPEN;
 		}
 	}
 

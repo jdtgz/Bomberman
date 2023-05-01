@@ -20,7 +20,6 @@ class Tile : public Collidable
 		void draw(sf::RenderWindow& window);
 		virtual void update(const float& dt);
 		virtual void collision(Player& plr); 
-		virtual void spawnEnemies(); 
 
 		// Accessors/Modifiers 
 		tileType::ID getType() const;
