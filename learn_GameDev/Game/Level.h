@@ -37,6 +37,9 @@ public:
 	bool deathCheck(std::vector<int> range, sf::Vector2i bombPos, const sf::FloatRect& bounds);
 
 	void update(const float& dt, Player& plr);
+
+	int powerupType() const;
+	bool powerupObtained() const;
 private:
 	const int MAP_LENGTH = 33;
 	const int MAP_HEIGHT = 15;

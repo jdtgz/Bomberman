@@ -48,7 +48,6 @@ void Player::hardReset()
 	wallPass = false;
 	bombPass = false;
 	flamePass = false;
-	invincible = 0;
 
 	reset();
 }
@@ -69,6 +68,7 @@ void Player::reset()
 	dead = false;
 
 	detonator = false;
+	invincible = 0;
 
 	sprite.setPosition(0, 100);
 }
@@ -308,8 +308,15 @@ int Player::getBombCount() const
 
 void Player::plusBomb()
 {
-	if(bombCount != 10)
-		bombCount++; 
+	if(bombCount < 10)
+		bombCount++;
+}
+
+
+void Player::minusBomb()
+{
+	if (bombCount > 1)
+		bombCount--;
 }
 
 
@@ -321,8 +328,15 @@ int Player::getFlameRange() const
 
 void Player::plusFlame()
 {
-	if (flameRange != 10)
+	if (flameRange < 10)
 		flameRange++; 
+}
+
+
+void Player::minusFlame()
+{
+	if (flameRange > 1)
+		flameRange++;
 }
 
 
@@ -334,7 +348,13 @@ float Player::getSpeed() const
 
 void Player::plusSpeed()
 {
-	speed += (speed * 0.10);
+	speed += speed * 0.10;
+}
+
+
+void Player::minusSpeed()
+{
+	speed -= speed * 0.10;
 }
 
 
@@ -350,6 +370,12 @@ void Player::enableWallPass()
 }
 
 
+void Player::disableWallPass()
+{
+	wallPass = false;
+}
+
+
 bool Player::hasDetonator() const
 {
 	return detonator; 
@@ -359,6 +385,12 @@ bool Player::hasDetonator() const
 void Player::enableDetonator()
 {
 	detonator = true; 
+}
+
+
+void Player::disableDetonator()
+{
+	detonator = false;
 }
 
 
@@ -374,6 +406,12 @@ void Player::enableBombPass()
 }
 
 
+void Player::disableBombPass()
+{
+	bombPass = false;
+}
+
+
 bool Player::hasFlamePass() const
 {
 	return flamePass;
@@ -383,6 +421,12 @@ bool Player::hasFlamePass() const
 void Player::enableFlamePass()
 {
 	flamePass = true; 
+}
+
+
+void Player::disableFlamePass()
+{
+	flamePass = false;
 }
 
 

@@ -299,7 +299,36 @@ void Game::render(const sf::Time& dt)
 						levelNumber = 1;
 					}
 					else
+					{
 						player.reset();
+						if (level.powerupObtained())
+						{
+							switch (level.powerupType())
+							{
+							case powerups::BOMB_UP:
+								player.minusBomb();
+								break;
+							case powerups::FLAME_UP:
+								player.minusFlame();
+								break;
+							case powerups::SPEED_UP:
+								player.minusSpeed();
+								break;
+							case powerups::WALL_PASS:
+								player.disableWallPass();
+								break;
+							case powerups::DETONATOR:
+								player.disableDetonator();
+								break;
+							case powerups::BOMB_PASS:
+								player.disableBombPass();
+								break;
+							case powerups::FLAME_PASS:
+								player.disableFlamePass();
+								break;
+							}
+						}
+					}
 
 					scoreboard.setLives(playerLives);
 				}

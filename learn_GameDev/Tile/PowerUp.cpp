@@ -117,7 +117,7 @@ void PowerUp::collision(Player& plr)
 		case powerups::SPEED_UP: 
 			if (DEBUG)
 				std::cout << "SPEED UP\n";
-			plr.plusSpeed(); 
+			plr.plusSpeed();
 			break; 
 		case powerups::WALL_PASS:
 			if (DEBUG)
@@ -143,7 +143,6 @@ void PowerUp::collision(Player& plr)
 			if (DEBUG)
 				std::cout << "INVINCIBLE\n";
 			plr.enableInvincible();
-			break;
 	}
 	setTile(tileType::AIR);
 }

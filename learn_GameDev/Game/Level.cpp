@@ -687,3 +687,16 @@ void Level::update(const float& dt, Player& plr)
 		}
 	}
 }
+
+
+int Level::powerupType() const
+{
+	return ((PowerUp*)tilemap[powerUp_pos.x][powerUp_pos.y])->getPowerupType();
+}
+
+
+bool Level::powerupObtained() const
+{
+	return tilemap[powerUp_pos.x][powerUp_pos.y]->getType() != tileType::POWERUP_HIDDEN &&
+		tilemap[powerUp_pos.x][powerUp_pos.y]->getType() != tileType::POWERUP_REVEALED;
+}

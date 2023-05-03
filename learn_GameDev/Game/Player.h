@@ -47,28 +47,35 @@ class Player : public Collidable
 
 
 		int getBombCount() const; 
-		void plusBomb(); 
+		void plusBomb();
+		void minusBomb();
 
 		int getFlameRange() const; 
-		void plusFlame(); 
+		void plusFlame();
+		void minusFlame();
 
 		float getSpeed() const;
 		void plusSpeed(); 
+		void minusSpeed();
 
 		bool hasWallPass() const;
 		void enableWallPass();
+		void disableWallPass();
 		 
 		bool hasDetonator() const;
 		void enableDetonator();
+		void disableDetonator();
 
 		bool hasBombPass() const; 
 		void enableBombPass(); 
+		void disableBombPass();
 
 		bool hasFlamePass() const; 
 		void enableFlamePass(); 
+		void disableFlamePass();
 
 		bool isInvincible() const; 
-		void enableInvincible(); 		
+		void enableInvincible();
 
 	private:
 		enum class animIndex

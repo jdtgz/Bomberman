@@ -8,6 +8,12 @@ enum direction { NORTH = 0, EAST, SOUTH, WEST, COUNT };
 
 enum enemyType { VALCOM = 0, ONEAL, DAHL, MINVO, OVAPE, DORIA, PASS, PONTAN };
 
+enum powerups
+{
+	BOMB_UP = 0, FLAME_UP, SPEED_UP, WALL_PASS, BOMB_PASS,
+	DETONATOR, FLAME_PASS, INVINCIBILITY
+};
+
 namespace tileType
 {
 	/*
